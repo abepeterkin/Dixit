@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/main.css">
     <title>${title}</title>
+    <script src="/js/card.js"></script>
   </head>
   <body>
   	${content}
