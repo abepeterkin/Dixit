@@ -1,9 +1,9 @@
 function Game(id,rules){
-	this.id: id;
-	this.rules: rulles;
-	currPhase: 0;
-	currClue: '';
-	board: null;
+	this.id = id;
+	this.rules = rules;
+	currPhase = 0;
+	currClue = '';
+	board = null;
 	//TODO: add a ctx and canvas so that those can be easily be referenced?
 }
 
