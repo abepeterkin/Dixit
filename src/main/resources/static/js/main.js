@@ -1,4 +1,5 @@
 var game = new Game(1, {numCards: 5}); 
+game.currPhase = 1; //make it nonstorycards so cards can move
 window.onload = function(){
   var mouseX;
   var mouseY;
@@ -64,8 +65,8 @@ window.onload = function(){
 	if(game.currPhase === game.phases.NonStoryCards || game.currPhase === game.phases.StoryTeller){
 		for(var i = 0; i< clientPlayer.hand.length; i++){
 			if(clientPlayer.hand[i].clicked(mouseX, mouseY)){ 
-				if((game.currPhase === phases.NonStoryCards && !clientPlayer.isStoryTeller) ||
-					(game.currPhase === phases.StoryTeller && clientPlayer.isStoryTeller)){
+				if((game.currPhase === game.phases.NonStoryCards && !clientPlayer.isStoryTeller) ||
+					(game.currPhase === game.phases.StoryTeller && clientPlayer.isStoryTeller)){
 					dragging=true;
 					draggingCard = clientPlayer.hand[i];
 				}
