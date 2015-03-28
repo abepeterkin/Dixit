@@ -4,7 +4,7 @@ function Card(id, img, x, y) {
 	this.id = id;
 	this.x = x;
 	this.y = y;
-	this.visible = false;
+	this.visible = true;
 	this.height = 120; //change this to make responsive with canvas dim
 	this.width = 90; //ditto
 	this.frontImg = new Image();
@@ -22,13 +22,32 @@ Card.prototype.getImg = function(){
 
 //function for drawing the card
 Card.prototype.draw = function(ctx){
-	ctx.drawImage(this.getImg(), parseInt(this.x), parseInt(this.y), this.width, this.height);	
+	var img = this.getImg();
+	var x = this.x;
+	var y = this.y;
+	var w = this.width;
+	var h = this.height;
+	if(img.complete){
+		ctx.drawImage(img, x, y, w, h);
+	} else {
+		img.onload = function(){
+			ctx.drawImage(img, x, y, w, h);
+		}
+	}	
 }
 
 //to see if this card was clicked
 Card.prototype.clicked = function(clickX, clickY){
-	return((clickX > this.x - this.width)&&
+	return((clickX > this.x)&&
 		   (clickX < this.x + this.width)&&
-		    (clickY > this.y - this.height)&&
+		    (clickY > this.y)&&
 		    (clickY < this.y + this.height));
 }
+
+Card.prototype.reveal = function (){
+	this.visible = true;	
+}
+
+$('#cardModal').on('show.bs.modal', function(event){
+	console.log(event);
+})

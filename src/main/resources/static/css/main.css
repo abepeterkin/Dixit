@@ -55,3 +55,7 @@ textarea#msg-txt {
 input#send-msg-btn{
   float:right;
 }
+
+.modal-content {
+ width:350px;
+}

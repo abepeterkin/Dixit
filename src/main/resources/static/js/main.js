@@ -1,4 +1,7 @@
 window.onload = function(){
+  var game = {
+  	rules: {numCards: 5}
+  }  
   var mouseX;
   var mouseY;
   var dragHoldX;
@@ -7,21 +10,70 @@ window.onload = function(){
   var targetX;
   var targetY;
   var dragging;
+  var dragIndex;
+  var draggingCard;
   var canvas = document.getElementById("board");  
   var ctx = canvas.getContext("2d");
-  var card = new Card(1, "/images/cards/dixit_card_01_001.jpg", 0, 0);
-  card.draw(ctx);
+  var clientPlayer;
+  init();
   canvas.addEventListener("mousedown", mouseDownListener, false);
+  canvas.addEventListener("dblclick", mouseDblClickListener, false);
   
+  function init(){
+  	clientPlayer = new Player(1, "#000000", false, game);
+  	clientPlayer.addHand(makeTestHand());
+  	drawBoard();
+  }
+  
+  function makeTestHand(){
+  	var hand = ["/images/cards/dixit_card_01_001.jpg", 
+  				"/images/cards/dixit_card_01_002.jpg",
+  				"/images/cards/dixit_card_01_003.jpg",
+  				"/images/cards/dixit_card_01_004.jpg",
+  				"/images/cards/dixit_card_01_005.jpg"
+  				];
+  	return makeHandArray(hand);
+  }
+  
+  function makeHandArray(handUrls){
+  	var hand = [];
+  	for(var i=0; i<handUrls.length;i++){
+  		hand.push(new Card(i, handUrls[i], i*100+160, canvas.height-260));
+  	}
+  	return hand; 
+  }
+  
+  function mouseDblClickListener(event){
+  	var bRect = canvas.getBoundingClientRect();
+	mouseX = (event.clientX - bRect.left)*(canvas.width/bRect.width);
+	mouseY = (event.clientY - bRect.top)*(canvas.height/bRect.height);
+	var card;
+	for(var i = 0; i< clientPlayer.hand.length; i++){
+		card = clientPlayer.hand[i];
+		if(card.clicked(mouseX, mouseY)){
+			if(card.visible){
+				var modal = $('#cardModal');
+				modal.find('.modal-body img')[0].src = card.frontImg.src;
+				modal.modal('show');
+			}			
+		}
+	}
+  }
   function mouseDownListener(event){
   	var bRect = canvas.getBoundingClientRect();
 	mouseX = (event.clientX - bRect.left)*(canvas.width/bRect.width);
 	mouseY = (event.clientY - bRect.top)*(canvas.height/bRect.height);
-	if(card.clicked(mouseX, mouseY)){
+	for(var i = 0; i< clientPlayer.hand.length; i++){
+		if(clientPlayer.hand[i].clicked(mouseX, mouseY)){
+		dragging=true;
+		draggingCard = clientPlayer.hand[i];
+		}
+	}
+	if(dragging){
 		dragging = true;
 		window.addEventListener("mousemove", mouseMoveListener, false);
-		dragHoldX = mouseX - card.x;
-		dragHoldY = mouseY - card.y;
+		dragHoldX = mouseX - draggingCard.x;
+		dragHoldY = mouseY - draggingCard.y;
 		//The "target" position is where the object should be if it were to move there instantaneously. But we will
 		//set up the code so that this target position is approached gradually, producing a smooth motion.
 		targetX = mouseX - dragHoldX;
@@ -43,13 +95,13 @@ window.onload = function(){
   
   function onTimerTick() {
 		//because of reordering, the dragging shape is the last one in the array.
-		card.x = card.x + 0.45*(targetX - card.x);
-		card.y = card.y + 0.45*(targetY - card.y);
+		draggingCard.x = draggingCard.x + 0.45*(targetX - draggingCard.x);
+		draggingCard.y = draggingCard.y + 0.45*(targetY - draggingCard.y);
 		
 		//stop the timer when the target position is reached (close enough)
-		if ((!dragging)&&(Math.abs(card.x - targetX) < 0.1) && (Math.abs(card.y - targetY) < 0.1)) {
-			card.x = targetX;
-			card.y = targetY;
+		if ((!dragging)&&(Math.abs(draggingCard.x - targetX) < 0.1) && (Math.abs(draggingCard.y - targetY) < 0.1)) {
+			draggingCard.x = targetX;
+			draggingCard.y = targetY;
 			//stop timer:
 			clearInterval(timer);
 		}
@@ -68,9 +120,9 @@ window.onload = function(){
 		var posX;
 		var posY;
 		var minX = 0;
-		var maxX = canvas.width - card.width;
+		var maxX = canvas.width - draggingCard.width;
 		var minY = 0;
-		var maxY = canvas.height - card.height;
+		var maxY = canvas.height - draggingCard.height;
 		
 		//getting mouse position correctly 
 		var bRect = canvas.getBoundingClientRect();
@@ -89,6 +141,6 @@ window.onload = function(){
 	
 	function drawBoard(){
   		ctx.clearRect(0, 0 ,canvas.width, canvas.height);
-		card.draw(ctx);	
+		clientPlayer.drawHand(ctx);
 	}
 }
