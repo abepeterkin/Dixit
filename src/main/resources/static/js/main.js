@@ -1,7 +1,5 @@
+var game = new Game(1, {numCards: 5}); 
 window.onload = function(){
-  var game = {
-  	rules: {numCards: 5}
-  }  
   var mouseX;
   var mouseY;
   var dragHoldX;
@@ -63,12 +61,18 @@ window.onload = function(){
   	var bRect = canvas.getBoundingClientRect();
 	mouseX = (event.clientX - bRect.left)*(canvas.width/bRect.width);
 	mouseY = (event.clientY - bRect.top)*(canvas.height/bRect.height);
-	for(var i = 0; i< clientPlayer.hand.length; i++){
-		if(clientPlayer.hand[i].clicked(mouseX, mouseY)){
-		dragging=true;
-		draggingCard = clientPlayer.hand[i];
+	if(game.currPhase === game.phases.NonStoryCards || game.currPhase === game.phases.StoryTeller){
+		for(var i = 0; i< clientPlayer.hand.length; i++){
+			if(clientPlayer.hand[i].clicked(mouseX, mouseY)){ 
+				if((game.currPhase === phases.NonStoryCards && !clientPlayer.isStoryTeller) ||
+					(game.currPhase === phases.StoryTeller && clientPlayer.isStoryTeller)){
+					dragging=true;
+					draggingCard = clientPlayer.hand[i];
+				}
+			}
 		}
-	}
+	} //TODO: else if it is voting time then go through the voting objects to see if it was hit
+	//also should change dragging card to dragging object to ouse the same listeners.
 	if(dragging){
 		dragging = true;
 		window.addEventListener("mousemove", mouseMoveListener, false);
@@ -141,6 +145,8 @@ window.onload = function(){
 	
 	function drawBoard(){
   		ctx.clearRect(0, 0 ,canvas.width, canvas.height);
+  		//TODO: draw clue
+  		//TODO: draw scoreboard
 		clientPlayer.drawHand(ctx);
 	}
 }

@@ -4,8 +4,10 @@ function Player(id, color, isStoryTeller, game){
 	this.isStoryTeller = isStoryTeller;
 	this.hand = new Array(game.rules.numCards);
 	this.game = game;
+	//TODO: add a vote so that a player is linked to its vote card
 }
 
+//makes player the storyteller;
 Player.prototype.makeStoryTeller = function(){
 	this.isStoryTeller = true;
 }
@@ -14,12 +16,15 @@ Player.prototype.makeStoryTeller = function(){
 Player.prototype.addHand = function(hand){
 	this.hand = hand;
 }
+
+//add card to player’s hand
 Player.prototype.addCard = function(card){
 	if(this.hand.length < this.game.rules.numCards){
 		this.hand.push(card)
 	}
 }
 
+//removes a card from player’s hand
 Player.prototype.removeCard = function(id){
 	for(var i=0; i < this.hand.length; i++){
 		if(this.hand[i] === id){
@@ -28,8 +33,17 @@ Player.prototype.removeCard = function(id){
 	}
 }
 
+//draws the player’s hand on canvas
 Player.prototype.drawHand = function (ctx){
 	for(var i = 0; i< this.hand.length; i++){
 		this.hand[i].draw(ctx);
 		}
+}
+//sends the clue to the board if it is the storyteller
+Player.prototype.sendClue = function(clue){
+ //TODO:
+}
+//cast player’s vote
+Player.prototype.vote = function(cardId){
+//TODO:
 }

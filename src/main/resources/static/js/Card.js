@@ -47,7 +47,3 @@ Card.prototype.clicked = function(clickX, clickY){
 Card.prototype.reveal = function (){
 	this.visible = true;	
 }
-
-$('#cardModal').on('show.bs.modal', function(event){
-	console.log(event);
-})
