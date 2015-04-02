@@ -12,7 +12,7 @@ public class Main {
         .ofType(Integer.class);
     try {
       OptionSet options = parser.parse(args);
-      Dixit.runSparkSever(port.value(options));
+      DixitServer.runSparkSever(port.value(options));
     } catch (RuntimeException e) {
       System.err.println("ERROR: " + e.getMessage());
     }

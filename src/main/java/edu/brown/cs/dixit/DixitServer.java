@@ -11,23 +11,14 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 import com.google.common.collect.ImmutableMap;
 
-public class Dixit {
+public class DixitServer {
   private static final int DEFAULT_PORT = 2345;
 
   public static void runSparkSever(Integer port) {
     port = port != null ? port : DEFAULT_PORT;
     Spark.setPort(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
-    Spark.get("/", new MainHandler(), new FreeMarkerEngine());
+    Spark.get("/", new DixitMainPage(), new FreeMarkerEngine());
   }
-
-  private static class MainHandler implements TemplateViewRoute {
-
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables = ImmutableMap.of("title", "Dixit");
-      return new ModelAndView(variables, "dixit.ftl");
-    }
-
-  }
+  
 }

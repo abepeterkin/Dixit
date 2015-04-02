@@ -1,17 +1,15 @@
 package gamestuff;
 
-import java.io.File;
-
 public class Card {
   private final int ID;
-  private final File IMAGE;
+  private final String IMAGE;
   private boolean isStoryteller = false;
 
   public int getId() {
     return ID;
   }
 
-  public File getImage() {
+  public String getImage() {
     return IMAGE;
   }
 
@@ -23,7 +21,7 @@ public class Card {
     return isStoryteller;
   }
 
-  public Card(int id, File image) {
+  public Card(int id, String image) {
     this.ID = id;
     this.IMAGE = image;
   }
