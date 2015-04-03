@@ -22,7 +22,7 @@ window.onload = function(){
   	clientPlayer = new Player(1, "#000000", false, game);
   	clientPlayer.addHand(makeTestHand());
   	drawBoard();
-  	//test
+  	//testing
   }
   
   function makeTestHand(){
