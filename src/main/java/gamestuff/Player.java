@@ -38,6 +38,9 @@ public class Player {
   }
 
   public void setIsStoryteller(boolean isStoryteller) {
+    for (Card c: this.hand) {
+      c.setStoryteller(isStoryteller);
+    }
     this.isStoryteller = isStoryteller;
   }
   

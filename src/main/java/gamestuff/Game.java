@@ -13,8 +13,9 @@ public class Game {
   private Phase phase;
   private Chat chat = new Chat();
   private Stack<Card> deck;
-  private List<Card> trash;
+  private Stack<Card> trash;
   private List<Card> tableCards;
+  private List<Vote> votes;
   private int handSize;
 
   public Game(int numPlayers, int maxCards, int handSize, Collection<Player> players) {
@@ -24,7 +25,9 @@ public class Game {
     this.handSize = handSize;
     this.deck = new Stack<Card>();
     this.trash = new Stack<Card>();
+    //perhaps tableCards should more effectively store position, aka 1,2,3,4 for voting?
     this.tableCards = new ArrayList<Card>();
+    this.votes = new ArrayList<Vote>();
   }
   
   /**
@@ -68,6 +71,31 @@ public class Game {
   }
   
   /**
+   * how exactly are we doing votes? for now just using vote class and we can update
+   * 
+   */
+  public void votingPhase() {
+    //Shuffler shuffle table cards
+    updatePhase(Phase.VOTING);
+  }
+  
+  /**
+   * again we need to figure out how we're doing votes, player will submit vote
+   * if votes full, advance to scoring
+   * 
+   * @param p
+   * @param v
+   */
+  public void playerVote(Player p, Vote v) {
+    //cast vote
+    if (this.votes.size() == this.players.size() - 1) {
+      scoringPhase();
+    }
+  }
+  
+  public void scoringPhase()
+  
+  /**
    * again is it selected Card we pass from front end or the ID?
    * 
    * @param p
@@ -93,6 +121,19 @@ public class Game {
     this.deck.addAll(this.trash);
     //CardShuffler shuffle Deck
     this.trash.clear();
+  }
+  
+  /**
+   * for front-end to show showing card on trash
+   * again confused, is this necessary?
+   * @return
+   */
+  public Card topOfTrash() {
+    if (this.trash.isEmpty()) {
+      return null;
+    } else {
+      return this.trash.peek();
+    }
   }
   
   /**
