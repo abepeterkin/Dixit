@@ -11,7 +11,7 @@ public class Game {
   private String clue;
   private Phase phase = Phase.STORYTELLER;
   private Chat chat = new Chat();
-  private List<Card> deck;
+  private Stack<Card> deck;
   private List<Card> trash;
   private int handSize;
 
@@ -31,6 +31,11 @@ public class Game {
    * all players given x cards depending on custom hand size
    */
   public void initiate() {
-    
+    //fill deck
+    for(int i = 0; i < this.handSize; i++) {
+      for(Player p: this.players) {
+        p.draw(this.deck.pop());
+      }
+    }
   }
 }
