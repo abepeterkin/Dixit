@@ -34,14 +34,14 @@ public class Game {
    * all players given x cards depending on custom hand size
    */
   public void initiate() {
-    //fill deck line here ******
+    //fill deck lines here ******
     //CardShuffler shuffle deck
     for(int i = 0; i < this.handSize; i++) {
       for(Player p: this.players) {
         p.draw(this.deck.pop());
       }
     }
-    this.phase = Phase.WAITINGFORFIRSTSTORY;
+    updatePhase(Phase.WAITINGFORFIRSTSTORY);
   }
   
   /**
@@ -54,7 +54,7 @@ public class Game {
    * @param player   Player who submitted first story
    * @param s        Story submitted
    */
-  public void firstStory(Player player, String s) {
+  public void firstStory(Player player, String s, Card c) {
     for (Player p: this.players) {
       if (player.equals(p)) {
         p.setIsStoryteller(true);
@@ -63,11 +63,22 @@ public class Game {
       }
     }
     this.story = s;
-    this.phase = Phase.NONSTORYCARDS;
+    addCardToTable(player, c);
+    updatePhase(Phase.NONSTORYCARDS);
   }
   
-  
-  
+  /**
+   * again is it selected Card we pass from front end or the ID?
+   * 
+   * @param p
+   * @param c
+   */
+  public void addCardToTable(Player p, Card c) {
+    this.tableCards.add(p.playCard(c));
+    if (this.tableCards.size() == this.players.size()) {
+      votingPhase();
+    }
+  }
   
   public Card drawFromDeck() {
     if (!deck.isEmpty()) {
@@ -82,5 +93,15 @@ public class Game {
     this.deck.addAll(this.trash);
     //CardShuffler shuffle Deck
     this.trash.clear();
+  }
+  
+  /**
+   * updates phase in game and in all players
+   */
+  public void updatePhase(Phase p) {
+    this.phase = p;
+    for (Player player: this.players) {
+      player.setPhase(p);
+    }
   }
 }

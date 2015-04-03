@@ -2,7 +2,9 @@ package gamestuff;
 
 import java.util.List;
 
+//should we pass Phase to player?
 public class Player {
+  private Phase phase;
   private int score;
   private final String CHAT_NAME;
   private final Color COLOR;
@@ -52,6 +54,10 @@ public class Player {
    */
   public Card playCard(Card c) {
     return null;
+  }
+  
+  public void setPhase(Phase p) {
+    this.phase = p;
   }
 
 }
