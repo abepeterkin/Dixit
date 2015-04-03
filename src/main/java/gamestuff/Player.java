@@ -38,5 +38,9 @@ public class Player {
   public void setIsStoryteller(boolean isStoryteller) {
     this.isStoryteller = isStoryteller;
   }
+  
+  public void draw(Card c){
+    hand.add(c);
+  }
 
 }
