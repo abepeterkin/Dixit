@@ -22,7 +22,7 @@ window.onload = function(){
   	clientPlayer = new Player(1, "#000000", false, game);
   	clientPlayer.addHand(makeTestHand());
   	drawBoard();
-  	//testing
+  	//testing git integration
   }
   
   function makeTestHand(){
