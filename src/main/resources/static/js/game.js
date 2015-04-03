@@ -5,6 +5,7 @@ function Game(id,rules){
 	currClue = '';
 	board = null;
 	//TODO: add a ctx and canvas so that those can be easily be referenced?
+	//currstorysteller
 }
 
 Game.prototype.phases = {

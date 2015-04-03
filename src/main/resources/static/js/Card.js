@@ -1,10 +1,10 @@
 var backImg = new Image();
 backImg.src = "/images/cards/dixit_card_01_000.jpg";
 function Card(id, img, x, y) {
-	this.id = id;
+	this.id = id; /// dont take img as constructor so ppl dont CHEAT
 	this.x = x;
 	this.y = y;
-	this.visible = true;
+	this.visible = false;
 	this.height = 120; //change this to make responsive with canvas dim
 	this.width = 90; //ditto
 	this.frontImg = new Image();
@@ -45,5 +45,5 @@ Card.prototype.clicked = function(clickX, clickY){
 }
 
 Card.prototype.reveal = function (){
-	this.visible = true;	
+	this.visible = true;
 }
