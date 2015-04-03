@@ -4,7 +4,7 @@ function Deck(cards){
 	this.topTrashCard = null;
 }
 //purely animation, flips trash and shuffles.
-Deck.prototype.shuffle = function(ctx){
+Deck.prototype.trash = function(ctx){
 
 }
 

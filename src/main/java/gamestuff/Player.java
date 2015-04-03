@@ -2,7 +2,9 @@ package gamestuff;
 
 import java.util.List;
 
+//should we pass Phase to player?
 public class Player {
+  private Phase phase;
   private int score;
   private final String CHAT_NAME;
   private final Color COLOR;
@@ -36,7 +38,29 @@ public class Player {
   }
 
   public void setIsStoryteller(boolean isStoryteller) {
+    for (Card c: this.hand) {
+      c.setStoryteller(isStoryteller);
+    }
     this.isStoryteller = isStoryteller;
+  }
+  
+  public void draw(Card c){
+    hand.add(c);
+  }
+  
+  /**
+   * so for this would the front end send the chosen card id to back end,
+   * then select that card from player's hand? a little confused
+   * 
+   * @param c
+   * @return
+   */
+  public Card playCard(Card c) {
+    return null;
+  }
+  
+  public void setPhase(Phase p) {
+    this.phase = p;
   }
 
 }
