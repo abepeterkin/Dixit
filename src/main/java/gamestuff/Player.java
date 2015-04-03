@@ -42,5 +42,16 @@ public class Player {
   public void draw(Card c){
     hand.add(c);
   }
+  
+  /**
+   * so for this would the front end send the chosen card id to back end,
+   * then select that card from player's hand? a little confused
+   * 
+   * @param c
+   * @return
+   */
+  public Card playCard(Card c) {
+    return null;
+  }
 
 }

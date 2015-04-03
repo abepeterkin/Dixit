@@ -1,6 +1,7 @@
 package gamestuff;
 
 public enum Phase {
+  WAITINGFORFIRSTSTORY,
   STORYTELLER,
   NONSTORYCARDS,
   VOTING,
