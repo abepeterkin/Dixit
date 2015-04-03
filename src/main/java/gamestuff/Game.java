@@ -2,9 +2,18 @@ package gamestuff;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * QUESTIONS:
+ *  How do we organize voting?
+ *  How do we organize table cards by position?
+ *  How do we organize players to rotate storyteller?
+ * @author zhammer
+ *
+ */
 public class Game {
   private int MAX_CARDS;
   private int numPlayers;
@@ -36,9 +45,9 @@ public class Game {
    * trash is empty
    * all players given x cards depending on custom hand size
    */
-  public void initiate() {
+  public void newGame() {
     //fill deck lines here ******
-    //CardShuffler shuffle deck
+    Collections.shuffle(this.deck);
     for(int i = 0; i < this.handSize; i++) {
       for(Player p: this.players) {
         p.draw(this.deck.pop());
@@ -65,9 +74,17 @@ public class Game {
         p.setIsStoryteller(false);
       }
     }
-    this.story = s;
-    addCardToTable(player, c);
+    submitStory(s, c);
     updatePhase(Phase.NONSTORYCARDS);
+  }
+  
+  public void submitStory(String s, Card c) {
+    for (Player p: this.players) {
+      if (p.getIsStoryteller()) {
+        addCardToTable(p,c);
+      }
+    }
+    this.story = s;
   }
   
   /**
@@ -75,7 +92,7 @@ public class Game {
    * 
    */
   public void votingPhase() {
-    //Shuffler shuffle table cards
+    Collections.shuffle(this.tableCards);
     updatePhase(Phase.VOTING);
   }
   
@@ -93,7 +110,38 @@ public class Game {
     }
   }
   
-  public void scoringPhase()
+  /**
+   * we need to discuss how votes will work to do this
+   */
+  public void scoringPhase() {
+    for (Card c: this.tableCards) {
+      //discuss voting mechanism
+      //all scores will be tallied based on game rules
+    }
+    updatePhase(Phase.SCORING);
+  }
+  
+  /**
+   * wait i imagine til some timer on front end after scoring phase?
+   */
+  public void cleanUp() {
+    //max score player wins if over maxScore, should we use sorted list?
+    //(if winner)
+    if (false) {
+      
+    } else {
+      trashTable();
+      this.story = null;
+      votes.clear();
+      //select newstoryteller
+      updatePhase(Phase.STORYTELLER);
+    }
+  }
+  
+  public void trashTable() {
+    trash.addAll(this.tableCards);
+    this.tableCards.clear();
+  }
   
   /**
    * again is it selected Card we pass from front end or the ID?
@@ -103,25 +151,24 @@ public class Game {
    */
   public void addCardToTable(Player p, Card c) {
     this.tableCards.add(p.playCard(c));
+    p.draw(drawFromDeck());
     if (this.tableCards.size() == this.players.size()) {
       votingPhase();
     }
   }
   
   public Card drawFromDeck() {
-    if (!deck.isEmpty()) {
-      return this.deck.pop();
-    } else {
+    if (deck.isEmpty()) {
       this.refillDeck();
-      return this.deck.pop();
     }
+    return this.deck.pop();
   }
   
   public void refillDeck() {
     this.deck.addAll(this.trash);
-    //CardShuffler shuffle Deck
+    Collections.shuffle(this.deck);
     this.trash.clear();
-  }
+  }      
   
   /**
    * for front-end to show showing card on trash
