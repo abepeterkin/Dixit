@@ -3,6 +3,8 @@ package gamestuff;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 public class Chat {
   private List<ChatLine> lines = new ArrayList<ChatLine>();
   private final int MAX_LINES;
@@ -36,8 +38,8 @@ public class Chat {
   /**
    * @return every line in the chat
    */
-  public List<ChatLine> getLines() {
-    return lines;
+  public ImmutableList<ChatLine> getLines() {
+    return ImmutableList.copyOf(lines);
   }
 
 }
