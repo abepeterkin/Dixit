@@ -1,4 +1,4 @@
-package edu.brown.cs.dixit;
+package edu.brown.cs.dixit.pages;
 
 import java.util.Map;
 
