@@ -6,6 +6,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
+/*
+ * IMPORTANT NOTE/TODO:
+ * the game object as it is now cannot handle multiple threads. Once we've
+ * got multiple clients making ajax requests, we need to find some way to keep
+ * everything here from exploding.
+ *
+ * Zach, when you work on this, could you investigate how to hook all this up to
+ * the frontend stuff?
+ */
+
 public class Game {
   private final int HAND_SIZE;
   private final int MAX_PLAYERS;
@@ -28,14 +38,23 @@ public class Game {
     this.votes = new ArrayList<Vote>();
   }
 
+  /**
+   * @return the game's chat
+   */
   public Chat getChat() {
     return this.chat;
   }
 
+  /**
+   * @return the phase of the game
+   */
   public Phase getPhase() {
     return this.phase;
   }
 
+  /**
+   * @return the game's current story
+   */
   public String getStory() {
     return this.story;
   }
@@ -51,9 +70,13 @@ public class Game {
     } else {
       return false;
     }
+    //TODO: figure out whether this is actually the correct way to do it
   }
 
-  public void removePlayer() {
+  /**
+   * @param p the player to remove
+   */
+  public void removePlayer(Player p) {
     //TODO: figure out the best way to remove a player from the game
   }
 
@@ -97,6 +120,10 @@ public class Game {
     updatePhase(Phase.NONSTORYCARDS);
   }
 
+  /**
+   * @param s the story
+   * @param c the card attributed to the story
+   */
   public void submitStory(String s, Card c) {
     for (Player p: this.players) {
       if (p.isStoryteller()) {
@@ -106,6 +133,9 @@ public class Game {
     this.story = s;
   }
 
+  /**
+   * Updates the phase to the voting phase.
+   */
   public void votingPhase() {
     Collections.shuffle(this.tableCards);
     updatePhase(Phase.VOTING);
@@ -202,6 +232,10 @@ public class Game {
     return winningPlayers;
   }*/
 
+  /**
+   * Give storyteller status to the next player in line, and revoke the current
+   * storyteller's status.
+   */
   private void cycleStoryteller() {
     for (int i = 0; i < players.size(); i++) {
       Player current = players.get(i);
@@ -212,6 +246,7 @@ public class Game {
         } else {
           players.get(i + 1).setIsStoryteller(true);
         }
+        break;
       }
     }
   }
@@ -226,9 +261,10 @@ public class Game {
 
   /**
    * again is it selected Card we pass from front end or the ID?
+   * ABRAHAM: good question, probably the ID. this can all change if needed
    *
-   * @param p
-   * @param c
+   * @param p the player adding the card
+   * @param c the card to be added
    */
   public void addCardToTable(Player p, Card c) {
     this.tableCards.add(c);
@@ -272,15 +308,25 @@ public class Game {
     private final Player player;
     private final Card card;
 
+    /**
+     * @param player the player who cast the vote
+     * @param card the card the vote was cast for
+     */
     public Vote(Player player, Card card) {
       this.player = player;
       this.card = card;
     }
 
+    /**
+     * @return the player who cast the vote
+     */
     public Player getPlayer() {
       return player;
     }
 
+    /**
+     * @return the card the vote was cast for
+     */
     public Card getCard() {
       return card;
     }

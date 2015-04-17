@@ -2,6 +2,8 @@ package gamestuff;
 
 import java.util.List;
 
+/** Class representing a game player.
+ */
 public class Player implements Comparable<Player> {
   private int score;
   private final String CHAT_NAME;
@@ -15,30 +17,51 @@ public class Player implements Comparable<Player> {
     this.COLOR = color;
   }
 
+  /**
+   * @return the player's score
+   */
   public int getScore() {
     return score;
   }
 
+  /**
+   * @return the number of cards in the players hand
+   */
   public int cardsInHand() {
     return hand.size();
   }
 
+  /**
+   * @param increment the amount to increment the score by
+   */
   public void incrementScore(int increment) {
     this.score += increment;
   }
 
+  /**
+   * @return the player's chat name
+   */
   public String getChatName() {
     return CHAT_NAME;
   }
 
+  /**
+   * @return the player's color
+   */
   public Color getColor() {
     return COLOR;
   }
 
+  /**
+   * @return whether or not the player is a storyteller
+   */
   public boolean isStoryteller() {
     return isStoryteller;
   }
 
+  /** Sets the storyteller status of the player
+   * @param isStoryteller whether or not the player is the storyteller
+   */
   public void setIsStoryteller(boolean isStoryteller) {
     for (Card c: this.hand) {
       c.setStoryteller(isStoryteller);
@@ -46,10 +69,16 @@ public class Player implements Comparable<Player> {
     this.isStoryteller = isStoryteller;
   }
 
+  /**Adds a card to the player's hand
+   * @param c the card to add to the player's hand.
+   */
   public void draw(Card c){
     hand.add(c);
   }
 
+  /**
+   * @param c the card to remove from the player's hand
+   */
   public void removeFromHand(Card c) {
     hand.remove(c);
   }
