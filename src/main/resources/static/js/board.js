@@ -37,7 +37,7 @@ Board.prototype.draw = function() {
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   // TODO: draw clue
   // TODO: draw game.players
-  this.drawScoreAndHand(this.game.players[this.playerId]);
+  this.drawScoreAndHand(this.game.players[this.playerId - 1]);
 }
 // draws the simplified board with the appropriate scores,
 Board.prototype.drawSmall = function() {
@@ -54,16 +54,22 @@ Board.prototype.drawScoreAndHand = function(player) {
   if (this.img.complete) {
     this.ctx.drawImage(img, x, y, w, h);
     player.drawHand(this.ctx);
+    this.drawPLayers();
     this.drawClue();
   } else {
     img.onload = function() {
       board.ctx.drawImage(img, x, y, w, h);
       player.drawHand(board.ctx);
+      board.drawPlayers();
       board.drawClue();
     }
   }
 }
-
+Board.prototype.drawPlayers = function() {
+  for (var i = 0; i < this.game.players.length; i++) {
+    this.game.players[i].drawIdle(this.ctx, i);
+  }
+}
 Board.prototype.drawClue = function() {
   this.ctx.font = "30px Georgia"; // make this responsive
   this.ctx.fillText(this.game.currClue, this.canvas.width / 2, 30);
@@ -95,7 +101,7 @@ Board.prototype.refresh = function() {
       || document.documentElement.clientWidth || document.body.clientWidth);
   this.canvas.height = (window.innerHeight
       || document.documentElement.clientHeight || document.body.clientHeight);
-  this.game.players[this.playerId].refresh(this.canvas);
+  this.game.players[this.playerId - 1].refresh(this.canvas);
   board.draw();
 }
 
@@ -152,11 +158,12 @@ function mouseDownListener(event) {
   if (game.currPhase === game.phases.NonStoryCards
       || game.currPhase === game.phases.StoryTeller) {
     for (var i = 0; i < board.game.players[board.playerId].hand.length; i++) {
-      if (board.game.players[board.playerId].hand[i].clicked(mouseX, mouseY)) {
-        if ((game.currPhase === game.phases.NonStoryCards && !board.game.players[board.playerId].isStoryTeller)
-            || (game.currPhase === game.phases.StoryTeller && board.game.players[board.playerId].isStoryTeller)) {
+      if (board.game.players[board.playerId - 1].hand[i]
+          .clicked(mouseX, mouseY)) {
+        if ((game.currPhase === game.phases.NonStoryCards && !board.game.players[board.playerId - 1].isStoryTeller)
+            || (game.currPhase === game.phases.StoryTeller && board.game.players[board.playerId - 1].isStoryTeller)) {
           dragging = true;
-          draggingCard = board.game.players[board.playerId].hand[i];
+          draggingCard = board.game.players[board.playerId - 1].hand[i];
         }
       }
     }
@@ -222,8 +229,8 @@ function mouseMoveListener(evt) {
   var mouseY = (evt.clientY - bRect.top) * (board.canvas.height / bRect.height);
   var hoveringCard = false;
   var card;
-  for (var i = 0; i < board.game.players[board.playerId].hand.length; i++) {
-    card = board.game.players[board.playerId].hand[i];
+  for (var i = 0; i < board.game.players[board.playerId - 1].hand.length; i++) {
+    card = board.game.players[board.playerId - 1].hand[i];
     if (card.clicked(mouseX, mouseY)) {
       // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
       hoveringCard = true;
