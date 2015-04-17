@@ -3,9 +3,12 @@ package gamestuff;
 import java.io.File;
 import java.util.Stack;
 
+/** Class for initilizing decks of cards.
+ */
 public class CardInitilizer {
 
-  /**
+  /** Takes a folder containing image files and creates a list of Cards
+   * Corresponding to those images.
    *
    * @param imageFolder the folder containing the images that will be turned into files
    * @return a stack of Cards made from the files in the folder
