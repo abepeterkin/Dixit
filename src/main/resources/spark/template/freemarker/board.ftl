@@ -1,6 +1,6 @@
 <#assign content>
 	<div class="container">	
-	 <div class="right">
+	 <div class="rightCol">
 	   <div class="border"id="music">music controls go here</div>
 	   <div class="chat">
 	     <div class="border" id="text"> chat text goes here</div>
@@ -10,7 +10,7 @@
 	     </div>
 	   </div>
 	 </div>
-	 <div class="left">
+	 <div class="leftCol">
 	   <canvas class="border" id="board"></canvas>
 	 </div>
 	</div>
@@ -44,39 +44,29 @@
     <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
     <li data-target="#carousel-example-generic" data-slide-to="1"></li>
     <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+    
+    
   </ol>
 
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">
     <div class="item active">
       <img id="card0" src="">
-      <div class="carousel-caption">
-        card three
-      </div>
     </div>
     <div class="item">
        <img id="card1" src="">
-      <div class="carousel-caption">
- 		card two
-      </div>
     </div>
      <div class="item">
        <img id="card2" src="">
-      <div class="carousel-caption">
- 		card two
-      </div>
     </div>
      <div class="item">
        <img id="card3" src="">
-      <div class="carousel-caption">
- 		card two
-      </div>
     </div>
      <div class="item">
        <img id="card4" src="">
-      <div class="carousel-caption">
- 		card two
-      </div>
+
     </div>
   </div>
   <!-- Controls -->

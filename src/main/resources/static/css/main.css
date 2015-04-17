@@ -6,13 +6,13 @@ img {
   -webkit-user-select: none;
   -moz-user-select: none;
 }
-.right {
+.rightCol {
   width: 250px;
   float: right;
   background: #aafed6;
 }
 
-.left {
+.leftCol {
   float: none;
   background: #e8f6fe;
   width: auto;
