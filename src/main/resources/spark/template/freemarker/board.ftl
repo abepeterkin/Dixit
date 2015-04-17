@@ -11,7 +11,7 @@
 	   </div>
 	 </div>
 	 <div class="left">
-	   <canvas width="880" height="775" class="border" id="board"></canvas>
+	   <canvas class="border" id="board"></canvas>
 	 </div>
 	</div>
 	<div class="modal fade" id="cardModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true">
