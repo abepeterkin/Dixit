@@ -7,12 +7,14 @@ import gamestuff.Game;
 import gamestuff.Phase;
 import gamestuff.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 /**
  * Serializes various classes into strings. Deep serialization means that nested
@@ -22,25 +24,28 @@ public class DixitSerializationUtil {
 
   private final static Gson GSON = new Gson();
 
-  public String serializeCard(Card card) {
+  public JsonElement serializeCard(
+      Card card) {
     Map<String, Object> variables = new ImmutableMap.Builder()
         .put("id", card.getId()).put("image", card.getImage())
         .put("isStoryTeller", card.getStoryteller()).build();
-    return GSON.toJson(variables);
+    return GSON.toJsonTree(variables);
   }
 
-  public String serializeHand(List<Card> hand) {
-    ImmutableList.Builder tempBuilder = new ImmutableList.Builder();
+  public JsonElement serializeHand(
+      List<Card> hand) {
+    ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
     int index = 0;
     while (index < hand.size()) {
       Card tempCard = hand.get(index);
       tempBuilder.add(serializeCard(tempCard));
       index += 1;
     }
-    return GSON.toJson(tempBuilder.build());
+    return GSON.toJsonTree(tempBuilder.build());
   }
 
-  public String serializeColor(Color color) {
+  public JsonElement serializeColor(
+      Color color) {
     String tempValue = "none";
     if (color == Color.RED) {
       tempValue = "RED";
@@ -57,23 +62,28 @@ public class DixitSerializationUtil {
     }
     Map<String, Object> variables = new ImmutableMap.Builder().put("value",
         tempValue).build();
-    return GSON.toJson(variables);
+    return GSON.toJsonTree(variables);
   }
 
-  public String serializePlayer(Player player, Player currentPlayer) {
+  public JsonElement serializePlayer(
+      Player player,
+      Player currentPlayer) {
     Map<String, Object> variables = new ImmutableMap.Builder()
         .put("score", player.getScore()).put("chatName", player.getChatName())
         .put("isStoryTeller", player.isStoryteller()).build();
-    return GSON.toJson(variables);
+    return GSON.toJsonTree(variables);
   }
 
-  public String deepSerializePlayer(Player player, Player currentPlayer) {
+  public JsonElement deepSerializePlayer(
+      Player player,
+      Player currentPlayer) {
     // TODO: Serialize.
     // Cannot serialize yet because player has no accessor for hand.
-    return "";
+    return GSON.toJsonTree("");
   }
 
-  public String serializePhase(Phase phase) {
+  public JsonElement serializePhase(
+      Phase phase) {
     String tempValue = "none";
     if (phase == Phase.STORYTELLER) {
       tempValue = "STORYTELLER";
@@ -88,23 +98,37 @@ public class DixitSerializationUtil {
     }
     Map<String, Object> variables = new ImmutableMap.Builder().put("value",
         tempValue).build();
-    return GSON.toJson(variables);
+    return GSON.toJsonTree(variables);
   }
 
-  public String serializeGame(Game game, Player currentPlayer) {
+  public JsonElement serializeGame(
+      Game game,
+      Player currentPlayer) {
     // TODO: Serialize.
     // Need accessors for serialization.
-    return "";
+    return GSON.toJsonTree("");
   }
 
-  public String deepSerializeGame(Game Game, Player currentPlayer) {
+  public JsonElement deepSerializeGame(
+      Game Game,
+      Player currentPlayer) {
     // TODO: Serialize.
     // Need accessors for serialization.
-    return "";
+    return GSON.toJsonTree("");
   }
 
-  public String serializeChatLine(ChatLine chatLine) {
-    return GSON.toJson(chatLine.getMessage());
+  public JsonElement serializeChatLine(
+      ChatLine chatLine) {
+    return GSON.toJsonTree(chatLine.getMessage());
+  }
+
+  public JsonElement serializeUpdate(
+      String updateName,
+      JsonElement json) {
+    List<JsonElement> tempList = new ArrayList<JsonElement>();
+    tempList.add(GSON.toJsonTree(updateName));
+    tempList.add(json);
+    return GSON.toJsonTree(tempList);
   }
 
 }

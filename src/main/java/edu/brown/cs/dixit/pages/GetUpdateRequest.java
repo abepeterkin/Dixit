@@ -13,6 +13,7 @@ import spark.TemplateViewRoute;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import edu.brown.cs.dixit.DixitGameSubscriber;
 import edu.brown.cs.dixit.DixitSerializationUtil;
@@ -94,10 +95,10 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
       dixitUpdates.add(dixitUpdate);
     }
 
-    public String getJson(
+    public JsonElement getJson(
         long startTime,
         Player player) {
-      List<String> tempJsonList = new ArrayList<String>();
+      List<JsonElement> tempJsonList = new ArrayList<JsonElement>();
       int index = dixitUpdates.size() - 1;
       while (index >= 0) {
         DixitUpdate tempUpdate = dixitUpdates.get(index);
@@ -107,7 +108,7 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
         tempJsonList.add(tempUpdate.getJson(player));
         index--;
       }
-      return gson.toJson(tempJsonList);
+      return gson.toJsonTree(tempJsonList);
     }
 
     public void removeUpdates(
@@ -132,7 +133,7 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
     // Returns a JSON representation of the update.
     // If the update should not be seen by the given player,
     // this function returns null.
-    String getJson(
+    JsonElement getJson(
         Player player);
 
     long getTime();
@@ -153,11 +154,12 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
     }
 
     @Override
-    public String getJson(
+    public JsonElement getJson(
         Player inputPlayer) {
       if (player == inputPlayer) {
         // There is no accessor for Hand in Player yet.
-        return serializationUtil.serializeHand(null);
+        JsonElement tempJson = serializationUtil.serializeHand(null);
+        return serializationUtil.serializeUpdate("hand", tempJson);
       } else {
         return null;
       }
@@ -184,9 +186,11 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
     }
 
     @Override
-    public String getJson(
+    public JsonElement getJson(
         Player inputPlayer) {
-      return serializationUtil.serializePlayer(player, inputPlayer);
+      JsonElement tempJson = serializationUtil.serializePlayer(player,
+          inputPlayer);
+      return serializationUtil.serializeUpdate("player", tempJson);
     }
 
     @Override
@@ -210,9 +214,10 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
     }
 
     @Override
-    public String getJson(
+    public JsonElement getJson(
         Player player) {
-      return serializationUtil.serializeGame(game, player);
+      JsonElement tempJson = serializationUtil.serializeGame(game, player);
+      return serializationUtil.serializeUpdate("game", tempJson);
     }
 
     @Override
@@ -238,9 +243,10 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
     }
 
     @Override
-    public String getJson(
+    public JsonElement getJson(
         Player player) {
-      return serializationUtil.serializeChatLine(chatLine);
+      JsonElement tempJson = serializationUtil.serializeChatLine(chatLine);
+      return serializationUtil.serializeUpdate("chat", tempJson);
     }
 
     @Override
