@@ -4,6 +4,7 @@ function Game(id, rules) {
   this.currPhase = 0;
   this.currClue = '"Harry Potter"';
   board = null;
+  this.players = [];
   // TODO: add a ctx and canvas so that those can be easily be referenced?
   // currstorysteller
 }

@@ -62,14 +62,16 @@ Player.prototype.vote = function(cardId) {
 }
 
 // draw the player idle standing by
-Player.prototype.drawIdle = function(ctx) {
+Player.prototype.drawIdle = function(board, index) {
   if (this.img.idle.complete) {
-
+    board.ctx.drawImage(this.img.idle, 0, 0, 128, 128, board.canvas.width
+        - (board.canvas.width / 8),
+        (index * 128 / 2) + board.canvas.height / 4, 128, 128);
   } else {
     this.img.idle.onload = function() {
+      board.ctx.drawImage(board.img.idle, 0, 0, 128, 128, board.canvas.width
+          - (board.canvas.width / 20), 0, 128, 128);
 
     }
   }
 }
-
-var get
