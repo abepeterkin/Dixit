@@ -1,12 +1,12 @@
 var backImg = new Image();
-backImg.src = "/images/cards/dixit_card_01_000.jpg";
-function Card(id, img, x, y) {
+backImg.src = "/images/back_of_card.jpg";
+function Card(id, img, x, y, canvas) {
   this.id = id; // / dont take img as constructor so ppl dont CHEAT
   this.x = x;
   this.y = y;
   this.visible = true;
-  this.height = 120; // change this to make responsive with canvas dim
-  this.width = 90; // ditto
+  this.height = canvas.height / 5.5;
+  this.width = canvas.width / 10;
   this.frontImg = new Image();
   this.frontImg.src = img;
   this.backImg = backImg;
@@ -20,6 +20,10 @@ Card.prototype.getImg = function() {
   }
 }
 
+Card.prototype.resize = function(canvas) {
+  this.height = canvas.height / 5.5;
+  this.width = canvas.width / 10;
+}
 // function for drawing the card
 Card.prototype.draw = function(ctx) {
   var img = this.getImg();

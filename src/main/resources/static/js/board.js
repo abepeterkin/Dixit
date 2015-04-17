@@ -10,11 +10,12 @@ var dragIndex;
 var draggingCard;
 var board;
 // should hold to array of players to display their score and color
-function Board(players, canvasId) {
+function Board(players, canvasId, playerId) {
+  this.playerId = playerId; // the player id who is using this client
   this.players = players;
   this.scores = {}; // maps of playerid to score
   this.cards = []// cards currently at play
-  this.canvas = document.getElementById(canvasIs);
+  this.canvas = document.getElementById(canvasId);
   this.canvas.width = (window.innerWidth
       || document.documentElement.clientWidth || document.body.clientWidth);
   this.canvas.height = (window.innerHeight
@@ -23,7 +24,13 @@ function Board(players, canvasId) {
   board = this;
 
 }
-
+// draws the entire game board, including client player's hand
+Board.prototype.draw = function() {
+  this.ctx.clearRect(0, 0, this.width, this.canvas.height);
+  // TODO: draw clue
+  // TODO: draw scoreboard
+  this.players[this.playerId].drawHand(this.ctx);
+}
 // draws the simplified board with the appropriate scores,
 Board.prototype.drawSmall = function() {
 
@@ -56,20 +63,25 @@ Board.prototype.refresh = function() {
       || document.documentElement.clientWidth || document.body.clientWidth);
   this.canvas.height = (window.innerHeight
       || document.documentElement.clientHeight || document.body.clientHeight);
+  this.players[this.playerId].refresh(this.canvas);
+  board.draw();
 }
 
 Board.prototype.addListeners = function() {
   this.canvas.addEventListener("mousedown", mouseDownListener, false);
   this.canvas.addEventListener("dblclick", mouseDblClickListener, false);
+  $(window).on('resize', function(e) {
+    board.refresh();
+  })
 }
 
 function mouseDblClickListener(event) {
-  var bRect = canvas.getBoundingClientRect();
-  mouseX = (event.clientX - bRect.left) * (canvas.width / bRect.width);
-  mouseY = (event.clientY - bRect.top) * (canvas.height / bRect.height);
+  var bRect = board.canvas.getBoundingClientRect();
+  mouseX = (event.clientX - bRect.left) * (board.canvas.width / bRect.width);
+  mouseY = (event.clientY - bRect.top) * (board.canvas.height / bRect.height);
   var card;
-  for (var i = 0; i < clientPlayer.hand.length; i++) {
-    card = clientPlayer.hand[i];
+  for (var i = 0; i < board.players[board.playerId].hand.length; i++) {
+    card = board.players[board.playerId].hand[i];
     if (card.clicked(mouseX, mouseY)) {
       if (card.visible) {
         var modal = $('#cardModal');
@@ -85,12 +97,12 @@ function mouseDownListener(event) {
   mouseY = (event.clientY - bRect.top) * (board.canvas.height / bRect.height);
   if (game.currPhase === game.phases.NonStoryCards
       || game.currPhase === game.phases.StoryTeller) {
-    for (var i = 0; i < clientPlayer.hand.length; i++) {
-      if (clientPlayer.hand[i].clicked(mouseX, mouseY)) {
-        if ((game.currPhase === game.phases.NonStoryCards && !clientPlayer.isStoryTeller)
-            || (game.currPhase === game.phases.StoryTeller && clientPlayer.isStoryTeller)) {
+    for (var i = 0; i < board.players[board.playerId].hand.length; i++) {
+      if (board.players[board.playerId].hand[i].clicked(mouseX, mouseY)) {
+        if ((game.currPhase === game.phases.NonStoryCards && !board.players[board.playerId].isStoryTeller)
+            || (game.currPhase === game.phases.StoryTeller && board.players[board.playerId].isStoryTeller)) {
           dragging = true;
-          draggingCard = clientPlayer.hand[i];
+          draggingCard = board.players[board.playerId].hand[i];
         }
       }
     }
@@ -138,11 +150,11 @@ function onTimerTick() {
     // stop timer:
     clearInterval(timer);
   }
-  drawBoard();
+  board.draw();
 }
 
 function mouseUpListener(evt) {
-  canvas.addEventListener("mousedown", mouseDownListener, false);
+  board.canvas.addEventListener("mousedown", mouseDownListener, false);
   window.removeEventListener("mouseup", mouseUpListener, false);
   if (dragging) {
     dragging = false;

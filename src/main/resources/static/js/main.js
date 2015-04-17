@@ -13,47 +13,27 @@ players[player2.id] = player2;
 players[player3.id] = player3;
 players[player4.id] = player4;
 game.currPhase = 1; // make it nonstorycards so cards can move
+function makeTestHand() {
+  var hand = [ "/images/cards/dixit_card_01_001.jpg",
+      "/images/cards/dixit_card_01_002.jpg",
+      "/images/cards/dixit_card_01_003.jpg",
+      "/images/cards/dixit_card_01_004.jpg",
+      "/images/cards/dixit_card_01_005.jpg" ];
+  return makeHandArray(hand);
+}
+
+function makeHandArray(handUrls) {
+  var hand = [];
+  for (var i = 0; i < handUrls.length; i++) {
+    hand.push(new Card(i, handUrls[i], i * (board.canvas.width / 9)
+        + (board.canvas.width / 4), board.canvas.height
+        - (board.canvas.height / 4), board.canvas));
+  }
+  return hand;
+}
 window.onload = function() {
-  var board = new Board(players, "board");
+  var board = new Board(players, "board", player1.id);
+  player1.addHand(makeTestHand());
   board.addListeners();
-
-  var canvas = document.getElementById("board");
-  var ctx = canvas.getContext("2d");
-  var clientPlayer;
-  init();
-  canvas.addEventListener("mousedown", mouseDownListener, false);
-  canvas.addEventListener("dblclick", mouseDblClickListener, false);
-
-  function init() {
-    clientPlayer = new Player(1, "#000000", false, game);
-    clientPlayer.addHand(makeTestHand());
-    drawBoard();
-    // testing git integration
-  }
-
-  function makeTestHand() {
-    var hand = [ "/images/cards/dixit_card_01_001.jpg",
-        "/images/cards/dixit_card_01_002.jpg",
-        "/images/cards/dixit_card_01_003.jpg",
-        "/images/cards/dixit_card_01_004.jpg",
-        "/images/cards/dixit_card_01_005.jpg" ];
-    return makeHandArray(hand);
-  }
-
-  function makeHandArray(handUrls) {
-    var hand = [];
-    for (var i = 0; i < handUrls.length; i++) {
-      hand.push(new Card(i, handUrls[i], i * 100 + 160, canvas.height - 260));
-    }
-    return hand;
-  }
-
-  f
-
-  function drawBoard() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // TODO: draw clue
-    // TODO: draw scoreboard
-    clientPlayer.drawHand(ctx);
-  }
+  board.draw();
 }
