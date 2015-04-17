@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html> 
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" hred="/css/html5bp.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <title>${title}</title>
-    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  </head>
-  <body>
-  
-  </body>
-</html>
+<#assign content>
+  <div class="container">
+  	<a href="/newgame" id="new-game-btn" class ="btn btn-primary">New Game</a>
+  	<a href="/joingame" id ="join-game-btn" class ="btn btn-primary">Join Game</a>
+  </div>
+</#assign>
+<#assign js>
+</#assign>
+<#include "main.ftl">

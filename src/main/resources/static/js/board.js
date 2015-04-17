@@ -31,6 +31,7 @@ function Board(game, canvasId, playerId) {
   this.icons.zoom.src = "/images/zoom.png";
   this.sendBtn = $('#send-card-btn');
   this.cardModal = $('#cardModal');
+  this.clueModal = $('#sendClueModal');
 }
 // draws the entire game board, including client player's hand
 Board.prototype.draw = function() {
@@ -54,7 +55,7 @@ Board.prototype.drawScoreAndHand = function(player) {
   if (this.img.complete) {
     this.ctx.drawImage(img, x, y, w, h);
     player.drawHand(this.ctx);
-    this.drawPLayers();
+    this.drawPlayers();
     this.drawClue();
   } else {
     img.onload = function() {
@@ -67,7 +68,7 @@ Board.prototype.drawScoreAndHand = function(player) {
 }
 Board.prototype.drawPlayers = function() {
   for (var i = 0; i < this.game.players.length; i++) {
-    this.game.players[i].drawIdle(this.ctx, i);
+    this.game.players[i].drawIdle(this, i);
   }
 }
 Board.prototype.drawClue = function() {
@@ -113,6 +114,16 @@ Board.prototype.addListeners = function() {
     board.refresh();
   })
   this.sendBtn.click(sendBtn);
+  $('#clueBtn')
+      .click(
+          function(e) {
+            var card;
+            for (var i = 0; i < board.game.players[board.playerId - 1].hand.length; i++) {
+              card = board.game.players[board.playerId - 1].hand[i];
+              board.clueModal.find('#card' + i)[0].src = card.frontImg.src;
+            }
+            board.clueModal.modal('show');
+          })
 }
 
 function sendBtn(event) {
@@ -124,7 +135,8 @@ function sendBtn(event) {
     board.cardModal.modal('hide');
     board.sendBtn.text("Return Card");
   } else {
-    var index = board.game.players[board.playerId].hand.indexOf(selectedCard);
+    var index = board.game.players[board.playerId - 1].hand
+        .indexOf(selectedCard);
     selectedCard.x = index * (board.canvas.width / 9)
         + (board.canvas.width / 4);
     selectedCard.y = board.canvas.height - (board.canvas.height / 5);
@@ -140,8 +152,8 @@ function mouseClickListener(event) {
   mouseX = (event.clientX - bRect.left) * (board.canvas.width / bRect.width);
   mouseY = (event.clientY - bRect.top) * (board.canvas.height / bRect.height);
   var card;
-  for (var i = 0; i < board.game.players[board.playerId].hand.length; i++) {
-    card = board.game.players[board.playerId].hand[i];
+  for (var i = 0; i < board.game.players[board.playerId - 1].hand.length; i++) {
+    card = board.game.players[board.playerId - 1].hand[i];
     if (card.clicked(mouseX, mouseY)) {
       if (card.visible) {
         board.cardModal.find('.modal-body img')[0].src = card.frontImg.src;
@@ -157,7 +169,7 @@ function mouseDownListener(event) {
   mouseY = (event.clientY - bRect.top) * (board.canvas.height / bRect.height);
   if (game.currPhase === game.phases.NonStoryCards
       || game.currPhase === game.phases.StoryTeller) {
-    for (var i = 0; i < board.game.players[board.playerId].hand.length; i++) {
+    for (var i = 0; i < board.game.players[board.playerId - 1].hand.length; i++) {
       if (board.game.players[board.playerId - 1].hand[i]
           .clicked(mouseX, mouseY)) {
         if ((game.currPhase === game.phases.NonStoryCards && !board.game.players[board.playerId - 1].isStoryTeller)
