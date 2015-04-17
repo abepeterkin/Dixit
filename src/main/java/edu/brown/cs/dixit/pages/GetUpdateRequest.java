@@ -17,6 +17,7 @@ import com.google.gson.JsonElement;
 
 import edu.brown.cs.dixit.DixitGameSubscriber;
 import edu.brown.cs.dixit.DixitSerializationUtil;
+import edu.brown.cs.dixit.Main;
 import gamestuff.ChatLine;
 import gamestuff.Game;
 import gamestuff.Player;
@@ -24,6 +25,7 @@ import gamestuff.Player;
 public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber {
 
   private Map<Game, DixitUpdateList> dixitUpdateListMap = new HashMap<Game, DixitUpdateList>();
+  private Map<Player, Long> playerTimeMap = new HashMap<Player, Long>();
 
   @Override
   public ModelAndView handle(
@@ -33,9 +35,21 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
     String gameName = qm.value("gameName");
     String playerName = qm.value("playerName");
 
-    // TODO: Get game updates.
+    Game tempGame = Main.getGame(gameName);
+    DixitUpdateList tempUpdateList = dixitUpdateListMap.get(tempGame);
+    // Game does not have accessors for players.
+    Player tempPlayer = null;
+    long tempTime;
+    if (playerTimeMap.containsKey(tempPlayer)) {
+      tempTime = playerTimeMap.get(tempPlayer);
+    } else {
+      tempTime = System.currentTimeMillis();
+    }
+    JsonElement tempJson = tempUpdateList.getJson(tempTime, tempPlayer);
+    playerTimeMap.put(tempPlayer, System.currentTimeMillis());
 
-    Map<String, Object> variables = ImmutableMap.of("response", "[]");
+    Map<String, Object> variables = ImmutableMap.of("response",
+        tempJson.toString());
     return new ModelAndView(variables, "response.ftl");
   }
 

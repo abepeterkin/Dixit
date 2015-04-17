@@ -65,6 +65,25 @@ public class DixitSerializationUtil {
     return GSON.toJsonTree(variables);
   }
 
+  public Color deserializeColor(
+      String json) {
+    String tempText = GSON.fromJson(json, String.class);
+    if (tempText.equals("RED")) {
+      return Color.RED;
+    } else if (tempText.equals("WHITE")) {
+      return Color.WHITE;
+    } else if (tempText.equals("YELLOW")) {
+      return Color.YELLOW;
+    } else if (tempText.equals("GREEN")) {
+      return Color.GREEN;
+    } else if (tempText.equals("BLUE")) {
+      return Color.BLUE;
+    } else if (tempText.equals("PINK")) {
+      return Color.PINK;
+    }
+    return null;
+  }
+
   public JsonElement serializePlayer(
       Player player,
       Player currentPlayer) {
