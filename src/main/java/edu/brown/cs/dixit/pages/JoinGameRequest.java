@@ -10,17 +10,40 @@ import spark.TemplateViewRoute;
 
 import com.google.common.collect.ImmutableMap;
 
+import edu.brown.cs.dixit.DixitSerializationUtil;
+import edu.brown.cs.dixit.Main;
+import gamestuff.Color;
+import gamestuff.Game;
+import gamestuff.Player;
+
 public class JoinGameRequest implements TemplateViewRoute {
 
-	@Override
-	public ModelAndView handle(Request req, Response res) {
-		QueryParamsMap qm = req.queryMap();
-		String gameName = qm.value("gameName");
-		String playerName = qm.value("playerName");
+  private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
 
-		// TODO: Join the game.
+  @Override
+  public ModelAndView handle(
+      Request req,
+      Response res) {
+    QueryParamsMap qm = req.queryMap();
+    String gameName = qm.value("gameName");
+    String playerName = qm.value("playerName");
+    String colorName = qm.value("colorName");
 
-		Map<String, Object> variables = ImmutableMap.of("response", "true");
-		return new ModelAndView(variables, "response.ftl");
-	}
+    String response;
+    if (!Main.gameExists(gameName)) {
+      response = "false";
+    } else {
+      Color tempColor = serializationUtil.deserializeColor(colorName);
+      Player tempPlayer = new Player(playerName, tempColor);
+      Game tempGame = Main.getGame(gameName);
+      if (tempGame.addPlayer(tempPlayer)) {
+        response = "true";
+      } else {
+        response = "false";
+      }
+    }
+
+    Map<String, Object> variables = ImmutableMap.of("response", response);
+    return new ModelAndView(variables, "response.ftl");
+  }
 }
