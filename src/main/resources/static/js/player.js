@@ -12,7 +12,7 @@ Player.prototype.refresh = function(canvas) {
   for (var i = 0; i < this.hand.length; i++) {
     card = this.hand[i];
     card.x = i * (canvas.width / 9) + (canvas.width / 4);
-    card.y = canvas.height - (canvas.height / 4);
+    card.y = canvas.height - (canvas.height / 5);
     card.resize(canvas);
   }
 }

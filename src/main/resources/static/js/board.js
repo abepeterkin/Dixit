@@ -21,19 +21,38 @@ function Board(players, canvasId, playerId) {
   this.canvas.height = (window.innerHeight
       || document.documentElement.clientHeight || document.body.clientHeight);
   this.ctx = this.canvas.getContext("2d");
+  this.img = new Image();
+  this.img.src = "/images/board.jpg";
   board = this;
-
 }
 // draws the entire game board, including client player's hand
 Board.prototype.draw = function() {
   this.ctx.clearRect(0, 0, this.width, this.canvas.height);
   // TODO: draw clue
   // TODO: draw scoreboard
-  this.players[this.playerId].drawHand(this.ctx);
+  this.drawScoreAndHand(this.players[this.playerId]);
 }
 // draws the simplified board with the appropriate scores,
 Board.prototype.drawSmall = function() {
 
+}
+// draws the scoreboard gets passed other objects to ensure
+// background board always gets drawn first
+Board.prototype.drawScoreAndHand = function(player) {
+  var img = this.img;
+  var x = 0;
+  var y = 0;
+  var w = this.canvas.width;
+  var h = this.canvas.height / 1.7;
+  if (this.img.complete) {
+    this.ctx.drawImage(img, x, y, w, h);
+    player.drawHand(this.ctx);
+  } else {
+    img.onload = function() {
+      board.ctx.drawImage(img, x, y, w, h);
+      player.drawHand(board.ctx);
+    }
+  }
 }
 
 // draws the big board with the appropriate scores,
@@ -68,7 +87,7 @@ Board.prototype.refresh = function() {
 }
 
 Board.prototype.addListeners = function() {
-  this.canvas.addEventListener("mousedown", mouseDownListener, false);
+  // this.canvas.addEventListener("mousedown", mouseDownListener, false);
   this.canvas.addEventListener("dblclick", mouseDblClickListener, false);
   $(window).on('resize', function(e) {
     board.refresh();
@@ -165,14 +184,14 @@ function mouseMoveListener(evt) {
   var posX;
   var posY;
   var minX = 0;
-  var maxX = canvas.width - draggingCard.width;
+  var maxX = board.canvas.width - draggingCard.width;
   var minY = 0;
-  var maxY = canvas.height - draggingCard.height;
+  var maxY = board.canvas.height - draggingCard.height;
 
   // getting mouse position correctly
-  var bRect = canvas.getBoundingClientRect();
-  mouseX = (evt.clientX - bRect.left) * (canvas.width / bRect.width);
-  mouseY = (evt.clientY - bRect.top) * (canvas.height / bRect.height);
+  var bRect = board.canvas.getBoundingClientRect();
+  mouseX = (evt.clientX - bRect.left) * (board.canvas.width / bRect.width);
+  mouseY = (evt.clientY - bRect.top) * (board.canvas.height / bRect.height);
 
   // clamp x and y positions to prevent object from dragging outside of canvas
   posX = mouseX - dragHoldX;

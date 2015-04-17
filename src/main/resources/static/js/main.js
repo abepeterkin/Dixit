@@ -3,8 +3,8 @@ var game = new Game(1, {
   numCards : 5
 });
 
-var player1 = new Player("1", "red", true, game);
-var player2 = new Player("2", "blue", false, game);
+var player1 = new Player("1", "red", false, game);
+var player2 = new Player("2", "blue", true, game);
 var player3 = new Player("3", "pink", false, game);
 var player4 = new Player("4", "blue", false, game);
 var players = {};
@@ -27,7 +27,7 @@ function makeHandArray(handUrls) {
   for (var i = 0; i < handUrls.length; i++) {
     hand.push(new Card(i, handUrls[i], i * (board.canvas.width / 9)
         + (board.canvas.width / 4), board.canvas.height
-        - (board.canvas.height / 4), board.canvas));
+        - (board.canvas.height / 5), board.canvas));
   }
   return hand;
 }
