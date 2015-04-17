@@ -1,5 +1,6 @@
 package gamestuff;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +24,6 @@ public class Game {
     this.players = players;
     this.deck = new Stack<Card>();
     this.trash = new Stack<Card>();
-    //perhaps tableCards should more effectively store position, aka 1,2,3,4 for voting?
     this.tableCards = new ArrayList<Card>();
     this.votes = new ArrayList<Vote>();
   }
@@ -42,7 +42,7 @@ public class Game {
 
   /**
    * @param p the player to add
-   * @return whether the player was sucessfully removed
+   * @return whether the player was successfully removed
    */
   public boolean addPlayer(Player p) {
     if (players.size() < MAX_PLAYERS) {
@@ -54,7 +54,7 @@ public class Game {
   }
 
   public void removePlayer() {
-
+    //TODO: figure out the best way to remove a player from the game
   }
 
   /**
@@ -64,7 +64,8 @@ public class Game {
    * all players given x cards depending on custom hand size
    */
   public void newGame() {
-    //fill deck lines here ******
+    this.deck = CardInitilizer.load(
+        new File("src/main/resources/static/images/cards"));
     Collections.shuffle(this.deck);
     for(int i = 0; i < this.HAND_SIZE; i++) {
       for(Player p: this.players) {
@@ -73,8 +74,6 @@ public class Game {
     }
     updatePhase(Phase.WAITINGFORFIRSTSTORY);
   }
-
-
 
   /**
    * When first player volunteers to share story,
@@ -172,7 +171,8 @@ public class Game {
     updatePhase(Phase.CLEANUP);
     // game ends when the deck is empty
     if (deck.isEmpty()) {
-      List<Player> winners = determineWinners();
+      Collections.sort(this.players);
+      List<Player> sortedByScore = Collections.unmodifiableList(players);
       //TODO: end game somehow
     } else {
       for(Player p: this.players) {
@@ -186,7 +186,7 @@ public class Game {
     }
   }
 
-  private List<Player> determineWinners() {
+  /*private List<Player> determineWinners() {
     int highestScore = 0;
     for (Player p : players){
       if (p.getScore() > highestScore) {
@@ -200,7 +200,7 @@ public class Game {
       }
     }
     return winningPlayers;
-  }
+  }*/
 
   private void cycleStoryteller() {
     for (int i = 0; i < players.size(); i++) {
@@ -259,14 +259,10 @@ public class Game {
   }
 
   /**
-   * updates phase in game and in all players
-   * ABRAHAM: I don't think we need to pass the phase to the player.
+   * updates phase in game.
    */
   public void updatePhase(Phase p) {
     this.phase = p;
-    /*for (Player player: this.players) {
-      player.setPhase(p);
-    }*/
   }
 
   /**
