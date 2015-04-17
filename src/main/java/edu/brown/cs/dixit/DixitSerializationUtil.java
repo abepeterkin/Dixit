@@ -15,10 +15,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
 /**
- * 
+ *
  * Serializes various classes into strings. Deep serialization means that nested
  * objects are recursively serialized.
- * 
+ *
  */
 public class DixitSerializationUtil {
 
@@ -74,7 +74,7 @@ public class DixitSerializationUtil {
       Player currentPlayer) {
     Map<String, Object> variables = new ImmutableMap.Builder()
         .put("score", player.getScore()).put("chatName", player.getChatName())
-        .put("isStoryTeller", player.getIsStoryteller()).build();
+        .put("isStoryTeller", player.isStoryteller()).build();
     return GSON.toJson(variables);
   }
 
