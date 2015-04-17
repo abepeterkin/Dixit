@@ -2,7 +2,7 @@ package gamestuff;
 
 import java.util.List;
 
-public class Player {
+public class Player implements Comparable<Player> {
   private int score;
   private final String CHAT_NAME;
   private final Color COLOR;
@@ -52,6 +52,11 @@ public class Player {
 
   public void removeFromHand(Card c) {
     hand.remove(c);
+  }
+
+  @Override
+  public int compareTo(Player other) {
+    return Integer.compare(this.score, other.score);
   }
 
 }
