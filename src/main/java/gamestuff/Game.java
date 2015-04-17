@@ -3,6 +3,7 @@ package gamestuff;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
@@ -27,6 +28,8 @@ public class Game {
   private Stack<Card> trash;
   private List<Card> tableCards;
   private List<Vote> votes;
+  private HashMap<String, Color> colorMap = new HashMap<>();
+  private boolean gameOver = false;
 
   public Game(int maxPlayers, int handSize, List<Player> players) {
     this.MAX_PLAYERS = maxPlayers;
@@ -36,6 +39,9 @@ public class Game {
     this.trash = new Stack<Card>();
     this.tableCards = new ArrayList<Card>();
     this.votes = new ArrayList<Vote>();
+    for (Player p : players) {
+      colorMap.put(p.getChatName(), p.getColor());
+    }
   }
 
   /**
@@ -43,6 +49,22 @@ public class Game {
    */
   public Chat getChat() {
     return this.chat;
+  }
+
+  /**
+   * adds a line to the game's chat log
+   */
+  public void addToChat(String playerName, String message) {
+    Color color = colorMap.get(playerName);
+    ChatLine line = new ChatLine(playerName, message, color);
+    chat.addLine(line);
+  }
+
+  /**
+   * @return whether or not the game is over
+   */
+  public boolean isGameOver() {
+    return gameOver;
   }
 
   /**
@@ -202,8 +224,7 @@ public class Game {
     // game ends when the deck is empty
     if (deck.isEmpty()) {
       Collections.sort(this.players);
-      List<Player> sortedByScore = Collections.unmodifiableList(players);
-      //TODO: end game somehow
+      gameOver = true;
     } else {
       for(Player p: this.players) {
         p.draw(this.deck.pop());
