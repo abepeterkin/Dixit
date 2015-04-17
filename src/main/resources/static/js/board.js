@@ -9,10 +9,12 @@ var dragging;
 var dragIndex;
 var draggingCard;
 var board;
-// should hold to array of players to display their score and color
-function Board(players, canvasId, playerId) {
+var selectedCard;
+var sentCard = false;
+// should hold to array of game.players to display their score and color
+function Board(game, canvasId, playerId) {
   this.playerId = playerId; // the player id who is using this client
-  this.players = players;
+  this.game = game;
   this.scores = {}; // maps of playerid to score
   this.cards = []// cards currently at play
   this.canvas = document.getElementById(canvasId);
@@ -24,13 +26,18 @@ function Board(players, canvasId, playerId) {
   this.img = new Image();
   this.img.src = "/images/board.jpg";
   board = this;
+  this.icons = {};
+  this.icons.zoom = new Image();
+  this.icons.zoom.src = "/images/zoom.png";
+  this.sendBtn = $('#send-card-btn');
+  this.cardModal = $('#cardModal');
 }
 // draws the entire game board, including client player's hand
 Board.prototype.draw = function() {
-  this.ctx.clearRect(0, 0, this.width, this.canvas.height);
+  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   // TODO: draw clue
-  // TODO: draw scoreboard
-  this.drawScoreAndHand(this.players[this.playerId]);
+  // TODO: draw game.players
+  this.drawScoreAndHand(this.game.players[this.playerId]);
 }
 // draws the simplified board with the appropriate scores,
 Board.prototype.drawSmall = function() {
@@ -47,14 +54,20 @@ Board.prototype.drawScoreAndHand = function(player) {
   if (this.img.complete) {
     this.ctx.drawImage(img, x, y, w, h);
     player.drawHand(this.ctx);
+    this.drawClue();
   } else {
     img.onload = function() {
       board.ctx.drawImage(img, x, y, w, h);
       player.drawHand(board.ctx);
+      board.drawClue();
     }
   }
 }
 
+Board.prototype.drawClue = function() {
+  this.ctx.font = "30px Georgia"; // make this responsive
+  this.ctx.fillText(this.game.currClue, this.canvas.width / 2, 30);
+}
 // draws the big board with the appropriate scores,
 Board.prototype.drawBig = function() {
 
@@ -69,7 +82,7 @@ Board.prototype.updateScore = function(ctx, playerId, newScore) {
 
 }
 
-// resets the score and positions all players at the beginning
+// resets the score and positions all game.players at the beginning
 Board.prototype.reset = function() {
 
 }
@@ -82,30 +95,52 @@ Board.prototype.refresh = function() {
       || document.documentElement.clientWidth || document.body.clientWidth);
   this.canvas.height = (window.innerHeight
       || document.documentElement.clientHeight || document.body.clientHeight);
-  this.players[this.playerId].refresh(this.canvas);
+  this.game.players[this.playerId].refresh(this.canvas);
   board.draw();
 }
 
 Board.prototype.addListeners = function() {
   // this.canvas.addEventListener("mousedown", mouseDownListener, false);
-  this.canvas.addEventListener("dblclick", mouseDblClickListener, false);
+  this.canvas.addEventListener("click", mouseClickListener, false);
+  this.canvas.addEventListener("mousemove", mouseMoveListener, false);
   $(window).on('resize', function(e) {
     board.refresh();
   })
+  this.sendBtn.click(sendBtn);
 }
 
-function mouseDblClickListener(event) {
+function sendBtn(event) {
+  if (!sentCard) {
+    selectedCard.x = board.playerId * (board.canvas.width / 7)
+        - selectedCard.width + board.playerId * selectedCard.width / 10;
+    selectedCard.y = board.canvas.height - (board.canvas.height / 2.5);
+    sentCard = true;
+    board.cardModal.modal('hide');
+    board.sendBtn.text("Return Card");
+  } else {
+    var index = board.game.players[board.playerId].hand.indexOf(selectedCard);
+    selectedCard.x = index * (board.canvas.width / 9)
+        + (board.canvas.width / 4);
+    selectedCard.y = board.canvas.height - (board.canvas.height / 5);
+    board.cardModal.modal('hide');
+    board.sendBtn.text("Send Card");
+    sentCard = false;
+  }
+  board.draw();
+}
+
+function mouseClickListener(event) {
   var bRect = board.canvas.getBoundingClientRect();
   mouseX = (event.clientX - bRect.left) * (board.canvas.width / bRect.width);
   mouseY = (event.clientY - bRect.top) * (board.canvas.height / bRect.height);
   var card;
-  for (var i = 0; i < board.players[board.playerId].hand.length; i++) {
-    card = board.players[board.playerId].hand[i];
+  for (var i = 0; i < board.game.players[board.playerId].hand.length; i++) {
+    card = board.game.players[board.playerId].hand[i];
     if (card.clicked(mouseX, mouseY)) {
       if (card.visible) {
-        var modal = $('#cardModal');
-        modal.find('.modal-body img')[0].src = card.frontImg.src;
-        modal.modal('show');
+        board.cardModal.find('.modal-body img')[0].src = card.frontImg.src;
+        board.cardModal.modal('show');
+        selectedCard = card;
       }
     }
   }
@@ -116,12 +151,12 @@ function mouseDownListener(event) {
   mouseY = (event.clientY - bRect.top) * (board.canvas.height / bRect.height);
   if (game.currPhase === game.phases.NonStoryCards
       || game.currPhase === game.phases.StoryTeller) {
-    for (var i = 0; i < board.players[board.playerId].hand.length; i++) {
-      if (board.players[board.playerId].hand[i].clicked(mouseX, mouseY)) {
-        if ((game.currPhase === game.phases.NonStoryCards && !board.players[board.playerId].isStoryTeller)
-            || (game.currPhase === game.phases.StoryTeller && board.players[board.playerId].isStoryTeller)) {
+    for (var i = 0; i < board.game.players[board.playerId].hand.length; i++) {
+      if (board.game.players[board.playerId].hand[i].clicked(mouseX, mouseY)) {
+        if ((game.currPhase === game.phases.NonStoryCards && !board.game.players[board.playerId].isStoryTeller)
+            || (game.currPhase === game.phases.StoryTeller && board.game.players[board.playerId].isStoryTeller)) {
           dragging = true;
-          draggingCard = board.players[board.playerId].hand[i];
+          draggingCard = board.game.players[board.playerId].hand[i];
         }
       }
     }
@@ -180,25 +215,37 @@ function mouseUpListener(evt) {
     window.removeEventListener("mousemove", mouseMoveListener, false);
   }
 }
+
 function mouseMoveListener(evt) {
-  var posX;
-  var posY;
-  var minX = 0;
-  var maxX = board.canvas.width - draggingCard.width;
-  var minY = 0;
-  var maxY = board.canvas.height - draggingCard.height;
-
-  // getting mouse position correctly
   var bRect = board.canvas.getBoundingClientRect();
-  mouseX = (evt.clientX - bRect.left) * (board.canvas.width / bRect.width);
-  mouseY = (evt.clientY - bRect.top) * (board.canvas.height / bRect.height);
-
-  // clamp x and y positions to prevent object from dragging outside of canvas
-  posX = mouseX - dragHoldX;
-  posX = (posX < minX) ? minX : ((posX > maxX) ? maxX : posX);
-  posY = mouseY - dragHoldY;
-  posY = (posY < minY) ? minY : ((posY > maxY) ? maxY : posY);
-
-  targetX = posX;
-  targetY = posY;
+  var mouseX = (evt.clientX - bRect.left) * (board.canvas.width / bRect.width);
+  var mouseY = (evt.clientY - bRect.top) * (board.canvas.height / bRect.height);
+  var hoveringCard = false;
+  var card;
+  for (var i = 0; i < board.game.players[board.playerId].hand.length; i++) {
+    card = board.game.players[board.playerId].hand[i];
+    if (card.clicked(mouseX, mouseY)) {
+      // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
+      hoveringCard = true;
+    }
+  }
+  if (hoveringCard) {
+    board.canvas.style.cursor = "pointer";
+  } else {
+    board.canvas.style.cursor = "default";
+  }
 }
+/*
+ * function mouseMoveListener(evt) { var posX; var posY; var minX = 0; var maxX =
+ * board.canvas.width - draggingCard.width; var minY = 0; var maxY =
+ * board.canvas.height - draggingCard.height; // getting mouse position
+ * correctly var bRect = board.canvas.getBoundingClientRect(); mouseX =
+ * (evt.clientX - bRect.left) * (board.canvas.width / bRect.width); mouseY =
+ * (evt.clientY - bRect.top) * (board.canvas.height / bRect.height); // clamp x
+ * and y positions to prevent object from dragging outside of canvas posX =
+ * mouseX - dragHoldX; posX = (posX < minX) ? minX : ((posX > maxX) ? maxX :
+ * posX); posY = mouseY - dragHoldY; posY = (posY < minY) ? minY : ((posY >
+ * maxY) ? maxY : posY);
+ * 
+ * targetX = posX; targetY = posY; }
+ */

@@ -1,9 +1,13 @@
-function Player(id, color, isStoryTeller, game) {
+function Player(id, name, color, isStoryTeller, game) {
   this.id = id;
+  this.name = name
   this.color = color;
   this.isStoryTeller = isStoryTeller;
   this.hand = new Array(game.rules.numCards);
   this.game = game;
+  this.img = {};
+  this.img.idle = new Image();
+  this.img.idle.src = "/images/rabbits/" + color + "/idle.png";
   // TODO: add a vote so that a player is linked to its vote card
 }
 
@@ -56,3 +60,16 @@ Player.prototype.sendClue = function(clue) {
 Player.prototype.vote = function(cardId) {
   // TODO:
 }
+
+// draw the player idle standing by
+Player.prototype.drawIdle = function(ctx) {
+  if (this.img.idle.complete) {
+
+  } else {
+    this.img.idle.onload = function() {
+
+    }
+  }
+}
+
+var get

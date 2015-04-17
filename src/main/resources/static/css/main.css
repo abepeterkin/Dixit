@@ -1,6 +1,11 @@
 body, html {
   height: 100%;
 }
+img {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
 .right {
   width: 250px;
   float: right;
@@ -17,6 +22,9 @@ body, html {
 #board {
   width: 100%;
   height: 100vh;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 div#music {
   height: 20vh;  

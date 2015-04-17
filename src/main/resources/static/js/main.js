@@ -3,16 +3,17 @@ var game = new Game(1, {
   numCards : 5
 });
 
-var player1 = new Player("1", "red", false, game);
-var player2 = new Player("2", "blue", true, game);
-var player3 = new Player("3", "pink", false, game);
-var player4 = new Player("4", "blue", false, game);
+var player1 = new Player("1", "Esteban", "red", false, game);
+var player2 = new Player("2", "Zach", "blue", true, game);
+var player3 = new Player("3", "Abe", "pink", false, game);
+var player4 = new Player("4", "Jack", "blue", false, game);
 var players = {};
 players[player1.id] = player1;
 players[player2.id] = player2;
 players[player3.id] = player3;
 players[player4.id] = player4;
 game.currPhase = 1; // make it nonstorycards so cards can move
+game.addPlayers(players);
 function makeTestHand() {
   var hand = [ "/images/cards/dixit_card_01_001.jpg",
       "/images/cards/dixit_card_01_002.jpg",
@@ -32,7 +33,7 @@ function makeHandArray(handUrls) {
   return hand;
 }
 window.onload = function() {
-  var board = new Board(players, "board", player1.id);
+  var board = new Board(game, "board", player1.id);
   player1.addHand(makeTestHand());
   board.addListeners();
   board.draw();

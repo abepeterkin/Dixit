@@ -24,6 +24,9 @@
       <div class="modal-body">
         <img id="cardImg" src="">
       </div>
+      <div class="modal-footer">
+      	<button id="send-card-btn" type="button" class="btn btn-default">Send Card</button>
+      </div>
     </div>
   </div>
 </div>
