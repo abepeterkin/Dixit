@@ -38,7 +38,7 @@
       </div>
       <div class="modal-body">
       	<input type="text" id="clueInput" class="form-control" placeholder="Enter clue here..."/>
-        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="false">
   <!-- Indicators -->
   <ol class="carousel-indicators">
     <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>

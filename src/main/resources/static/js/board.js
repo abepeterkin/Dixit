@@ -32,21 +32,28 @@ function Board(game, canvasId, playerId) {
   this.sendBtn = $('#send-card-btn');
   this.cardModal = $('#cardModal');
   this.clueModal = $('#sendClueModal');
+  this.smallBoard = true;
 }
 // draws the entire game board, including client player's hand
 Board.prototype.draw = function() {
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   // TODO: draw clue
   // TODO: draw game.players
-  this.drawScoreAndHand(this.game.players[this.playerId - 1]);
+  if (!this.smallBoard) {
+    this.drawBig(this.game.players[this.playerId - 1]);
+  } else {
+    this.drawSmall();
+
+  }
 }
 // draws the simplified board with the appropriate scores,
 Board.prototype.drawSmall = function() {
-
+  this.drawPlayersSmall();
+  this.game.players[this.playerId - 1].drawHand(this.ctx);
 }
 // draws the scoreboard gets passed other objects to ensure
 // background board always gets drawn first
-Board.prototype.drawScoreAndHand = function(player) {
+Board.prototype.drawBig = function(player) {
   var img = this.img;
   var x = 0;
   var y = 0;
@@ -66,26 +73,24 @@ Board.prototype.drawScoreAndHand = function(player) {
     }
   }
 }
-Board.prototype.drawPlayers = function() {
+Board.prototype.drawPlayersBig = function() {
   for (var i = 0; i < this.game.players.length; i++) {
     this.game.players[i].drawIdle(this, i);
+  }
+}
+
+Board.prototype.drawPlayersSmall = function() {
+  for (var i = 0; i < this.game.players.length; i++) {
+    this.game.players[i].drawSmall(this, i);
   }
 }
 Board.prototype.drawClue = function() {
   this.ctx.font = "30px Georgia"; // make this responsive
   this.ctx.fillText(this.game.currClue, this.canvas.width / 2, 30);
 }
-// draws the big board with the appropriate scores,
-Board.prototype.drawBig = function() {
 
-}
 // to update the score
 Board.prototype.setScore = function(score) {
-
-}
-
-// if we only need to change one player’s score, makes animation
-Board.prototype.updateScore = function(ctx, playerId, newScore) {
 
 }
 

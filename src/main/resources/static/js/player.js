@@ -75,3 +75,27 @@ Player.prototype.drawIdle = function(board, index) {
     }
   }
 }
+
+Player.prototype.drawSmall = function(board, index) {
+  var img = this.img.idle;
+  var sx = 0;
+  var sy = 0;
+  var sw = 128;
+  var sh = 128;
+  var w = board.canvas.width / 6;
+  var h = board.canvas.height / 5;
+  var x = board.canvas.width - w;
+  var y = (index * h / 2.2) - h / 5;
+  var score = board.game.score[this.id];
+  if (img.complete) {
+    board.ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+    board.ctx.font = "30px Georgia"; // make this responsive
+    board.ctx.fillText(score, x + w / 1.5, y + h / 1.7);
+  } else {
+    img.onload = function() {
+      board.ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+      board.ctx.font = "30px Georgia"; // make this responsive
+      board.ctx.fillText(score, x + w / 1.5, y + h);
+    }
+  }
+}
