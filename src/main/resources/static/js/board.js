@@ -47,7 +47,7 @@ Board.prototype.draw = function() {
 
   }
 }
-
+/*
 Board.prototype.draws = function() {
   if (!this.smallBoard) {
     window.requestAnimationFrame(Board.prototype.draws);
@@ -60,7 +60,7 @@ Board.prototype.draws = function() {
     this.drawSmall();
   }
   // }
-}
+}*/
 // draws the simplified board with the appropriate scores,
 Board.prototype.drawSmall = function() {
   board.icons = [];
@@ -202,7 +202,6 @@ function sendBtn(event) {
     board.sendBtn.text("Send Card");
     sentCard = false;
   }
-  board.draw();
 }
 
 function mouseClickListener(event) {
@@ -275,7 +274,7 @@ function mouseDownListener(event) {
   } // older IE
   return false;
 }
-
+/*
 function onTimerTick() {
   // because of reordering, the dragging shape is the last one in the array.
   draggingCard.x = draggingCard.x + 0.45 * (targetX - draggingCard.x);
@@ -291,7 +290,7 @@ function onTimerTick() {
   }
   board.draw();
 }
-
+*/
 function mouseUpListener(evt) {
   board.canvas.addEventListener("mousedown", mouseDownListener, false);
   window.removeEventListener("mouseup", mouseUpListener, false);
