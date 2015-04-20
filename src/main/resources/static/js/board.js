@@ -32,19 +32,35 @@ function Board(game, canvasId, playerId) {
   this.sendBtn = $('#send-card-btn');
   this.cardModal = $('#cardModal');
   this.clueModal = $('#sendClueModal');
-  this.smallBoard = true;
+  this.smallBoard = false;
 }
 // draws the entire game board, including client player's hand
 Board.prototype.draw = function() {
-  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  board.ctx.clearRect(0, 0, board.canvas.width, board.canvas.height);
+  window.requestAnimationFrame(Board.prototype.draw);
+
   // TODO: draw clue
   // TODO: draw game.players
-  if (!this.smallBoard) {
-    this.drawBig(this.game.players[this.playerId - 1]);
+  if (!board.smallBoard) {
+    board.drawBig();
   } else {
-    this.drawSmall();
+    board.drawSmall();
 
   }
+}
+
+Board.prototype.draws = function() {
+  if (!this.smallBoard) {
+    window.requestAnimationFrame(Board.prototype.draws);
+    var player;
+    // \for (var i = 0; i < board.game.players.length; i++) {
+    player = board.game.players[0];
+    player.idle.update();
+    player.idle.render(board.ctx, player.id);
+  } else {
+    this.drawSmall();
+  }
+  // }
 }
 // draws the simplified board with the appropriate scores,
 Board.prototype.drawSmall = function() {
@@ -53,29 +69,31 @@ Board.prototype.drawSmall = function() {
 }
 // draws the scoreboard gets passed other objects to ensure
 // background board always gets drawn first
-Board.prototype.drawBig = function(player) {
-  var img = this.img;
+Board.prototype.drawBig = function() {
+  var img = board.img;
   var x = 0;
   var y = 0;
-  var w = this.canvas.width;
-  var h = this.canvas.height / 1.7;
-  if (this.img.complete) {
-    this.ctx.drawImage(img, x, y, w, h);
-    player.drawHand(this.ctx);
-    this.drawPlayers();
-    this.drawClue();
+  var w = board.canvas.width;
+  var h = board.canvas.height / 1.7;
+  var player = board.game.players[board.playerId - 1]
+  if (board.img.complete) {
+    board.ctx.drawImage(img, x, y, w, h);
+    player.drawHand(board.ctx);
+    board.drawPlayersBig();
+    board.drawClue();
   } else {
     img.onload = function() {
       board.ctx.drawImage(img, x, y, w, h);
       player.drawHand(board.ctx);
-      board.drawPlayers();
+      board.drawPlayersBig();
       board.drawClue();
     }
   }
 }
 Board.prototype.drawPlayersBig = function() {
   for (var i = 0; i < this.game.players.length; i++) {
-    this.game.players[i].drawIdle(this, i);
+    board.game.players[i].idle.update();
+    board.game.players[i].idle.render(board.ctx, i);
   }
 }
 
@@ -108,7 +126,6 @@ Board.prototype.refresh = function() {
   this.canvas.height = (window.innerHeight
       || document.documentElement.clientHeight || document.body.clientHeight);
   this.game.players[this.playerId - 1].refresh(this.canvas);
-  board.draw();
 }
 
 Board.prototype.addListeners = function() {

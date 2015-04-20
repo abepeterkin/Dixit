@@ -8,6 +8,14 @@ function Player(id, name, color, isStoryTeller, game) {
   this.img = {};
   this.img.idle = new Image();
   this.img.idle.src = "/images/rabbits/" + color + "/idle.png";
+  this.idle = new Sprite({
+    width : 1024,
+    height : 128,
+    image : this.img.idle,
+    numberOfFrames : 29,
+    ticksPerFrame : 3,
+    numberOfCols : 8
+  })
   // TODO: add a vote so that a player is linked to its vote card
 }
 
