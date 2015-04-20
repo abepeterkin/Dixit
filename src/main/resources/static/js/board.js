@@ -26,9 +26,8 @@ function Board(game, canvasId, playerId) {
   this.img = new Image();
   this.img.src = "/images/board.jpg";
   board = this;
-  this.icons = {};
-  this.icons.zoom = new Image();
-  this.icons.zoom.src = "/images/zoom.png";
+  this.icons = [];
+  this.iconsMap = {};
   this.sendBtn = $('#send-card-btn');
   this.cardModal = $('#cardModal');
   this.clueModal = $('#sendClueModal');
@@ -64,31 +63,68 @@ Board.prototype.draws = function() {
 }
 // draws the simplified board with the appropriate scores,
 Board.prototype.drawSmall = function() {
+  board.icons = [];
+  board.iconsMap = {};
+  var xMin = 20;
+  var yMin = 20;
+  var wMin = board.canvas.width / 100;
+  var hMin = board.canvas.height / 400;
+  board.ctx.fillRect(xMin, yMin, wMin, hMin);
+  board.ctx.fillRect(xMin + wMin / 2, yMin - wMin / 2, hMin, wMin);
+  var ind = board.icons.push(new Icon({
+    x : xMin,
+    y : yMin,
+    width : wMin,
+    height : hMin,
+    callback : function() {
+      board.smallBoard = false;
+    },
+    name : "max"
+  }))
+  board.iconsMap['max'] = ind - 1;
   this.drawPlayersSmall();
   this.game.players[this.playerId - 1].drawHand(this.ctx);
 }
 // draws the scoreboard gets passed other objects to ensure
 // background board always gets drawn first
 Board.prototype.drawBig = function() {
+  if (board.img.complete) {
+    drawBigHelper();
+  } else {
+    board.img.onload = drawBigHelper;
+  }
+}
+
+var drawBigHelper = function() {
+  board.icons = [];
+  board.iconsMap = {};
   var img = board.img;
   var x = 0;
   var y = 0;
   var w = board.canvas.width;
   var h = board.canvas.height / 1.7;
   var player = board.game.players[board.playerId - 1]
-  if (board.img.complete) {
-    board.ctx.drawImage(img, x, y, w, h);
-    player.drawHand(board.ctx);
-    board.drawPlayersBig();
-    board.drawClue();
-  } else {
-    img.onload = function() {
-      board.ctx.drawImage(img, x, y, w, h);
-      player.drawHand(board.ctx);
-      board.drawPlayersBig();
-      board.drawClue();
-    }
-  }
+  var xMin = 20;
+  var yMin = 20;
+  var wMin = board.canvas.width / 100;
+  var hMin = board.canvas.height / 400;
+  board.ctx.drawImage(img, x, y, w, h);
+  board.ctx.fillStyle = "black";
+  board.ctx.fillRect(xMin, yMin, wMin, hMin);
+  var ind = board.icons.push(new Icon({
+    x : xMin,
+    y : yMin,
+    width : wMin,
+    height : hMin,
+    callback : function() {
+      board.smallBoard = true;
+    },
+    name : "min"
+  }))
+  board.iconsMap['min'] = ind - 1;
+  player.drawHand(board.ctx);
+  board.drawPlayersBig();
+  board.drawClue();
 }
 Board.prototype.drawPlayersBig = function() {
   for (var i = 0; i < this.game.players.length; i++) {
@@ -184,6 +220,14 @@ function mouseClickListener(event) {
       }
     }
   }
+  for (var i = 0; i < board.icons.length; i++) {
+    if (board.icons[i].clicked(mouseX, mouseY)) {
+      board.icons[i].callback();
+      if (board.icons[i].name === "min" || board.icons[i].name === "min") {
+        board.icons.splice(board.iconsMap[board.icons[i].name], 1);
+      }
+    }
+  }
 }
 function mouseDownListener(event) {
   var bRect = board.canvas.getBoundingClientRect();
@@ -270,23 +314,15 @@ function mouseMoveListener(evt) {
       hoveringCard = true;
     }
   }
+
+  for (var i = 0; i < board.icons.length; i++) {
+    if (board.icons[i].clicked(mouseX, mouseY)) {
+      hoveringCard = true;
+    }
+  }
   if (hoveringCard) {
     board.canvas.style.cursor = "pointer";
   } else {
     board.canvas.style.cursor = "default";
   }
 }
-/*
- * function mouseMoveListener(evt) { var posX; var posY; var minX = 0; var maxX =
- * board.canvas.width - draggingCard.width; var minY = 0; var maxY =
- * board.canvas.height - draggingCard.height; // getting mouse position
- * correctly var bRect = board.canvas.getBoundingClientRect(); mouseX =
- * (evt.clientX - bRect.left) * (board.canvas.width / bRect.width); mouseY =
- * (evt.clientY - bRect.top) * (board.canvas.height / bRect.height); // clamp x
- * and y positions to prevent object from dragging outside of canvas posX =
- * mouseX - dragHoldX; posX = (posX < minX) ? minX : ((posX > maxX) ? maxX :
- * posX); posY = mouseY - dragHoldY; posY = (posY < minY) ? minY : ((posY >
- * maxY) ? maxY : posY);
- * 
- * targetX = posX; targetY = posY; }
- */

@@ -89,6 +89,7 @@
 <button type="button" class="btn btn-default" id="clueBtn">Clue</button>
 </#assign>
 <#assign js>
+	<script src="js/icon.js"></script>
     <script src="/js/card.js"></script>
     <script src="/js/game.js"></script>
         <script src="/js/sprite.js"></script>
