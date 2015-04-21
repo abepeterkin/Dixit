@@ -26,7 +26,7 @@ public class DixitServer {
     Spark.setPort(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.get("/board", new DixitMainPage(), new FreeMarkerEngine());
-    Spark.get("/createGame", new CreateGameRequest(), new FreeMarkerEngine());
+    Spark.post("/createGame", new CreateGameRequest(), new FreeMarkerEngine());
     Spark.get("/getGameList", new GetGameListRequest(), new FreeMarkerEngine());
     Spark.get("/joinGame", new JoinGameRequest(), new FreeMarkerEngine());
     Spark.get("/getGame", new GetGameRequest(), new FreeMarkerEngine());

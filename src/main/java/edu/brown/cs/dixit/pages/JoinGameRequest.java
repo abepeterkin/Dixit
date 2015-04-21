@@ -12,7 +12,6 @@ import com.google.common.collect.ImmutableMap;
 
 import edu.brown.cs.dixit.DixitSerializationUtil;
 import edu.brown.cs.dixit.Main;
-import gamestuff.Color;
 import gamestuff.Game;
 import gamestuff.Player;
 
@@ -33,8 +32,7 @@ public class JoinGameRequest implements TemplateViewRoute {
     if (!Main.gameExists(gameName)) {
       response = "false";
     } else {
-      Color tempColor = serializationUtil.deserializeColor(colorName);
-      Player tempPlayer = new Player(playerName, tempColor);
+      Player tempPlayer = new Player(playerName, colorName);
       Game tempGame = Main.getGame(gameName);
       if (tempGame.addPlayer(tempPlayer)) {
         response = "true";

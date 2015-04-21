@@ -30,6 +30,7 @@ public class Main {
 
   public static boolean gameExists(
       String name) {
+    //System.out.println(gameMap.keySet());
     return gameMap.containsKey(name);
   }
 

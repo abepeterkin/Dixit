@@ -32,6 +32,7 @@ div#music {
 
 div#text {
   height:60vh;  
+  word-wrap: break-word;
 }
 
 div.msg{

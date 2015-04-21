@@ -64,4 +64,5 @@ window.onload = function() {
   player1.addHand(makeTestHand());
   board.addListeners();
   board.draw();
+  var chat = new Chat(game);
 }

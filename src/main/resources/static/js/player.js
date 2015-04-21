@@ -84,6 +84,16 @@ Player.prototype.drawIdle = function(board, index) {
   }
 }
 
+//submits a line to the chat box
+Player.prototype.addChatLine = function(message) {
+  console.log("gets called");
+  /*var color = "blue";
+  var name = "Abe";*/
+  $("#text").html(text.html() + "<p style=\"color:" + this.color + "\">"
+      + this.name + ": " + message + "<\p>");
+  //messageText.val("");
+}
+
 Player.prototype.drawSmall = function(board, index) {
   var img = this.img.idle;
   var sx = 0;

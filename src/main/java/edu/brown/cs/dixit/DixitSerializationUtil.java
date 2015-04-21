@@ -2,7 +2,6 @@ package edu.brown.cs.dixit;
 
 import gamestuff.Card;
 import gamestuff.ChatLine;
-import gamestuff.Color;
 import gamestuff.Game;
 import gamestuff.Phase;
 import gamestuff.Player;
@@ -42,46 +41,6 @@ public class DixitSerializationUtil {
       index += 1;
     }
     return GSON.toJsonTree(tempBuilder.build());
-  }
-
-  public JsonElement serializeColor(
-      Color color) {
-    String tempValue = "none";
-    if (color == Color.RED) {
-      tempValue = "RED";
-    } else if (color == Color.WHITE) {
-      tempValue = "WHITE";
-    } else if (color == Color.YELLOW) {
-      tempValue = "YELLOW";
-    } else if (color == Color.GREEN) {
-      tempValue = "GREEN";
-    } else if (color == Color.BLUE) {
-      tempValue = "BLUE";
-    } else if (color == Color.PINK) {
-      tempValue = "PINK";
-    }
-    Map<String, Object> variables = new ImmutableMap.Builder().put("value",
-        tempValue).build();
-    return GSON.toJsonTree(variables);
-  }
-
-  public Color deserializeColor(
-      String json) {
-    String tempText = GSON.fromJson(json, String.class);
-    if (tempText.equals("RED")) {
-      return Color.RED;
-    } else if (tempText.equals("WHITE")) {
-      return Color.WHITE;
-    } else if (tempText.equals("YELLOW")) {
-      return Color.YELLOW;
-    } else if (tempText.equals("GREEN")) {
-      return Color.GREEN;
-    } else if (tempText.equals("BLUE")) {
-      return Color.BLUE;
-    } else if (tempText.equals("PINK")) {
-      return Color.PINK;
-    }
-    return null;
   }
 
   public JsonElement serializePlayer(

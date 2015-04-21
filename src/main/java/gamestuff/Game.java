@@ -28,7 +28,7 @@ public class Game {
   private Stack<Card> trash;
   private List<Card> tableCards;
   private List<Vote> votes;
-  private HashMap<String, Color> colorMap = new HashMap<>();
+  private HashMap<String, String> colorMap = new HashMap<>();
   private boolean gameOver = false;
 
   public Game(int maxPlayers, int handSize, List<Player> players) {
@@ -55,7 +55,7 @@ public class Game {
    * adds a line to the game's chat log
    */
   public void addToChat(String playerName, String message) {
-    Color color = colorMap.get(playerName);
+    String color = colorMap.get(playerName);
     ChatLine line = new ChatLine(playerName, message, color);
     chat.addLine(line);
   }
@@ -83,7 +83,7 @@ public class Game {
 
   /**
    * @param p the player to add
-   * @return whether the player was successfully removed
+   * @return whether the player was successfully added
    */
   public boolean addPlayer(Player p) {
     if (players.size() < MAX_PLAYERS) {
@@ -92,7 +92,6 @@ public class Game {
     } else {
       return false;
     }
-    //TODO: figure out whether this is actually the correct way to do it
   }
 
   /**

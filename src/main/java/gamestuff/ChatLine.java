@@ -5,7 +5,7 @@ package gamestuff;
 public class ChatLine {
   private String message;
   private String playerName;
-  private Color color;
+  private String color;
 
   /** Constructor for ChatLines.
    *
@@ -13,7 +13,7 @@ public class ChatLine {
    * @param playerName the name of the player who sent the message
    * @param color the player's color
    */
-  public ChatLine(String playerName, String message, Color color) {
+  public ChatLine(String playerName, String message, String color) {
     this.message = message;
     this.playerName = playerName;
     this.color = color;
@@ -36,7 +36,7 @@ public class ChatLine {
   /**
    * @return the color of the player who sent the message
    */
-  public Color getColor() {
+  public String getColor() {
     return color;
   }
 }
