@@ -40,7 +40,7 @@ public class DixitServer {
     Spark.get("/voteForCard", new VoteForCardRequest(), new FreeMarkerEngine());
     Spark.get("/removeVoteForCard", new RemoveVoteForCardRequest(),
         new FreeMarkerEngine());
-    Spark.get("/addChat", new AddChatRequest(), new FreeMarkerEngine());
+    Spark.post("/addChat", new AddChatRequest(), new FreeMarkerEngine());
     Spark.get("/", new DixitHomePage(), new FreeMarkerEngine());
     Spark.get("/newgame", new DixitNewGamePage(), new FreeMarkerEngine());
     Spark.get("/joingame", new DixitJoinGamePage(), new FreeMarkerEngine());

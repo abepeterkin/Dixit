@@ -38,7 +38,8 @@ public class CreateGameRequest implements TemplateViewRoute {
       Player tempPlayer = new Player(playerName, colorName);
       List<Player> tempPlayerList = new ArrayList<Player>();
       tempPlayerList.add(tempPlayer);
-      Game tempGame = new Game(numberOfPlayers, numberOfCards, tempPlayerList);
+      Game tempGame =
+          new Game(gameName, numberOfPlayers, numberOfCards, tempPlayerList);
       Main.addGame(gameName, tempGame);
       response = "created successfully";
     }

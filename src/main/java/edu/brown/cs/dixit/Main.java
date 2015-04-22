@@ -54,4 +54,8 @@ public class Main {
     return new ArrayList<String>(gameMap.keySet());
   }
 
+  public static List<Game> getGameList() {
+    return new ArrayList<Game>(gameMap.values());
+  }
+
 }

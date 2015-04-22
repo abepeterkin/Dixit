@@ -42,4 +42,13 @@ public class Chat {
     return ImmutableList.copyOf(lines);
   }
 
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    for (ChatLine line : lines) {
+      builder.append(line.getPlayerName() + ": " + line.getMessage() + "\n");
+    }
+    return builder.toString();
+  }
+
 }

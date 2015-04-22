@@ -18,6 +18,7 @@ import java.util.Stack;
  */
 
 public class Game {
+  private String name;
   private final int HAND_SIZE;
   private final int MAX_PLAYERS;
   private List<Player> players;
@@ -31,7 +32,8 @@ public class Game {
   private HashMap<String, String> colorMap = new HashMap<>();
   private boolean gameOver = false;
 
-  public Game(int maxPlayers, int handSize, List<Player> players) {
+  public Game(String name, int maxPlayers, int handSize, List<Player> players) {
+    this.name = name;
     this.MAX_PLAYERS = maxPlayers;
     this.HAND_SIZE = handSize;
     this.players = players;
@@ -42,6 +44,56 @@ public class Game {
     for (Player p : players) {
       colorMap.put(p.getChatName(), p.getColor());
     }
+  }
+
+  /**
+   * @return the name of the game
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * @return the current number of players
+   */
+  public int getNumberOfPlayers() {
+    return players.size();
+  }
+
+  /**
+   * @return the names of every player
+   */
+  public List<String> getPlayerNames() {
+    List<String> toReturn = new ArrayList<>();
+    for (Player player : players) {
+      toReturn.add(player.getChatName());
+    }
+    return toReturn;
+  }
+
+  /**
+   * @return every color used
+   */
+  public List<String> getColorsInUse() {
+    List<String> toReturn = new ArrayList<>();
+    for (Player player : players) {
+      toReturn.add(player.getColor());
+    }
+    return toReturn;
+  }
+
+  /**
+   * @return the maximum number of players
+   */
+  public int getMaxPlayers() {
+    return MAX_PLAYERS;
+  }
+
+  /**
+   * @return the maximum hand size
+   */
+  public int getHandSize() {
+    return HAND_SIZE;
   }
 
   /**
@@ -58,6 +110,10 @@ public class Game {
     String color = colorMap.get(playerName);
     ChatLine line = new ChatLine(playerName, message, color);
     chat.addLine(line);
+  }
+
+  public String getChatString() {
+    return chat.toString();
   }
 
   /**
