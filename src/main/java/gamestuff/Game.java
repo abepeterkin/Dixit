@@ -13,9 +13,6 @@ import java.util.Stack;
  * the game object as it is now cannot handle multiple threads. Once we've
  * got multiple clients making ajax requests, we need to find some way to keep
  * everything here from exploding.
- * 
- * @zhammer: I'm going to mark all the methods that (as far as I can tell)
- * would explode with //EXP so we can better assess the solution.
  *
  * Zach, when you work on this, could you investigate how to hook all this up to
  * the frontend stuff?
@@ -25,6 +22,7 @@ public class Game {
   private String name;
   private final int HAND_SIZE;
   private final int MAX_PLAYERS;
+  //we should have min players too, which is always 3
   private List<Player> players;
   private String story;
   private Phase phase;
@@ -380,6 +378,34 @@ public class Game {
   public void updatePhase(Phase p) {
     this.phase = p;
   }
+  
+  /**
+   * @param p Player in game
+   * @return  List of cards
+   */
+  public List<Card> getPlayerHand(Player p) {
+    return p.getHand();
+  }
+  
+  /**
+   * @param name    string name of player
+   * @return        Player object
+   */
+  public Player getPlayerByName(String name) {
+    for (Player p: players) {
+      if (p.getChatName() == name) {
+        return p;
+      }
+    }
+    throw new InvalidParameterException("PLAYER DOESNT EXIST");
+  }
+  
+  /**
+   * @return list of all players
+   */
+  public List<Player> getPlayers() {
+    return players;
+  }
 
   /**
    * Class representing a vote, containing a player and a card
@@ -396,14 +422,6 @@ public class Game {
       this.player = player;
       this.card = card;
     }
-
-    /**
-     * @param p Player in game
-     * @return  List of cards
-     */
-    public List<Card> getPlayerHand(Player p) {
-      return p.getHand();
-    }
     
     /**
      * @return the player who cast the vote
@@ -412,28 +430,6 @@ public class Game {
       return player;
     }
     
-    /**
-     * @param name    string name of player
-     * @return        Player object
-     */
-    public Player getPlayerByName(String name) {
-      for (Player p: players) {
-        if (p.getChatName() == name) {
-          return p;
-        }
-      }
-      throw new InvalidParameterException("PLAYER DOESNT EXIST");
-    }
-    
-    /**
-     * @return list of all players
-     */
-    public List<Player> getPlayers() {
-      return players;
-    }
-    
-    
-
     /**
      * @return the card the vote was cast for
      */
