@@ -1,6 +1,7 @@
 package gamestuff;
 
 import java.io.File;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,6 +13,9 @@ import java.util.Stack;
  * the game object as it is now cannot handle multiple threads. Once we've
  * got multiple clients making ajax requests, we need to find some way to keep
  * everything here from exploding.
+ * 
+ * @zhammer: I'm going to mark all the methods that (as far as I can tell)
+ * would explode with //EXP so we can better assess the solution.
  *
  * Zach, when you work on this, could you investigate how to hook all this up to
  * the frontend stuff?
@@ -394,11 +398,41 @@ public class Game {
     }
 
     /**
+     * @param p Player in game
+     * @return  List of cards
+     */
+    public List<Card> getPlayerHand(Player p) {
+      return p.getHand();
+    }
+    
+    /**
      * @return the player who cast the vote
      */
     public Player getPlayer() {
       return player;
     }
+    
+    /**
+     * @param name    string name of player
+     * @return        Player object
+     */
+    public Player getPlayerByName(String name) {
+      for (Player p: players) {
+        if (p.getChatName() == name) {
+          return p;
+        }
+      }
+      throw new InvalidParameterException("PLAYER DOESNT EXIST");
+    }
+    
+    /**
+     * @return list of all players
+     */
+    public List<Player> getPlayers() {
+      return players;
+    }
+    
+    
 
     /**
      * @return the card the vote was cast for

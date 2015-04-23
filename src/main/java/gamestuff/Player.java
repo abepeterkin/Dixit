@@ -82,6 +82,13 @@ public class Player implements Comparable<Player> {
   public void removeFromHand(Card c) {
     hand.remove(c);
   }
+  
+  /**
+   * @return List of cards in hand
+   */
+  public List<Card> getHand() {
+    return hand;
+  }
 
   @Override
   public int compareTo(Player other) {
