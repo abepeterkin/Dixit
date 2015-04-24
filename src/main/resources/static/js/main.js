@@ -53,9 +53,14 @@ function makeTestHand() {
 function makeHandArray(handUrls) {
   var hand = [];
   for (var i = 0; i < handUrls.length; i++) {
-    hand.push(new Card(i, handUrls[i], i * (board.canvas.width / 9)
-        + (board.canvas.width / 4), board.canvas.height
-        - (board.canvas.height / 5), board.canvas));
+    hand.push(new Card({
+      id : i,
+      img : handUrls[i],
+      x : i * (board.canvas.width / 9) + (board.canvas.width / 4),
+      y : board.canvas.height - (board.canvas.height / 5),
+      canvas : board.canvas,
+      inHand : true
+    }));
   }
   return hand;
 }
@@ -63,5 +68,11 @@ window.onload = function() {
   var board = new Board(game, "board", player1.id);
   player1.addHand(makeTestHand());
   board.addListeners();
+  board.addCard(new Card({
+    img : "/images/cards/dixit_card_01_012.jpg",
+    canvas : board.canvas,
+    inHand : false
+  }))
+
   board.draw();
 }

@@ -15,7 +15,6 @@ var sentCard = false;
 function Board(game, canvasId, playerId) {
   this.playerId = playerId; // the player id who is using this client
   this.game = game;
-  this.scores = {}; // maps of playerid to score
   this.cards = []// cards currently at play
   this.canvas = document.getElementById(canvasId);
   this.canvas.width = (window.innerWidth
@@ -44,23 +43,15 @@ Board.prototype.draw = function() {
     board.drawBig();
   } else {
     board.drawSmall();
-
   }
 }
 /*
-Board.prototype.draws = function() {
-  if (!this.smallBoard) {
-    window.requestAnimationFrame(Board.prototype.draws);
-    var player;
-    // \for (var i = 0; i < board.game.players.length; i++) {
-    player = board.game.players[0];
-    player.idle.update();
-    player.idle.render(board.ctx, player.id);
-  } else {
-    this.drawSmall();
-  }
-  // }
-}*/
+ * Board.prototype.draws = function() { if (!this.smallBoard) {
+ * window.requestAnimationFrame(Board.prototype.draws); var player; // \for (var
+ * i = 0; i < board.game.players.length; i++) { player = board.game.players[0];
+ * player.idle.update(); player.idle.render(board.ctx, player.id); } else {
+ * this.drawSmall(); } // } }
+ */
 // draws the simplified board with the appropriate scores,
 Board.prototype.drawSmall = function() {
   board.icons = [];
@@ -78,12 +69,16 @@ Board.prototype.drawSmall = function() {
     height : hMin,
     callback : function() {
       board.smallBoard = false;
+      for (var i = 0; i < board.cards.length; i++) {
+        board.cards[i].makeSmall(i);
+      }
     },
     name : "max"
   }))
   board.iconsMap['max'] = ind - 1;
   this.drawPlayersSmall();
   this.game.players[this.playerId - 1].drawHand(this.ctx);
+  this.cards.drawCards();
 }
 // draws the scoreboard gets passed other objects to ensure
 // background board always gets drawn first
@@ -118,6 +113,9 @@ var drawBigHelper = function() {
     height : hMin,
     callback : function() {
       board.smallBoard = true;
+      for (var i = 0; i < board.cards.length; i++) {
+        board.cards[i].makeBig(i);
+      }
     },
     name : "min"
   }))
@@ -125,6 +123,7 @@ var drawBigHelper = function() {
   player.drawHand(board.ctx);
   board.drawPlayersBig();
   board.drawClue();
+  board.drawCards();
 }
 Board.prototype.drawPlayersBig = function() {
   for (var i = 0; i < this.game.players.length; i++) {
@@ -143,6 +142,12 @@ Board.prototype.drawClue = function() {
   this.ctx.fillText(this.game.currClue, this.canvas.width / 2, 30);
 }
 
+// draws the cards that are at play in the board
+Board.prototype.drawCards = function() {
+  for (var i = 0; i < board.cards.length; i++) {
+    board.cards[i].draw(board.ctx);
+  }
+}
 // to update the score
 Board.prototype.setScore = function(score) {
 
@@ -164,6 +169,18 @@ Board.prototype.refresh = function() {
   this.game.players[this.playerId - 1].refresh(this.canvas);
 }
 
+Board.prototype.addCard = function(card) {
+  if (this.cards.length < this.game.players.length) {
+    this.cards.push(card);
+    if (this.smallBoard) {
+      card.makeBig(this.cards.length - 1);
+    } else {
+      card.makeSmall(this.cards.length - 1);
+    }
+  } else {
+    console.log("trying to push more cards on board than there are players!");
+  }
+}
 Board.prototype.addListeners = function() {
   // this.canvas.addEventListener("mousedown", mouseDownListener, false);
   this.canvas.addEventListener("click", mouseClickListener, false);
@@ -275,22 +292,15 @@ function mouseDownListener(event) {
   return false;
 }
 /*
-function onTimerTick() {
-  // because of reordering, the dragging shape is the last one in the array.
-  draggingCard.x = draggingCard.x + 0.45 * (targetX - draggingCard.x);
-  draggingCard.y = draggingCard.y + 0.45 * (targetY - draggingCard.y);
-
-  // stop the timer when the target position is reached (close enough)
-  if ((!dragging) && (Math.abs(draggingCard.x - targetX) < 0.1)
-      && (Math.abs(draggingCard.y - targetY) < 0.1)) {
-    draggingCard.x = targetX;
-    draggingCard.y = targetY;
-    // stop timer:
-    clearInterval(timer);
-  }
-  board.draw();
-}
-*/
+ * function onTimerTick() { // because of reordering, the dragging shape is the
+ * last one in the array. draggingCard.x = draggingCard.x + 0.45 * (targetX -
+ * draggingCard.x); draggingCard.y = draggingCard.y + 0.45 * (targetY -
+ * draggingCard.y); // stop the timer when the target position is reached (close
+ * enough) if ((!dragging) && (Math.abs(draggingCard.x - targetX) < 0.1) &&
+ * (Math.abs(draggingCard.y - targetY) < 0.1)) { draggingCard.x = targetX;
+ * draggingCard.y = targetY; // stop timer: clearInterval(timer); }
+ * board.draw(); }
+ */
 function mouseUpListener(evt) {
   board.canvas.addEventListener("mousedown", mouseDownListener, false);
   window.removeEventListener("mouseup", mouseUpListener, false);
