@@ -15,7 +15,7 @@ import edu.brown.cs.dixit.Main;
 import gamestuff.Game;
 import gamestuff.Player;
 
-public class JoinGameRequest implements TemplateViewRoute {
+public class AddPlayerRequest implements TemplateViewRoute {
 
   private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
 
@@ -30,14 +30,14 @@ public class JoinGameRequest implements TemplateViewRoute {
 
     String response;
     if (!Main.gameExists(gameName)) {
-      response = "false";
+      response = "game does not exist";
     } else {
       Player tempPlayer = new Player(playerName, colorName);
       Game tempGame = Main.getGame(gameName);
       if (tempGame.addPlayer(tempPlayer)) {
-        response = "true";
+        response = "player successfully added!";
       } else {
-        response = "false";
+        response = "player could not be added";
       }
     }
 

@@ -1,6 +1,5 @@
-
 function viewGames(table) {
-  $.get("/getGameList", function(responseJSON) {
+  $.get("/seeCurrentGames", function(responseJSON) {
     var responseObject = JSON.parse(responseJSON);
     var gameDataList = responseObject.data;
     for (var j = 0; j < gameDataList.length; j++) {
@@ -17,7 +16,8 @@ function viewGames(table) {
          + "<td>" + gameData.gameName + "</td>"
          + "<td>" + playerNameString+ "</td>"
          + "<td>" + gameData.maxPlayers + "</td>"
-         + "<td><a href=\"/board\" class=\"btn btn-primary\">Join</td>"
+         + "<td><a href=\"/joinOptions/" 
+         + gameData.gameName + "\" class=\"btn btn-primary\">Join</td>"
          + "</tr>";
       table.html(table.html() + newRow);
     }
@@ -26,4 +26,4 @@ function viewGames(table) {
 window.onload = function() {
   var table = $('#table');
   viewGames(table);
-};
+}

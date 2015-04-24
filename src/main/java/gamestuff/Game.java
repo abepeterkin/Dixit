@@ -378,7 +378,7 @@ public class Game {
   public void updatePhase(Phase p) {
     this.phase = p;
   }
-  
+
   /**
    * @param p Player in game
    * @return  List of cards
@@ -386,7 +386,7 @@ public class Game {
   public List<Card> getPlayerHand(Player p) {
     return p.getHand();
   }
-  
+
   /**
    * @param name    string name of player
    * @return        Player object
@@ -399,7 +399,7 @@ public class Game {
     }
     throw new InvalidParameterException("PLAYER DOESNT EXIST");
   }
-  
+
   /**
    * @return list of all players
    */
@@ -422,14 +422,14 @@ public class Game {
       this.player = player;
       this.card = card;
     }
-    
+
     /**
      * @return the player who cast the vote
      */
     public Player getPlayer() {
       return player;
     }
-    
+
     /**
      * @return the card the vote was cast for
      */
