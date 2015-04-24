@@ -7,11 +7,11 @@ import java.util.List;
 public class Player implements Comparable<Player> {
   private int score;
   private final String CHAT_NAME;
-  private final Color COLOR;
+  private final String COLOR;
   private boolean isStoryteller = false;
   private List<Card> hand;
 
-  public Player(String chatName, Color color) {
+  public Player(String chatName, String color) {
     this.score = 0;
     this.CHAT_NAME = chatName;
     this.COLOR = color;
@@ -48,7 +48,7 @@ public class Player implements Comparable<Player> {
   /**
    * @return the player's color
    */
-  public Color getColor() {
+  public String getColor() {
     return COLOR;
   }
 
@@ -82,10 +82,17 @@ public class Player implements Comparable<Player> {
   public void removeFromHand(Card c) {
     hand.remove(c);
   }
+  
+  /**
+   * @return List of cards in hand
+   */
+  public List<Card> getHand() {
+    return hand;
+  }
 
   @Override
   public int compareTo(Player other) {
-    return Integer.compare(this.score, other.score);
+    return Integer.compare(this.score, other.getScore());
   }
 
 }

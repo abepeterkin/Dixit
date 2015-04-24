@@ -26,8 +26,8 @@ public class DixitServer {
     Spark.setPort(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.get("/board", new DixitMainPage(), new FreeMarkerEngine());
-    Spark.get("/createGame", new CreateGameRequest(), new FreeMarkerEngine());
-    Spark.get("/getGameList", new GetGameListRequest(), new FreeMarkerEngine());
+    Spark.post("/createGame", new CreateGameRequest(), new FreeMarkerEngine());
+    Spark.get("/getGameList", new GetGameListRequest());
     Spark.get("/joinGame", new JoinGameRequest(), new FreeMarkerEngine());
     Spark.get("/getGame", new GetGameRequest(), new FreeMarkerEngine());
     Spark.get("/getUpdate", new GetUpdateRequest(), new FreeMarkerEngine());
@@ -40,10 +40,10 @@ public class DixitServer {
     Spark.get("/voteForCard", new VoteForCardRequest(), new FreeMarkerEngine());
     Spark.get("/removeVoteForCard", new RemoveVoteForCardRequest(),
         new FreeMarkerEngine());
-    Spark.get("/addChat", new AddChatRequest(), new FreeMarkerEngine());
+    Spark.post("/addChat", new AddChatRequest(), new FreeMarkerEngine());
     Spark.get("/", new DixitHomePage(), new FreeMarkerEngine());
-    Spark.get("/newgame", new DixitNewGamePage(), new FreeMarkerEngine());
-    Spark.get("/joingame", new DixitJoinGamePage(), new FreeMarkerEngine());
+    Spark.get("/newGamePage", new DixitNewGamePage(), new FreeMarkerEngine());
+    Spark.get("/joinGamePage", new DixitJoinGamePage(), new FreeMarkerEngine());
 
   }
 

@@ -1,6 +1,7 @@
 package gamestuff;
 
 import java.io.File;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,8 +19,10 @@ import java.util.Stack;
  */
 
 public class Game {
+  private String name;
   private final int HAND_SIZE;
   private final int MAX_PLAYERS;
+  //we should have min players too, which is always 3
   private List<Player> players;
   private String story;
   private Phase phase;
@@ -28,10 +31,11 @@ public class Game {
   private Stack<Card> trash;
   private List<Card> tableCards;
   private List<Vote> votes;
-  private HashMap<String, Color> colorMap = new HashMap<>();
+  private HashMap<String, String> colorMap = new HashMap<>();
   private boolean gameOver = false;
 
-  public Game(int maxPlayers, int handSize, List<Player> players) {
+  public Game(String name, int maxPlayers, int handSize, List<Player> players) {
+    this.name = name;
     this.MAX_PLAYERS = maxPlayers;
     this.HAND_SIZE = handSize;
     this.players = players;
@@ -45,6 +49,56 @@ public class Game {
   }
 
   /**
+   * @return the name of the game
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * @return the current number of players
+   */
+  public int getNumberOfPlayers() {
+    return players.size();
+  }
+
+  /**
+   * @return the names of every player
+   */
+  public List<String> getPlayerNames() {
+    List<String> toReturn = new ArrayList<>();
+    for (Player player : players) {
+      toReturn.add(player.getChatName());
+    }
+    return toReturn;
+  }
+
+  /**
+   * @return every color used
+   */
+  public List<String> getColorsInUse() {
+    List<String> toReturn = new ArrayList<>();
+    for (Player player : players) {
+      toReturn.add(player.getColor());
+    }
+    return toReturn;
+  }
+
+  /**
+   * @return the maximum number of players
+   */
+  public int getMaxPlayers() {
+    return MAX_PLAYERS;
+  }
+
+  /**
+   * @return the maximum hand size
+   */
+  public int getHandSize() {
+    return HAND_SIZE;
+  }
+
+  /**
    * @return the game's chat
    */
   public Chat getChat() {
@@ -55,9 +109,13 @@ public class Game {
    * adds a line to the game's chat log
    */
   public void addToChat(String playerName, String message) {
-    Color color = colorMap.get(playerName);
+    String color = colorMap.get(playerName);
     ChatLine line = new ChatLine(playerName, message, color);
     chat.addLine(line);
+  }
+
+  public String getChatString() {
+    return chat.toString();
   }
 
   /**
@@ -83,7 +141,7 @@ public class Game {
 
   /**
    * @param p the player to add
-   * @return whether the player was successfully removed
+   * @return whether the player was successfully added
    */
   public boolean addPlayer(Player p) {
     if (players.size() < MAX_PLAYERS) {
@@ -92,7 +150,6 @@ public class Game {
     } else {
       return false;
     }
-    //TODO: figure out whether this is actually the correct way to do it
   }
 
   /**
@@ -321,6 +378,34 @@ public class Game {
   public void updatePhase(Phase p) {
     this.phase = p;
   }
+  
+  /**
+   * @param p Player in game
+   * @return  List of cards
+   */
+  public List<Card> getPlayerHand(Player p) {
+    return p.getHand();
+  }
+  
+  /**
+   * @param name    string name of player
+   * @return        Player object
+   */
+  public Player getPlayerByName(String name) {
+    for (Player p: players) {
+      if (p.getChatName() == name) {
+        return p;
+      }
+    }
+    throw new InvalidParameterException("PLAYER DOESNT EXIST");
+  }
+  
+  /**
+   * @return list of all players
+   */
+  public List<Player> getPlayers() {
+    return players;
+  }
 
   /**
    * Class representing a vote, containing a player and a card
@@ -337,14 +422,14 @@ public class Game {
       this.player = player;
       this.card = card;
     }
-
+    
     /**
      * @return the player who cast the vote
      */
     public Player getPlayer() {
       return player;
     }
-
+    
     /**
      * @return the card the vote was cast for
      */

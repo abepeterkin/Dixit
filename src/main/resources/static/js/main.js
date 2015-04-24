@@ -64,6 +64,7 @@ function makeHandArray(handUrls) {
   }
   return hand;
 }
+
 window.onload = function() {
   var board = new Board(game, "board", player1.id);
   player1.addHand(makeTestHand());
@@ -75,4 +76,5 @@ window.onload = function() {
   }))
 
   board.draw();
+  var chat = new Chat(game);
 }

@@ -14,7 +14,6 @@ import com.google.common.collect.ImmutableMap;
 
 import edu.brown.cs.dixit.DixitSerializationUtil;
 import edu.brown.cs.dixit.Main;
-import gamestuff.Color;
 import gamestuff.Game;
 import gamestuff.Player;
 
@@ -23,9 +22,7 @@ public class CreateGameRequest implements TemplateViewRoute {
   private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
 
   @Override
-  public ModelAndView handle(
-      Request req,
-      Response res) {
+  public ModelAndView handle( Request req, Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
     String playerName = qm.value("playerName");
@@ -33,16 +30,18 @@ public class CreateGameRequest implements TemplateViewRoute {
     int numberOfPlayers = Integer.parseInt(qm.value("numberOfPlayers"));
     int numberOfCards = Integer.parseInt(qm.value("numberOfCards"));
 
+    //System.out.println(gameName + " " + playerName + " " + colorName + " " + numberOfPlayers + " " + numberOfCards);
     String response;
     if (Main.gameExists(gameName)) {
-      response = "false";
+      response = "game already exists";
     } else {
-      Color tempColor = serializationUtil.deserializeColor(colorName);
-      Player tempPlayer = new Player(playerName, tempColor);
+      Player tempPlayer = new Player(playerName, colorName);
       List<Player> tempPlayerList = new ArrayList<Player>();
-      Game tempGame = new Game(numberOfPlayers, numberOfCards, tempPlayerList);
+      tempPlayerList.add(tempPlayer);
+      Game tempGame =
+          new Game(gameName, numberOfPlayers, numberOfCards, tempPlayerList);
       Main.addGame(gameName, tempGame);
-      response = "true";
+      response = "created successfully";
     }
 
     Map<String, Object> variables = ImmutableMap.of("response", response);

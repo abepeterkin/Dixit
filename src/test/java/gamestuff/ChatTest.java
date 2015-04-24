@@ -11,11 +11,11 @@ public class ChatTest {
     Chat chat = new Chat();
     assertTrue(chat.getLines().size() == 0);
     for (int i = 0; i < 30; i++) {
-      chat.addLine(new ChatLine("Nobody", "" + i, Color.BLUE));
+      chat.addLine(new ChatLine("Nobody", "" + i, "blue"));
     }
     assertTrue(chat.getLines().size() == 30);
     assertTrue(chat.getLines().get(0).getMessage().equals("0"));
-    chat.addLine(new ChatLine("Somebody", "30", Color.RED));
+    chat.addLine(new ChatLine("Somebody", "30", "red"));
     assertTrue(chat.getLines().size() == 30);
     assertTrue(chat.getLines().get(0).getMessage().equals("1"));
   }
@@ -25,11 +25,11 @@ public class ChatTest {
     Chat chat = new Chat(20);
     assertTrue(chat.getLines().size() == 0);
     for (int i = 0; i < 30; i++) {
-      chat.addLine(new ChatLine("Nobody", "" + i, Color.BLUE));
+      chat.addLine(new ChatLine("Nobody", "" + i, "blue"));
     }
     assertTrue(chat.getLines().get(0).getMessage().equals("10"));
     assertTrue(chat.getLines().size() == 20);
-    chat.addLine(new ChatLine("Somebody", "30", Color.RED));
+    chat.addLine(new ChatLine("Somebody", "30", "red"));
     assertTrue(chat.getLines().size() == 20);
     assertTrue(chat.getLines().get(0).getMessage().equals("11"));
   }
