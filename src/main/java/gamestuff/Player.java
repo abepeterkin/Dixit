@@ -1,5 +1,6 @@
 package gamestuff;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /** Class representing a game player.
@@ -9,7 +10,7 @@ public class Player implements Comparable<Player> {
   private final String CHAT_NAME;
   private final String COLOR;
   private boolean isStoryteller = false;
-  private List<Card> hand;
+  private List<Card> hand = new ArrayList<>();
 
   public Player(String chatName, String color) {
     this.score = 0;
@@ -82,7 +83,7 @@ public class Player implements Comparable<Player> {
   public void removeFromHand(Card c) {
     hand.remove(c);
   }
-  
+
   /**
    * @return List of cards in hand
    */

@@ -2,7 +2,7 @@
   <form method="POST" action="/addPlayer">
     <div class="form-group">
       <label for="gameName">Game Name</label>
-      <input type="text" class="form-control" name="gameName" value="${gameName}" readonly>
+      <input type="text" class="form-control" name="gameName" value="${gameName}" readonly required>
     </div>
     <div class="form-group">
       <label for="playerName">Player Name</label>
