@@ -13,7 +13,7 @@ var selectedCard;
 var sentCard = false;
 // should hold to array of game.players to display their score and color
 function Board(game, canvasId, playerId) {
-  this.playerId = playerId; // the player id who is using this client
+  this.clientPlayer = game.players[playerId - 1]; // the player this client
   this.game = game;
   this.cards = []// cards currently at play
   this.canvas = document.getElementById(canvasId);
@@ -28,9 +28,12 @@ function Board(game, canvasId, playerId) {
   this.icons = [];
   this.iconsMap = {};
   this.sendBtn = $('#send-card-btn');
+  this.sendClueBtn = $('#send-clue-btn');
+  this.clueInput = $('#clueInput');
   this.cardModal = $('#cardModal');
   this.clueModal = $('#sendClueModal');
-  this.smallBoard = false;
+  this.smallBoard = true;
+  $('#clientPlayer').text('Client player: ' + this.clientPlayer.name);
 }
 // draws the entire game board, including client player's hand
 Board.prototype.draw = function() {
@@ -77,8 +80,9 @@ Board.prototype.drawSmall = function() {
   }))
   board.iconsMap['max'] = ind - 1;
   this.drawPlayersSmall();
-  this.game.players[this.playerId - 1].drawHand(this.ctx);
-  this.cards.drawCards();
+  this.clientPlayer.drawHand(this.ctx);
+  this.drawCards();
+  this.drawClue();
 }
 // draws the scoreboard gets passed other objects to ensure
 // background board always gets drawn first
@@ -98,7 +102,7 @@ var drawBigHelper = function() {
   var y = 0;
   var w = board.canvas.width;
   var h = board.canvas.height / 1.7;
-  var player = board.game.players[board.playerId - 1]
+  var player = board.clientPlayer
   var xMin = 20;
   var yMin = 20;
   var wMin = board.canvas.width / 100;
@@ -166,7 +170,7 @@ Board.prototype.refresh = function() {
       || document.documentElement.clientWidth || document.body.clientWidth);
   this.canvas.height = (window.innerHeight
       || document.documentElement.clientHeight || document.body.clientHeight);
-  this.game.players[this.playerId - 1].refresh(this.canvas);
+  this.clientPlayer.refresh(this.canvas);
 }
 
 Board.prototype.addCard = function(card) {
@@ -189,16 +193,51 @@ Board.prototype.addListeners = function() {
     board.refresh();
   })
   this.sendBtn.click(sendBtn);
-  $('#clueBtn')
-      .click(
-          function(e) {
-            var card;
-            for (var i = 0; i < board.game.players[board.playerId - 1].hand.length; i++) {
-              card = board.game.players[board.playerId - 1].hand[i];
-              board.clueModal.find('#card' + i)[0].src = card.frontImg.src;
-            }
-            board.clueModal.modal('show');
-          })
+  $('#clueBtn').click(function(e) {
+    var card;
+    for (var i = 0; i < board.clientPlayer.hand.length; i++) {
+      card = board.clientPlayer.hand[i];
+      board.clueModal.find('#card' + i)[0].src = card.frontImg.src;
+    }
+    board.clueModal.modal('show');
+  })
+  this.sendClueBtn.click(sendClue);
+  $("img").mousedown(function() {
+    return false;
+  });
+  this.clueInput.on('input', function() {
+    if (board.clueInput.val().length == 0) {
+      board.sendClueBtn.prop('disabled', true);
+    } else {
+      board.sendClueBtn.prop('disabled', false);
+    }
+  })
+  $('#advancePhase').click(function() {
+    board.game.nextPhase();
+  })
+
+  $('#carousel-example-generic').on('slid.bs.carousel', function(e) {
+    console.log(e.relatedTarget.children[0].val());
+  })
+}
+
+Board.prototype.changePhase = function(phase) {
+  switch (phase) {
+  case this.game.phases['StoryTeller']:
+    if (this.clientPlayer.isStoryTeller) {
+      var card;
+      for (var i = 0; i < board.clientPlayer.hand.length; i++) {
+        card = board.clientPlayer.hand[i];
+        board.clueModal.find('#card' + i)[0].src = card.frontImg.src;
+      }
+      board.clueModal.modal('show');
+      break;
+    }
+  case this.game.phases['NonStoryCards']:
+    if (!this.clientPlayer.isStoryTeller) {
+      this.sendBtn.prop("disabled", false);
+    }
+  }
 }
 
 function sendBtn(event) {
@@ -210,8 +249,7 @@ function sendBtn(event) {
     board.cardModal.modal('hide');
     board.sendBtn.text("Return Card");
   } else {
-    var index = board.game.players[board.playerId - 1].hand
-        .indexOf(selectedCard);
+    var index = board.clientPlayer.hand.indexOf(selectedCard);
     selectedCard.x = index * (board.canvas.width / 9)
         + (board.canvas.width / 4);
     selectedCard.y = board.canvas.height - (board.canvas.height / 5);
@@ -221,13 +259,19 @@ function sendBtn(event) {
   }
 }
 
+function sendClue(event) {
+  board.game.currClue = '"' + board.clueInput.val() + '"';
+  board.clueModal.modal('hide');
+  board.game.nextPhase();
+}
+
 function mouseClickListener(event) {
   var bRect = board.canvas.getBoundingClientRect();
   mouseX = (event.clientX - bRect.left) * (board.canvas.width / bRect.width);
   mouseY = (event.clientY - bRect.top) * (board.canvas.height / bRect.height);
   var card;
-  for (var i = 0; i < board.game.players[board.playerId - 1].hand.length; i++) {
-    card = board.game.players[board.playerId - 1].hand[i];
+  for (var i = 0; i < board.clientPlayer.hand.length; i++) {
+    card = board.clientPlayer.hand[i];
     if (card.clicked(mouseX, mouseY)) {
       if (card.visible) {
         board.cardModal.find('.modal-body img')[0].src = card.frontImg.src;
@@ -251,13 +295,12 @@ function mouseDownListener(event) {
   mouseY = (event.clientY - bRect.top) * (board.canvas.height / bRect.height);
   if (game.currPhase === game.phases.NonStoryCards
       || game.currPhase === game.phases.StoryTeller) {
-    for (var i = 0; i < board.game.players[board.playerId - 1].hand.length; i++) {
-      if (board.game.players[board.playerId - 1].hand[i]
-          .clicked(mouseX, mouseY)) {
-        if ((game.currPhase === game.phases.NonStoryCards && !board.game.players[board.playerId - 1].isStoryTeller)
-            || (game.currPhase === game.phases.StoryTeller && board.game.players[board.playerId - 1].isStoryTeller)) {
+    for (var i = 0; i < board.clientPlayer.hand.length; i++) {
+      if (board.clientPlayer.hand[i].clicked(mouseX, mouseY)) {
+        if ((game.currPhase === game.phases.NonStoryCards && !board.clientPlayer.isStoryTeller)
+            || (game.currPhase === game.phases.StoryTeller && board.clientPlayer.isStoryTeller)) {
           dragging = true;
-          draggingCard = board.game.players[board.playerId - 1].hand[i];
+          draggingCard = board.clientPlayer.hand[i];
         }
       }
     }
@@ -316,8 +359,8 @@ function mouseMoveListener(evt) {
   var mouseY = (evt.clientY - bRect.top) * (board.canvas.height / bRect.height);
   var hoveringCard = false;
   var card;
-  for (var i = 0; i < board.game.players[board.playerId - 1].hand.length; i++) {
-    card = board.game.players[board.playerId - 1].hand[i];
+  for (var i = 0; i < board.clientPlayer.hand.length; i++) {
+    card = board.clientPlayer.hand[i];
     if (card.clicked(mouseX, mouseY)) {
       // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
       hoveringCard = true;

@@ -35,11 +35,10 @@ var game = new Game(1, {
 });
 
 var player1 = new Player("1", "Esteban", "blue", false, game);
-var player2 = new Player("2", "Zach", "blue", true, game);
+var player2 = new Player("2", "Zach", "blue", false, game);
 var player3 = new Player("3", "Abe", "blue", false, game);
 var player4 = new Player("4", "Jack", "blue", false, game);
 var players = [ player1, player2, player3, player4 ];
-game.currPhase = 1; // make it nonstorycards so cards can move
 game.addPlayers(players);
 function makeTestHand() {
   var hand = [ "/images/cards/dixit_card_01_001.jpg",
@@ -66,15 +65,16 @@ function makeHandArray(handUrls) {
 }
 
 window.onload = function() {
+  game.setStoryTeller(player1);
   var board = new Board(game, "board", player1.id);
+  game.board = board;
   player1.addHand(makeTestHand());
   board.addListeners();
-  board.addCard(new Card({
-    img : "/images/cards/dixit_card_01_012.jpg",
-    canvas : board.canvas,
-    inHand : false
-  }))
-
+  /*
+   * board.addCard(new Card({ img : "/images/cards/dixit_card_01_012.jpg",
+   * canvas : board.canvas, inHand : false }))
+   */
+  game.nextPhase();
   board.draw();
   var chat = new Chat(game);
 }

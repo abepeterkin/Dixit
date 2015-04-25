@@ -25,12 +25,12 @@
         <img id="cardImg" src="">
       </div>
       <div class="modal-footer">
-      	<button id="send-card-btn" type="button" class="btn btn-default">Send Card</button>
+      	<button id="send-card-btn" type="button" class="btn btn-default" disabled>Send Card</button>
       </div>
     </div>
   </div>
 </div>
-<div class="modal fade" id="sendClueModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true">
+<div class="modal fade" id="sendClueModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true"data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -53,18 +53,23 @@
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">
     <div class="item active">
+      <input id="cardId" value="0"hidden/>
       <img id="card0" src="">
     </div>
     <div class="item">
+     <input id="cardId" value="1"hidden/>
        <img id="card1" src="">
     </div>
      <div class="item">
+      <input id="cardId" value="2"hidden/>
        <img id="card2" src="">
     </div>
      <div class="item">
+      <input id="cardId" value="3"hidden/>
        <img id="card3" src="">
     </div>
      <div class="item">
+      <input id="cardId" value="4"hidden/>
        <img id="card4" src="">
 
     </div>
@@ -81,12 +86,15 @@
 </div>
       </div>
       <div class="modal-footer">
-      	<button id="send-card-btn" type="button" class="btn btn-default">Send Clue</button>
+      	<button id="send-clue-btn" type="button" class="btn btn-default" disabled>Send Clue</button>
       </div>
     </div>
   </div>
 </div>
-<button type="button" class="btn btn-default" id="clueBtn">Clue</button>
+<button class ="btn btn-default" id="advancePhase">advance phase</button>
+<p id="currentPhase"></p>
+<p id="storyTeller"></p>
+<p id="clientPlayer"></p>
 </#assign>
 <#assign js>
 	<script src="js/icon.js"></script>
