@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableList;
 /** Class representing a game player.
  */
 public class Player implements Comparable<Player> {
-  private final String id;
+  private final String ID;
   private int score;
   private final String CHAT_NAME;
   private final String COLOR;
@@ -16,7 +16,7 @@ public class Player implements Comparable<Player> {
   private List<Card> hand = new ArrayList<>();
 
   public Player(String id, String chatName, String color) {
-    this.id = id;
+    this.ID = id;
     this.score = 0;
     this.CHAT_NAME = chatName;
     this.COLOR = color;
@@ -33,7 +33,7 @@ public class Player implements Comparable<Player> {
    * @return the player's unique id
    */
   public String getId() {
-    return id;
+    return ID;
   }
 
   /**
