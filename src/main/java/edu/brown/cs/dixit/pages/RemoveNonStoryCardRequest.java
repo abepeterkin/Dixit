@@ -19,7 +19,13 @@ public class RemoveNonStoryCardRequest implements Route {
     String playerId = qm.value("playerId");
 
     Game game = Main.getGame(gameName);
+    if (game == null) {
+      return "false";
+    }
     Player player = game.getPlayerWithId(playerId);
+    if (player == null) {
+      return "false";
+    }
     if (player.isStoryteller()) {
       return "false";
     }

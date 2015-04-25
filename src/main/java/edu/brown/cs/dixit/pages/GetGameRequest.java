@@ -24,7 +24,13 @@ public class GetGameRequest implements Route {
     String gameName = qm.value("gameName");
     String playerId = qm.value("playerId");
     Game tempGame = Main.getGame(gameName);
+    if (tempGame == null) {
+      return "false";
+    }
     Player tempPlayer = tempGame.getPlayerWithId(playerId);
+    if (tempPlayer == null) {
+      return "false";
+    }
     JsonElement tempJson = serializationUtil.deepSerializeGame(tempGame,
         tempPlayer);
 

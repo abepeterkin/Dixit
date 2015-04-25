@@ -22,11 +22,20 @@ public class AddStoryCardRequest implements Route {
     String clue = qm.value("clue");
 
     Game game = Main.getGame(gameName);
+    if (game == null) {
+      return "false";
+    }
     Player player = game.getPlayerWithId(playerId);
+    if (player == null) {
+      return "false";
+    }
     if (!player.isStoryteller()) {
       return "false";
     }
     Card card = game.getCardWithId(cardId);
+    if (card == null) {
+      return "false";
+    }
     game.submitStory(clue, card);
 
     return "true";
