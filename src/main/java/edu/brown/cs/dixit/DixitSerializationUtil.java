@@ -1,6 +1,7 @@
 package edu.brown.cs.dixit;
 
 import gamestuff.Card;
+import gamestuff.Chat;
 import gamestuff.ChatLine;
 import gamestuff.Game;
 import gamestuff.Phase;
@@ -109,13 +110,27 @@ public class DixitSerializationUtil {
     Map<String, Object> variables = new ImmutableMap.Builder()
         .put("name", game.getName())
         .put("phase", serializePhase(game.getPhase()))
-        .put("story", game.getStory()).put("players", playerJsonList).build();
+        .put("story", game.getStory()).put("players", playerJsonList)
+        .put("chat", serializeChat(game.getChat())).build();
     return GSON.toJsonTree("");
   }
 
   public JsonElement serializeChatLine(
       ChatLine chatLine) {
     return GSON.toJsonTree(chatLine.getMessage());
+  }
+
+  public JsonElement serializeChat(
+      Chat chat) {
+    List<ChatLine> chatLineList = chat.getLines();
+    ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
+    int index = 0;
+    while (index < chatLineList.size()) {
+      ChatLine tempChatLine = chatLineList.get(index);
+      tempBuilder.add(serializeChatLine(tempChatLine));
+      index += 1;
+    }
+    return GSON.toJsonTree(tempBuilder.build());
   }
 
   public JsonElement serializeUpdate(
