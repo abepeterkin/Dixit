@@ -29,8 +29,7 @@ public class GetGameRequest implements TemplateViewRoute {
     String playerName = qm.value("playerName");
 
     Game tempGame = Main.getGame(gameName);
-    // Need accessor for player.
-    Player tempPlayer = null;
+    Player tempPlayer = tempGame.getPlayerByName(playerName);
     JsonElement tempJson = serializationUtil.deepSerializeGame(tempGame,
         tempPlayer);
 

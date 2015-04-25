@@ -12,7 +12,6 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMap.Builder;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
@@ -58,8 +57,8 @@ public class DixitSerializationUtil {
       Player player,
       Player currentPlayer) {
     ImmutableMap.Builder tempBuilder = new ImmutableMap.Builder()
-    .put("score", player.getScore()).put("chatName", player.getChatName())
-    .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
+        .put("score", player.getScore()).put("chatName", player.getChatName())
+        .put("isStoryTeller", player.isStoryteller()).put("id", player.getId());
     if (currentPlayer == player) {
       tempBuilder.put("hand", serializeHand(player.getHand()));
     }
