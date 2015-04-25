@@ -38,7 +38,7 @@ public class Chat {
   /**
    * @return every line in the chat
    */
-  public ImmutableList<ChatLine> getLines() {
+  public List<ChatLine> getLines() {
     return ImmutableList.copyOf(lines);
   }
 

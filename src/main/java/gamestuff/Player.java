@@ -3,6 +3,8 @@ package gamestuff;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 /** Class representing a game player.
  */
 public class Player implements Comparable<Player> {
@@ -97,7 +99,7 @@ public class Player implements Comparable<Player> {
    * @return List of cards in hand
    */
   public List<Card> getHand() {
-    return hand;
+    return ImmutableList.copyOf(hand);
   }
 
   @Override

@@ -4,17 +4,18 @@ import java.util.List;
 
 import org.junit.Test;
 
+import edu.brown.cs.dixit.Main;
 import static org.junit.Assert.assertTrue;
 
 public class GameTest {
-  
+
   @Test
   public void GameConstructionTest() {
     List<Player> players = new ArrayList<Player>();
-    Player p1 = new Player("Zach", "BLUE");
-    Player p2 = new Player("Esteban", "RED");
-    Player p3 = new Player("Jack", "GREEN");
-    Player p4 = new Player("Abraham", "YELLOW");
+    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
+    Player p4 = new Player(Main.newId(), "Abraham", "YELLOW");
     players.add(p1);
     players.add(p2);
     players.add(p3);
@@ -36,14 +37,14 @@ public class GameTest {
     assertTrue(colors.contains("GREEN"));
     assertTrue(colors.contains("YELLOW"));
   }
-  
+
   @Test
   public void GetPlayerByNameTest() {
     List<Player> players = new ArrayList<Player>();
-    Player p1 = new Player("Zach", "BLUE");
-    Player p2 = new Player("Esteban", "RED");
-    Player p3 = new Player("Jack", "GREEN");
-    Player p4 = new Player("Abraham", "YELLOW");
+    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
+    Player p4 = new Player(Main.newId(), "Abraham", "YELLOW");
     players.add(p1);
     players.add(p2);
     players.add(p3);
@@ -54,41 +55,41 @@ public class GameTest {
     assertTrue(p3.equals(g.getPlayerByName("Jack")));
     assertTrue(p4.equals(g.getPlayerByName("Abraham")));
   }
-  
+
   @Test
   public void AddPlayerUnderMaxTest() {
     List<Player> players = new ArrayList<Player>();
-    Player p1 = new Player("Zach", "BLUE");
-    Player p2 = new Player("Esteban", "RED");
-    Player p3 = new Player("Jack", "GREEN");
+    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
     players.add(p1);
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 6, 5, players);
-    Player p4 = new Player("Abraham", "YELLOW");
+    Player p4 = new Player(Main.newId(), "Abraham", "YELLOW");
     assertTrue(g.addPlayer(p4));
   }
-  
+
   @Test
   public void AddPlayerOverMaxTest() {
     List<Player> players = new ArrayList<Player>();
-    Player p1 = new Player("Zach", "BLUE");
-    Player p2 = new Player("Esteban", "RED");
-    Player p3 = new Player("Jack", "GREEN");
+    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
     players.add(p1);
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 5, players);
-    Player p4 = new Player("Abraham", "YELLOW");
+    Player p4 = new Player(Main.newId(), "Abraham", "YELLOW");
     assertTrue(g.addPlayer(p4) == false);
   }
-  
+
   @Test
   public void PhaseAfterNewGameTest() {
     List<Player> players = new ArrayList<Player>();
-    Player p1 = new Player("Zach", "BLUE");
-    Player p2 = new Player("Esteban", "RED");
-    Player p3 = new Player("Jack", "GREEN");
+    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
     players.add(p1);
     players.add(p2);
     players.add(p3);
@@ -96,13 +97,13 @@ public class GameTest {
     g.newGame();
     assertTrue(g.getPhase().equals(Phase.WAITINGFORFIRSTSTORY));
   }
-  
+
   @Test
   public void HandSize5Test() {
     List<Player> players = new ArrayList<Player>();
-    Player p1 = new Player("Zach", "BLUE");
-    Player p2 = new Player("Esteban", "RED");
-    Player p3 = new Player("Jack", "GREEN");
+    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
     players.add(p1);
     players.add(p2);
     players.add(p3);
@@ -115,13 +116,13 @@ public class GameTest {
     assertTrue(h2.size() == 5);
     assertTrue(h3.size() == 5);
   }
-  
+
   @Test
   public void HandSize7Test() {
     List<Player> players = new ArrayList<Player>();
-    Player p1 = new Player("Zach", "BLUE");
-    Player p2 = new Player("Esteban", "RED");
-    Player p3 = new Player("Jack", "GREEN");
+    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
     players.add(p1);
     players.add(p2);
     players.add(p3);
@@ -134,9 +135,9 @@ public class GameTest {
     assertTrue(h2.size() == 7);
     assertTrue(h3.size() == 7);
   }
-  
-  
-  
-  
+
+
+
+
 
 }
