@@ -15,7 +15,7 @@ var sentCard = false;
 function Board(game, canvasId, playerId) {
   this.playerId = playerId; // the player id who is using this client
   this.game = game;
-  this.cards = []// cards currently at play
+  this.cards = [];// cards currently at play
   this.canvas = document.getElementById(canvasId);
   this.canvas.width = (window.innerWidth
       || document.documentElement.clientWidth || document.body.clientWidth);

@@ -35,7 +35,7 @@ public class CreateGameRequest implements TemplateViewRoute {
     if (Main.gameExists(gameName)) {
       response = "game already exists";
     } else {
-      Player tempPlayer = new Player(playerName, colorName);
+      Player tempPlayer = new Player(Main.newId(), playerName, colorName);
       List<Player> tempPlayerList = new ArrayList<Player>();
       tempPlayerList.add(tempPlayer);
       Game tempGame =

@@ -32,7 +32,7 @@ public class AddPlayerRequest implements TemplateViewRoute {
     if (!Main.gameExists(gameName)) {
       response = "game does not exist";
     } else {
-      Player tempPlayer = new Player(playerName, colorName);
+      Player tempPlayer = new Player(Main.newId(), playerName, colorName);
       Game tempGame = Main.getGame(gameName);
       if (tempGame.addPlayer(tempPlayer)) {
         response = "player successfully added!";

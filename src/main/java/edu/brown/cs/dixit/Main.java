@@ -14,6 +14,7 @@ import joptsimple.OptionSpec;
 public class Main {
 
   private static Map<String, Game> gameMap = new HashMap<String, Game>();
+  private static int nextId = 0;
 
   public static void main(
       String[] args) {
@@ -26,6 +27,17 @@ public class Main {
     } catch (RuntimeException e) {
       System.err.println("ERROR: " + e.getMessage());
     }
+  }
+
+  /** Returns the next id to be assigned to a player, and increments the value
+   * so that the next player will get a new id.
+   *
+   * @return an id for a new player
+   */
+  public static String newId() {
+    String toReturn = Integer.toString(nextId);
+    nextId++;
+    return toReturn;
   }
 
   public static boolean gameExists(

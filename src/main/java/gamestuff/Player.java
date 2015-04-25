@@ -6,13 +6,15 @@ import java.util.List;
 /** Class representing a game player.
  */
 public class Player implements Comparable<Player> {
+  private final String id;
   private int score;
   private final String CHAT_NAME;
   private final String COLOR;
   private boolean isStoryteller = false;
   private List<Card> hand = new ArrayList<>();
 
-  public Player(String chatName, String color) {
+  public Player(String id, String chatName, String color) {
+    this.id = id;
     this.score = 0;
     this.CHAT_NAME = chatName;
     this.COLOR = color;
@@ -23,6 +25,13 @@ public class Player implements Comparable<Player> {
    */
   public int getScore() {
     return score;
+  }
+
+  /**
+   * @return the player's unique id
+   */
+  public String getId() {
+    return id;
   }
 
   /**
