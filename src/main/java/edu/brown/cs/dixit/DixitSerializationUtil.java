@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
@@ -48,16 +49,21 @@ public class DixitSerializationUtil {
       Player currentPlayer) {
     Map<String, Object> variables = new ImmutableMap.Builder()
         .put("score", player.getScore()).put("chatName", player.getChatName())
-        .put("isStoryTeller", player.isStoryteller()).build();
+        .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
+        .build();
     return GSON.toJsonTree(variables);
   }
 
   public JsonElement deepSerializePlayer(
       Player player,
       Player currentPlayer) {
-    // TODO: Serialize.
-    // Cannot serialize yet because player has no accessor for hand.
-    return GSON.toJsonTree("");
+    ImmutableMap.Builder tempBuilder = new ImmutableMap.Builder()
+    .put("score", player.getScore()).put("chatName", player.getChatName())
+    .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
+    if (currentPlayer == player) {
+      tempBuilder.put("hand", serializeHand(player.getHand()));
+    }
+    return GSON.toJsonTree(tempBuilder.build());
   }
 
   public JsonElement serializePhase(
@@ -82,16 +88,29 @@ public class DixitSerializationUtil {
   public JsonElement serializeGame(
       Game game,
       Player currentPlayer) {
-    // TODO: Serialize.
-    // Need accessors for serialization.
-    return GSON.toJsonTree("");
+    Map<String, Object> variables = new ImmutableMap.Builder()
+        .put("name", game.getName())
+        .put("phase", serializePhase(game.getPhase()))
+        .put("story", game.getStory()).build();
+    return GSON.toJsonTree(variables);
   }
 
   public JsonElement deepSerializeGame(
-      Game Game,
+      Game game,
       Player currentPlayer) {
-    // TODO: Serialize.
-    // Need accessors for serialization.
+    List<Player> playerList = game.getPlayers();
+    ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
+    int index = 0;
+    while (index < playerList.size()) {
+      Player tempPlayer = playerList.get(index);
+      tempBuilder.add(deepSerializePlayer(tempPlayer, currentPlayer));
+      index += 1;
+    }
+    JsonElement playerJsonList = GSON.toJsonTree(tempBuilder.build());
+    Map<String, Object> variables = new ImmutableMap.Builder()
+        .put("name", game.getName())
+        .put("phase", serializePhase(game.getPhase()))
+        .put("story", game.getStory()).put("players", playerJsonList).build();
     return GSON.toJsonTree("");
   }
 
