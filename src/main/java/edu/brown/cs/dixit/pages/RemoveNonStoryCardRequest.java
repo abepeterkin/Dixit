@@ -3,21 +3,15 @@ package edu.brown.cs.dixit.pages;
 import edu.brown.cs.dixit.Main;
 import gamestuff.Game;
 import gamestuff.Player;
-
-import java.util.Map;
-
-import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
-import spark.TemplateViewRoute;
+import spark.Route;
 
-import com.google.common.collect.ImmutableMap;
-
-public class RemoveNonStoryCardRequest implements TemplateViewRoute {
+public class RemoveNonStoryCardRequest implements Route {
 
   @Override
-  public ModelAndView handle(
+  public Object handle(
       Request req,
       Response res) {
     QueryParamsMap qm = req.queryMap();
@@ -27,12 +21,10 @@ public class RemoveNonStoryCardRequest implements TemplateViewRoute {
     Game game = Main.getGame(gameName);
     Player player = game.getPlayerWithId(playerId);
     if (player.isStoryteller()) {
-      Map<String, Object> variables = ImmutableMap.of("response", "false");
-      return new ModelAndView(variables, "response.ftl");
+      return "false";
     }
     // TODO: Remove card.
 
-    Map<String, Object> variables = ImmutableMap.of("response", "true");
-    return new ModelAndView(variables, "response.ftl");
+    return "true";
   }
 }
