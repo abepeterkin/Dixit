@@ -1,6 +1,7 @@
 package edu.brown.cs.dixit.pages;
 
 import edu.brown.cs.dixit.Main;
+import gamestuff.Card;
 import gamestuff.Game;
 import gamestuff.Player;
 
@@ -23,7 +24,7 @@ public class AddNonStoryCardRequest implements TemplateViewRoute {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
     String playerName = qm.value("playerName");
-    int cardId = Integer.parseInt(qm.value("cardId"));
+    String cardId = qm.value("cardId");
 
     Game game = Main.getGame(gameName);
     Player player = game.getPlayerByName(playerName);
@@ -31,7 +32,8 @@ public class AddNonStoryCardRequest implements TemplateViewRoute {
       Map<String, Object> variables = ImmutableMap.of("response", "false");
       return new ModelAndView(variables, "response.ftl");
     }
-    // TODO: Get the card.
+    Card card = game.getCardWithId(cardId);
+    game.addCardToTable(player, card);
 
     Map<String, Object> variables = ImmutableMap.of("response", "true");
     return new ModelAndView(variables, "response.ftl");
