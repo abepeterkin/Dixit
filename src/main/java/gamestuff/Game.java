@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
+import edu.brown.cs.dixit.DixitGameSubscriber;
+import edu.brown.cs.dixit.DixitServer;
+
 /*
  * IMPORTANT NOTE/TODO:
  * the game object as it is now cannot handle multiple threads. Once we've
@@ -35,6 +38,8 @@ public class Game {
   private HashMap<String, Player> playerIdMap = new HashMap<>();
   private HashMap<String, String> colorMap = new HashMap<>();
   private boolean gameOver = false;
+
+  private DixitGameSubscriber subscriber = DixitServer.getDixitGameSubscriber();
 
   public Game(String name, int maxPlayers, int handSize, List<Player> players) {
     this.name = name;
@@ -136,6 +141,7 @@ public class Game {
     String color = colorMap.get(playerName);
     ChatLine line = new ChatLine(playerName, message, color);
     chat.addLine(line);
+    subscriber.chatChanged(this);
   }
 
   /**
@@ -195,9 +201,14 @@ public class Game {
    */
   public void newGame() {
     Collections.shuffle(this.deck);
+    for(Player p: this.players) {
+      trashPlayerCards(p);
+    }
+    refillDeck();
     for(int i = 0; i < this.HAND_SIZE; i++) {
       for(Player p: this.players) {
         p.draw(this.deck.pop());
+        subscriber.handChanged(this, p);
       }
     }
     updatePhase(Phase.WAITINGFORFIRSTSTORY);
@@ -223,6 +234,7 @@ public class Game {
     }
     submitStory(s, c);
     updatePhase(Phase.NONSTORYCARDS);
+    subscriber.gameChanged(this);
   }
 
   /**
@@ -236,6 +248,7 @@ public class Game {
       }
     }
     this.story = s;
+    subscriber.gameChanged(this);
   }
 
   /**
@@ -244,6 +257,7 @@ public class Game {
   public void votingPhase() {
     Collections.shuffle(this.tableCards);
     updatePhase(Phase.VOTING);
+    subscriber.gameChanged(this);
   }
 
   /**
@@ -260,6 +274,15 @@ public class Game {
     }
   }
 
+  private void trashPlayerCards(Player player) {
+    List<Card> hand = player.getHand();
+    for (Card card : hand) {
+      trash.push(card);
+      player.removeFromHand(card);
+    }
+    subscriber.handChanged(this, player);
+  }
+
   /**
    * Tallies up the votes and increases the scores of the players accordingly.
    *
@@ -271,6 +294,7 @@ public class Game {
    */
   public void scoringPhase() {
     updatePhase(Phase.SCORING);
+    subscriber.gameChanged(this);
     int totalCorrectFinds = 0;
     List<Player> correctPlayers = new ArrayList<Player>();
     for (Vote v : this.votes) {
@@ -283,17 +307,20 @@ public class Game {
       for (Player p : players) {
         if (!p.isStoryteller()) {
           p.incrementScore(2);
+          subscriber.playerChanged(this, p);
         }
       }
     } else {
       for (Player p : players) {
         if (p.isStoryteller() || correctPlayers.contains(p)) {
           p.incrementScore(3);
+          subscriber.playerChanged(this, p);
         }
       }
       for (Vote v : this.votes) {
         Player votePlayer = v.getPlayer();
         votePlayer.incrementScore(1);
+        subscriber.playerChanged(this, votePlayer);
       }
       prepareForNextRound();
     }
@@ -304,6 +331,7 @@ public class Game {
    */
   public void prepareForNextRound() {
     updatePhase(Phase.CLEANUP);
+    subscriber.gameChanged(this);
     // game ends when the deck is empty
     if (deck.isEmpty()) {
       Collections.sort(this.players);
@@ -311,6 +339,7 @@ public class Game {
     } else {
       for(Player p: this.players) {
         p.draw(this.deck.pop());
+        subscriber.playerChanged(this, p);
       }
       trashTable();
       this.story = "";
@@ -318,6 +347,7 @@ public class Game {
       cycleStoryteller();
       updatePhase(Phase.STORYTELLER);
     }
+    subscriber.gameChanged(this);
   }
 
   /*private List<Player> determineWinners() {
@@ -345,10 +375,13 @@ public class Game {
       Player current = players.get(i);
       if (current.isStoryteller()) {
         current.setIsStoryteller(false);
+        subscriber.playerChanged(this, current);
         if (i == players.size() - 1) {
           players.get(0).setIsStoryteller(true);
+          subscriber.playerChanged(this, players.get(0));
         } else {
           players.get(i + 1).setIsStoryteller(true);
+          subscriber.playerChanged(this, players.get(i + 1));
         }
         break;
       }
@@ -364,8 +397,6 @@ public class Game {
   }
 
   /**
-   * again is it selected Card we pass from front end or the ID?
-   * ABRAHAM: good question, probably the ID. this can all change if needed
    *
    * @param p the player adding the card
    * @param c the card to be added
@@ -374,6 +405,7 @@ public class Game {
     this.tableCards.add(c);
     p.removeFromHand(c);
     p.draw(drawFromDeck());
+    subscriber.handChanged(this, p);
     if (this.tableCards.size() == this.players.size()) {
       votingPhase();
     }

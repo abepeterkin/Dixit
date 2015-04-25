@@ -47,7 +47,6 @@ public class DixitServer {
     Spark.get("/", new DixitHomePage(), new FreeMarkerEngine());
     Spark.get("/newGamePage", new DixitNewGamePage(), new FreeMarkerEngine());
     Spark.get("/joinGamePage", new DixitJoinGamePage(), new FreeMarkerEngine());
-
   }
 
   public static DixitGameSubscriber getDixitGameSubscriber() {
