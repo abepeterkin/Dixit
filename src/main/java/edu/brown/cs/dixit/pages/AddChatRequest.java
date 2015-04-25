@@ -19,8 +19,11 @@ public class AddChatRequest implements Route {
     String playerId = qm.value("playerId");
     String message = qm.value("message");
     Game game = Main.getGame(gameName);
-    Player player = game.getPlayerWithId(playerId);
     if (game == null) {
+      return "false";
+    }
+    Player player = game.getPlayerWithId(playerId);
+    if (player == null) {
       return "false";
     } else {
       game.addToChat(player.getChatName(), message);

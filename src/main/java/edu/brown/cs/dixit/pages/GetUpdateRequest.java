@@ -34,8 +34,14 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     String playerId = qm.value("playerId");
 
     Game tempGame = Main.getGame(gameName);
+    if (tempGame == null) {
+      return "false";
+    }
     DixitUpdateList tempUpdateList = dixitUpdateListMap.get(tempGame);
     Player tempPlayer = tempGame.getPlayerWithId(playerId);
+    if (tempPlayer == null) {
+      return "false";
+    }
     long tempTime;
     if (playerTimeMap.containsKey(tempPlayer)) {
       tempTime = playerTimeMap.get(tempPlayer);

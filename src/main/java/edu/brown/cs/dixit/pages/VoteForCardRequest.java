@@ -21,11 +21,20 @@ public class VoteForCardRequest implements Route {
     String cardId = qm.value("cardId");
 
     Game game = Main.getGame(gameName);
+    if (game == null) {
+      return "false";
+    }
     Player player = game.getPlayerWithId(playerId);
+    if (player == null) {
+      return "false";
+    }
     if (player.isStoryteller()) {
       return "false";
     }
     Card card = game.getCardWithId(cardId);
+    if (card == null) {
+      return "false";
+    }
     game.castVote(player, card);
 
     return "true";
