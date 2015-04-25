@@ -29,6 +29,10 @@ function Board(game, canvasId, playerId) {
   this.iconsMap = {};
   this.sendBtn = $('#send-card-btn');
   this.sendClueBtn = $('#send-clue-btn');
+  this.clue = new Clue({
+    x : this.canvas.width / 2
+  });
+  this.clue.makeBig(this.canvas);
   this.clueInput = $('#clueInput');
   this.cardModal = $('#cardModal');
   this.clueModal = $('#sendClueModal');
@@ -75,6 +79,7 @@ Board.prototype.drawSmall = function() {
       for (var i = 0; i < board.cards.length; i++) {
         board.cards[i].makeSmall(i);
       }
+      board.clue.makeSmall(board);
     },
     name : "max"
   }))
@@ -82,7 +87,7 @@ Board.prototype.drawSmall = function() {
   this.drawPlayersSmall();
   this.clientPlayer.drawHand(this.ctx);
   this.drawCards();
-  this.drawClue();
+  this.clue.draw(this.ctx);
 }
 // draws the scoreboard gets passed other objects to ensure
 // background board always gets drawn first
@@ -120,13 +125,14 @@ var drawBigHelper = function() {
       for (var i = 0; i < board.cards.length; i++) {
         board.cards[i].makeBig(i);
       }
+      board.clue.makeBig(board);
     },
     name : "min"
   }))
   board.iconsMap['min'] = ind - 1;
   player.drawHand(board.ctx);
   board.drawPlayersBig();
-  board.drawClue();
+  board.clue.draw(board.ctx);
   board.drawCards();
 }
 Board.prototype.drawPlayersBig = function() {
@@ -141,11 +147,6 @@ Board.prototype.drawPlayersSmall = function() {
     this.game.players[i].drawSmall(this, i);
   }
 }
-Board.prototype.drawClue = function() {
-  this.ctx.font = "30px Georgia"; // make this responsive
-  this.ctx.fillText(this.game.currClue, this.canvas.width / 2, 30);
-}
-
 // draws the cards that are at play in the board
 Board.prototype.drawCards = function() {
   for (var i = 0; i < board.cards.length; i++) {
@@ -171,6 +172,7 @@ Board.prototype.refresh = function() {
   this.canvas.height = (window.innerHeight
       || document.documentElement.clientHeight || document.body.clientHeight);
   this.clientPlayer.refresh(this.canvas);
+  this.clue.refresh(this);
 }
 
 Board.prototype.addCard = function(card) {
@@ -217,26 +219,26 @@ Board.prototype.addListeners = function() {
   })
 
   $('#carousel-example-generic').on('slid.bs.carousel', function(e) {
-    console.log(e.relatedTarget.children[0].val());
+    board.clue.cardIndex = e.relatedTarget.children.item(0).value;
   })
 }
 
 Board.prototype.changePhase = function(phase) {
   switch (phase) {
-  case this.game.phases['StoryTeller']:
-    if (this.clientPlayer.isStoryTeller) {
-      var card;
-      for (var i = 0; i < board.clientPlayer.hand.length; i++) {
-        card = board.clientPlayer.hand[i];
-        board.clueModal.find('#card' + i)[0].src = card.frontImg.src;
+    case this.game.phases['StoryTeller']:
+      if (this.clientPlayer.isStoryTeller) {
+        var card;
+        for (var i = 0; i < board.clientPlayer.hand.length; i++) {
+          card = board.clientPlayer.hand[i];
+          board.clueModal.find('#card' + i)[0].src = card.frontImg.src;
+        }
+        board.clueModal.modal('show');
+        break;
       }
-      board.clueModal.modal('show');
-      break;
-    }
-  case this.game.phases['NonStoryCards']:
-    if (!this.clientPlayer.isStoryTeller) {
-      this.sendBtn.prop("disabled", false);
-    }
+    case this.game.phases['NonStoryCards']:
+      if (!this.clientPlayer.isStoryTeller) {
+        this.sendBtn.prop("disabled", false);
+      }
   }
 }
 
@@ -260,8 +262,13 @@ function sendBtn(event) {
 }
 
 function sendClue(event) {
-  board.game.currClue = '"' + board.clueInput.val() + '"';
+  board.clue.text = '"' + board.clueInput.val() + '"';
   board.clueModal.modal('hide');
+  board.clue.card = board.clientPlayer.hand[board.clue.cardIndex]
+      .setAsClue(board.canvas);
+  board.clue.refresh(board);
+  board.clientPlayer.hand.splice(board.clue.cardIndex, 1);
+  board.clientPlayer.refresh(board.canvas);
   board.game.nextPhase();
 }
 

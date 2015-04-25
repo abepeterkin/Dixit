@@ -97,10 +97,11 @@
 <p id="clientPlayer"></p>
 </#assign>
 <#assign js>
-	<script src="js/icon.js"></script>
+	<script src="/js/icon.js"></script>
     <script src="/js/card.js"></script>
+    <script src="/js/clue.js"></script>
     <script src="/js/game.js"></script>
-        <script src="/js/sprite.js"></script>
+    <script src="/js/sprite.js"></script>
     <script src="/js/player.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/board.js"></script>

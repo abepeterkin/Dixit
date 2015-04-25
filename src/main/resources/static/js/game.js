@@ -6,8 +6,8 @@ function Game(id, rules) {
   this.board = null;
   this.players = [];
   this.score = {};
-  // TODO: add a ctx and canvas so that those can be easily be referenced?
-  // currstorysteller
+  this.storyTeller = null;
+
 }
 
 Game.prototype.phases = {

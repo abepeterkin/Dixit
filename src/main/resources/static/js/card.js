@@ -44,6 +44,12 @@ Card.prototype.draw = function(ctx) {
   }
 }
 
+Card.prototype.setAsClue = function(canvas) {
+  this.x = 0;
+  this.y = 0;
+  return this;
+}
+
 // to see if this card was clicked
 Card.prototype.clicked = function(clickX, clickY) {
   return ((clickX > this.x) && (clickX < this.x + this.width)
