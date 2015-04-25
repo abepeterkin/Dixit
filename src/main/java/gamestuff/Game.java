@@ -27,13 +27,13 @@ public class Game {
   private final int MAX_PLAYERS;
   //we should have min players too, which is always 3
   private List<Player> players;
-  private String story;
-  private Phase phase;
+  private String story = "";
+  private Phase phase = Phase.STORYTELLER;
   private Chat chat = new Chat();
-  private Stack<Card> deck;
-  private Stack<Card> trash;
-  private List<Card> tableCards;
-  private List<Vote> votes;
+  private Stack<Card> deck = new Stack<Card>();
+  private Stack<Card> trash = new Stack<Card>();
+  private List<Card> tableCards = new ArrayList<Card>();
+  private List<Vote> votes = new ArrayList<Vote>();
   private HashMap<String, Card> cardIdMap = new HashMap<>();
   private HashMap<String, Player> playerIdMap = new HashMap<>();
   private HashMap<String, String> colorMap = new HashMap<>();
@@ -46,10 +46,6 @@ public class Game {
     this.MAX_PLAYERS = maxPlayers;
     this.HAND_SIZE = handSize;
     this.players = players;
-    this.deck = new Stack<Card>();
-    this.trash = new Stack<Card>();
-    this.tableCards = new ArrayList<Card>();
-    this.votes = new ArrayList<Vote>();
     for (Player p : players) {
       playerIdMap.put(p.getId(), p);
       colorMap.put(p.getChatName(), p.getColor());

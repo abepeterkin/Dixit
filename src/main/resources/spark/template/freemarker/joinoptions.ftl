@@ -23,6 +23,5 @@
   </form>
 </#assign>
 <#assign js>
-<script src="/js/joinoptions.js"></script>
 </#assign>
 <#include "main.ftl">

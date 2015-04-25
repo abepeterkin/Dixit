@@ -112,7 +112,7 @@ public class DixitSerializationUtil {
         .put("phase", serializePhase(game.getPhase()))
         .put("story", game.getStory()).put("players", playerJsonList)
         .put("chat", serializeChat(game.getChat())).build();
-    return GSON.toJsonTree("");
+    return GSON.toJsonTree(variables);
   }
 
   public JsonElement serializeChatLine(

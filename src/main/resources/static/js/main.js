@@ -37,10 +37,9 @@ var game = new Game(1, {
 
 function retreiveGame(responseObject) {
   console.log(responseObject);
-  /*var gameInfo = responseObject.response;
-  game = new Game(gameInfo.gameName, {
+  game = new Game(responseObject.name, {
     numCards : gameInfo
-  });*/
+  });
 }
 
 var player1 = new Player("1", "Esteban", "blue", false, game);
