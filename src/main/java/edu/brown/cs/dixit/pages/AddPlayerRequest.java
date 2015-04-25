@@ -10,14 +10,11 @@ import spark.TemplateViewRoute;
 
 import com.google.common.collect.ImmutableMap;
 
-import edu.brown.cs.dixit.DixitSerializationUtil;
 import edu.brown.cs.dixit.Main;
 import gamestuff.Game;
 import gamestuff.Player;
 
 public class AddPlayerRequest implements TemplateViewRoute {
-
-  private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
 
   @Override
   public ModelAndView handle(
@@ -28,20 +25,28 @@ public class AddPlayerRequest implements TemplateViewRoute {
     String playerName = qm.value("playerName");
     String colorName = qm.value("colorName");
 
-    String response;
     if (!Main.gameExists(gameName)) {
-      response = "game does not exist";
+      return failure("game does not exist");
     } else {
-      Player tempPlayer = new Player(Main.newId(), playerName, colorName);
-      Game tempGame = Main.getGame(gameName);
-      if (tempGame.addPlayer(tempPlayer)) {
-        response = "player successfully added!";
+      String newId = Main.newId();
+      Player player = new Player(newId, playerName, colorName);
+      Game game = Main.getGame(gameName);
+      if (game.addPlayer(player)) {
+        Map<String, Object> variables =
+            ImmutableMap.of("response", "Game join successful.",
+                "gameName", game.getName(),
+                "playerId", newId);
+        return new ModelAndView(variables, "success.ftl");
       } else {
-        response = "player could not be added";
+        return failure("player could not be added");
       }
     }
 
-    Map<String, Object> variables = ImmutableMap.of("response", response);
-    return new ModelAndView(variables, "response.ftl");
+  }
+
+  private ModelAndView failure(String message) {
+    Map<String, Object> variables = ImmutableMap.of("success", "false",
+        "error", message);
+    return new ModelAndView(variables, "reponse.ftl");
   }
 }

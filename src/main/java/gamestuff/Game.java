@@ -31,6 +31,7 @@ public class Game {
   private Stack<Card> trash;
   private List<Card> tableCards;
   private List<Vote> votes;
+  private HashMap<String, Player> idMap = new HashMap<>();
   private HashMap<String, String> colorMap = new HashMap<>();
   private boolean gameOver = false;
 
@@ -44,6 +45,7 @@ public class Game {
     this.tableCards = new ArrayList<Card>();
     this.votes = new ArrayList<Vote>();
     for (Player p : players) {
+      idMap.put(p.getId(), p);
       colorMap.put(p.getChatName(), p.getColor());
     }
   }
@@ -53,6 +55,14 @@ public class Game {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * @param id a player id
+   * @return the id of the player to return
+   */
+  public Player getPlayerWithId(String id) {
+    return idMap.get(id);
   }
 
   /**
@@ -114,6 +124,9 @@ public class Game {
     chat.addLine(line);
   }
 
+  /**
+   * @return a string representation of the chat
+   */
   public String getChatString() {
     return chat.toString();
   }
@@ -139,12 +152,13 @@ public class Game {
     return this.story;
   }
 
-  /**
+  /** Adds a player to the game. Will fail if the game is at capacity or if
+   * a player with that ID already exists.
    * @param p the player to add
    * @return whether the player was successfully added
    */
   public boolean addPlayer(Player p) {
-    if (players.size() < MAX_PLAYERS) {
+    if (players.size() < MAX_PLAYERS && idMap.get(p.getId()) == null) {
       players.add(p);
       return true;
     } else {

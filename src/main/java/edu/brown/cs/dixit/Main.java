@@ -7,12 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
+
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
 public class Main {
 
+  public static final Gson GSON = new Gson();
   private static Map<String, Game> gameMap = new HashMap<String, Game>();
   private static int nextId = 0;
 

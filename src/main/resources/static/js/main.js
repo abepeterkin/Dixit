@@ -66,6 +66,7 @@ function makeHandArray(handUrls) {
 }
 
 window.onload = function() {
+  //alert(sessionStorage.gameName + " " + sessionStorage.playerId);
   var board = new Board(game, "board", player1.id);
   player1.addHand(makeTestHand());
   board.addListeners();
