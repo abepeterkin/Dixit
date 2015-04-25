@@ -26,7 +26,7 @@ public class DixitSerializationUtil {
 
   public JsonElement serializeCard(
       Card card) {
-    Map<String, Object> variables = new ImmutableMap.Builder()
+    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("id", card.getId()).put("image", card.getImage())
         .put("isStoryTeller", card.getStoryteller()).build();
     return GSON.toJsonTree(variables);
@@ -47,7 +47,7 @@ public class DixitSerializationUtil {
   public JsonElement serializePlayer(
       Player player,
       Player currentPlayer) {
-    Map<String, Object> variables = new ImmutableMap.Builder()
+    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("score", player.getScore()).put("chatName", player.getChatName())
         .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
         .build();
@@ -57,7 +57,7 @@ public class DixitSerializationUtil {
   public JsonElement deepSerializePlayer(
       Player player,
       Player currentPlayer) {
-    ImmutableMap.Builder tempBuilder = new ImmutableMap.Builder()
+    ImmutableMap.Builder<String, Object> tempBuilder = new ImmutableMap.Builder<String, Object>()
         .put("score", player.getScore()).put("chatName", player.getChatName())
         .put("isStoryTeller", player.isStoryteller()).put("id", player.getId());
     if (currentPlayer == player) {
@@ -80,15 +80,13 @@ public class DixitSerializationUtil {
     } else if (phase == Phase.CLEANUP) {
       tempValue = "CLEANUP";
     }
-    Map<String, Object> variables = new ImmutableMap.Builder().put("value",
-        tempValue).build();
-    return GSON.toJsonTree(variables);
+    return GSON.toJsonTree(tempValue);
   }
 
   public JsonElement serializeGame(
       Game game,
       Player currentPlayer) {
-    Map<String, Object> variables = new ImmutableMap.Builder()
+    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("name", game.getName())
         .put("phase", serializePhase(game.getPhase()))
         .put("story", game.getStory()).build();
@@ -107,7 +105,7 @@ public class DixitSerializationUtil {
       index += 1;
     }
     JsonElement playerJsonList = GSON.toJsonTree(tempBuilder.build());
-    Map<String, Object> variables = new ImmutableMap.Builder()
+    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("name", game.getName())
         .put("phase", serializePhase(game.getPhase()))
         .put("story", game.getStory()).put("players", playerJsonList)
