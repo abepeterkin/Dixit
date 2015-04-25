@@ -33,12 +33,11 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
       Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
-    String playerName = qm.value("playerName");
+    String playerId = qm.value("playerId");
 
     Game tempGame = Main.getGame(gameName);
     DixitUpdateList tempUpdateList = dixitUpdateListMap.get(tempGame);
-    // Game does not have accessors for players.
-    Player tempPlayer = null;
+    Player tempPlayer = tempGame.getPlayerWithId(playerId);
     long tempTime;
     if (playerTimeMap.containsKey(tempPlayer)) {
       tempTime = playerTimeMap.get(tempPlayer);

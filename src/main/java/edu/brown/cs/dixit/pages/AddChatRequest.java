@@ -2,6 +2,7 @@ package edu.brown.cs.dixit.pages;
 
 import edu.brown.cs.dixit.Main;
 import gamestuff.Game;
+import gamestuff.Player;
 
 import java.util.Map;
 
@@ -21,14 +22,15 @@ public class AddChatRequest implements TemplateViewRoute {
       Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
-    String playerName = qm.value("playerName");
+    String playerId = qm.value("playerId");
     String message = qm.value("message");
     Game game = Main.getGame(gameName);
+    Player player = game.getPlayerWithId(playerId);
     if (game == null) {
       Map<String, Object> variables = ImmutableMap.of("response", "false");
       return new ModelAndView(variables, "response.ftl");
     } else {
-      game.addToChat(playerName, message);
+      game.addToChat(player.getChatName(), message);
       Map<String, Object> variables = ImmutableMap.of("response", "true");
       return new ModelAndView(variables, "response.ftl");
     }

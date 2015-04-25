@@ -22,10 +22,10 @@ public class RemoveVoteForCardRequest implements TemplateViewRoute {
       Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
-    String playerName = qm.value("playerName");
+    String playerId = qm.value("playerId");
 
     Game game = Main.getGame(gameName);
-    Player player = game.getPlayerByName(playerName);
+    Player player = game.getPlayerWithId(playerId);
     if (player.isStoryteller()) {
       Map<String, Object> variables = ImmutableMap.of("response", "false");
       return new ModelAndView(variables, "response.ftl");

@@ -26,10 +26,10 @@ public class GetGameRequest implements TemplateViewRoute {
       Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
-    String playerName = qm.value("playerName");
+    String playerId = qm.value("playerId");
 
     Game tempGame = Main.getGame(gameName);
-    Player tempPlayer = tempGame.getPlayerByName(playerName);
+    Player tempPlayer = tempGame.getPlayerWithId(playerId);
     JsonElement tempJson = serializationUtil.deepSerializeGame(tempGame,
         tempPlayer);
 
