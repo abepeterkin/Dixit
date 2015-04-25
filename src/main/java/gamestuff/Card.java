@@ -1,11 +1,11 @@
 package gamestuff;
 
 public class Card {
-  private final int ID;
+  private final String ID;
   private final String IMAGE;
   private boolean isStoryteller = false;
 
-  public int getId() {
+  public String getId() {
     return ID;
   }
 
@@ -21,7 +21,7 @@ public class Card {
     return isStoryteller;
   }
 
-  public Card(int id, String image) {
+  public Card(String id, String image) {
     this.ID = id;
     this.IMAGE = image;
   }

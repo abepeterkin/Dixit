@@ -21,6 +21,7 @@ import edu.brown.cs.dixit.pages.VoteForCardRequest;
 
 public class DixitServer {
   private static final int DEFAULT_PORT = 2345;
+  private static GetUpdateRequest getUpdateRequest = new GetUpdateRequest();
 
   public static void runSparkSever(Integer port) {
     port = port != null ? port : DEFAULT_PORT;
@@ -31,7 +32,7 @@ public class DixitServer {
     Spark.get("/seeCurrentGames", new SeeCurrentGamesRequest());
     Spark.post("/addPlayer", new AddPlayerRequest(), new FreeMarkerEngine());
     Spark.get("/getGame", new GetGameRequest(), new FreeMarkerEngine());
-    Spark.get("/getUpdate", new GetUpdateRequest(), new FreeMarkerEngine());
+    Spark.get("/getUpdate", getUpdateRequest, new FreeMarkerEngine());
     Spark.get("/addStoryCard", new AddStoryCardRequest(),
         new FreeMarkerEngine());
     Spark.get("/addNonStoryCard", new AddNonStoryCardRequest(),
@@ -47,6 +48,10 @@ public class DixitServer {
     Spark.get("/newGamePage", new DixitNewGamePage(), new FreeMarkerEngine());
     Spark.get("/joinGamePage", new DixitJoinGamePage(), new FreeMarkerEngine());
 
+  }
+
+  public static DixitGameSubscriber getDixitGameSubscriber() {
+    return getUpdateRequest;
   }
 
 }

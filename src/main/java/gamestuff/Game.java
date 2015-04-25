@@ -31,7 +31,8 @@ public class Game {
   private Stack<Card> trash;
   private List<Card> tableCards;
   private List<Vote> votes;
-  private HashMap<String, Player> idMap = new HashMap<>();
+  private HashMap<String, Card> cardIdMap = new HashMap<>();
+  private HashMap<String, Player> playerIdMap = new HashMap<>();
   private HashMap<String, String> colorMap = new HashMap<>();
   private boolean gameOver = false;
 
@@ -45,8 +46,13 @@ public class Game {
     this.tableCards = new ArrayList<Card>();
     this.votes = new ArrayList<Vote>();
     for (Player p : players) {
-      idMap.put(p.getId(), p);
+      playerIdMap.put(p.getId(), p);
       colorMap.put(p.getChatName(), p.getColor());
+    }
+    this.deck = CardInitilizer.load(
+        new File("src/main/resources/static/images/cards"));
+    for (Card card : deck) {
+      cardIdMap.put(card.getId(), card);
     }
   }
 
@@ -62,7 +68,15 @@ public class Game {
    * @return the id of the player to return
    */
   public Player getPlayerWithId(String id) {
-    return idMap.get(id);
+    return playerIdMap.get(id);
+  }
+
+  /**
+   * @param a card id
+   * @return the card with that id
+   */
+  public Card getCardWithId(String id) {
+    return cardIdMap.get(id);
   }
 
   /**
@@ -158,7 +172,7 @@ public class Game {
    * @return whether the player was successfully added
    */
   public boolean addPlayer(Player p) {
-    if (players.size() < MAX_PLAYERS && idMap.get(p.getId()) == null) {
+    if (players.size() < MAX_PLAYERS && playerIdMap.get(p.getId()) == null) {
       players.add(p);
       return true;
     } else {
@@ -180,8 +194,6 @@ public class Game {
    * all players given x cards depending on custom hand size
    */
   public void newGame() {
-    this.deck = CardInitilizer.load(
-        new File("src/main/resources/static/images/cards"));
     Collections.shuffle(this.deck);
     for(int i = 0; i < this.HAND_SIZE; i++) {
       for(Player p: this.players) {

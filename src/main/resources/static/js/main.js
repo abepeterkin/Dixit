@@ -67,6 +67,10 @@ function makeHandArray(handUrls) {
 
 window.onload = function() {
   //alert(sessionStorage.gameName + " " + sessionStorage.playerId);
+  if (sessionStorage.gameName === undefined 
+      || sessionStorage.pleyerId === undefined) {
+    alert("WARNING: you have not joined a game.");
+  }
   var board = new Board(game, "board", player1.id);
   player1.addHand(makeTestHand());
   board.addListeners();
