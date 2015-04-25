@@ -18,7 +18,7 @@ import edu.brown.cs.dixit.DixitSerializationUtil;
 import edu.brown.cs.dixit.Main;
 import gamestuff.Game;
 
-public class GetGameListRequest implements Route {
+public class SeeCurrentGamesRequest implements Route {
 
   private final static Gson GSON = new Gson();
 
