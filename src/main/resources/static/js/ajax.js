@@ -20,8 +20,8 @@ function getUpdateRequest(responseFunction) {
 function addStoryCardRequest(cardId, clue, responseFunction) {
   var tempMap = {"gameName": sessionStorage.gameName,
       "playerId": sessionStorage.playerId,
-      "cardId": cardId, "clue", clue};
-  $.get("/addStoryCard", tempMap, function(responseJson){
+      "cardId": cardId, "clue": clue};
+  $.post("/addStoryCard", tempMap, function(responseJson){
     responseObject = JSON.parse(responseJson);
     responseFunction(responseObject);
   });
@@ -31,7 +31,7 @@ function addNonStoryCardRequest(cardId, responseFunction) {
   var tempMap = {"gameName": sessionStorage.gameName,
       "playerId": sessionStorage.playerId,
       "cardId": cardId};
-  $.get("/addNonStoryCard", tempMap, function(responseJson){
+  $.post("/addNonStoryCard", tempMap, function(responseJson){
     responseObject = JSON.parse(responseJson);
     responseFunction(responseObject);
   });
@@ -40,7 +40,7 @@ function addNonStoryCardRequest(cardId, responseFunction) {
 function removeNonStoryCardRequest(responseFunction) {
   var tempMap = {"gameName": sessionStorage.gameName,
       "playerId": sessionStorage.playerId};
-  $.get("/removeNonStoryCard", tempMap, function(responseJson){
+  $.post("/removeNonStoryCard", tempMap, function(responseJson){
     responseObject = JSON.parse(responseJson);
     responseFunction(responseObject);
   });
@@ -50,7 +50,7 @@ function voteForCardRequest(cardId, responseFunction) {
   var tempMap = {"gameName": sessionStorage.gameName,
       "playerId": sessionStorage.playerId,
       "cardId": cardId};
-  $.get("/voteForCard", tempMap, function(responseJson){
+  $.post("/voteForCard", tempMap, function(responseJson){
     responseObject = JSON.parse(responseJson);
     responseFunction(responseObject);
   });
@@ -59,7 +59,7 @@ function voteForCardRequest(cardId, responseFunction) {
 function removeVoteForCardRequest(responseFunction) {
   var tempMap = {"gameName": sessionStorage.gameName,
       "playerId": sessionStorage.playerId};
-  $.get("/removeVoteForCard", tempMap, function(responseJson){
+  $.post("/removeVoteForCard", tempMap, function(responseJson){
     responseObject = JSON.parse(responseJson);
     responseFunction(responseObject);
   });
@@ -69,7 +69,7 @@ function addChatRequest(message, responseFunction) {
   var tempMap = {"gameName": sessionStorage.gameName,
       "playerId": sessionStorage.playerId,
       "message": message};
-  $.get("/addChat", tempMap, function(responseJson){
+  $.post("/addChat", tempMap, function(responseJson){
     responseObject = JSON.parse(responseJson);
     responseFunction(responseObject);
   });
