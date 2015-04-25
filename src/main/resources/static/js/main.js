@@ -29,10 +29,19 @@
       clearTimeout(id);
     };
 }());
+
 // TODO: get these from the server
 var game = new Game(1, {
-  numCards : 5
+  numCards : 6
 });
+
+function retreiveGame(responseObject) {
+  console.log(responseObject);
+  /*var gameInfo = responseObject.response;
+  game = new Game(gameInfo.gameName, {
+    numCards : gameInfo
+  });*/
+}
 
 var player1 = new Player("1", "Esteban", "blue", false, game);
 var player2 = new Player("2", "Zach", "blue", true, game);
@@ -71,6 +80,7 @@ window.onload = function() {
       || sessionStorage.playerId === undefined) {
     alert("WARNING: you have not joined a game.");
   }
+  getGameRequest(retreiveGame);
   var board = new Board(game, "board", player1.id);
   player1.addHand(makeTestHand());
   board.addListeners();
