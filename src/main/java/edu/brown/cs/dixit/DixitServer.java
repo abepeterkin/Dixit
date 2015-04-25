@@ -40,8 +40,7 @@ public class DixitServer {
         new FreeMarkerEngine());
     Spark.post("/removeNonStoryCard", new RemoveNonStoryCardRequest(),
         new FreeMarkerEngine());
-    Spark
-        .post("/voteForCard", new VoteForCardRequest(), new FreeMarkerEngine());
+    Spark.post("/voteForCard", new VoteForCardRequest(), new FreeMarkerEngine());
     Spark.post("/removeVoteForCard", new RemoveVoteForCardRequest(),
         new FreeMarkerEngine());
     Spark.post("/addChat", new AddChatRequest(), new FreeMarkerEngine());
