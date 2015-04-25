@@ -1,5 +1,5 @@
-function Game(id, rules) {
-  this.id = id;
+function Game(name, rules) {
+  this.name = name;
   this.rules = rules;
   this.currPhase = 0;
   this.currClue = '"Harry Potter"';

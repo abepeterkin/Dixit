@@ -76,5 +76,5 @@ window.onload = function() {
   }))
 
   board.draw();
-  var chat = new Chat(game);
+  var chat = new Chat(player1);
 }
