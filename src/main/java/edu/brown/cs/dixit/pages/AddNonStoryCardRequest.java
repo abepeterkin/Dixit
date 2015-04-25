@@ -7,18 +7,17 @@ import gamestuff.Player;
 
 import java.util.Map;
 
-import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
-import spark.TemplateViewRoute;
+import spark.Route;
 
 import com.google.common.collect.ImmutableMap;
 
-public class AddNonStoryCardRequest implements TemplateViewRoute {
+public class AddNonStoryCardRequest implements Route {
 
   @Override
-  public ModelAndView handle(
+  public Object handle(
       Request req,
       Response res) {
     QueryParamsMap qm = req.queryMap();
@@ -29,13 +28,12 @@ public class AddNonStoryCardRequest implements TemplateViewRoute {
     Game game = Main.getGame(gameName);
     Player player = game.getPlayerWithId(playerId);
     if (player.isStoryteller()) {
-      Map<String, Object> variables = ImmutableMap.of("response", "false");
-      return new ModelAndView(variables, "response.ftl");
+      return "false";
     }
     Card card = game.getCardWithId(cardId);
     game.addCardToTable(player, card);
 
     Map<String, Object> variables = ImmutableMap.of("response", "true");
-    return new ModelAndView(variables, "response.ftl");
+    return "true";
   }
 }

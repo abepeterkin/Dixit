@@ -32,18 +32,14 @@ public class DixitServer {
     Spark.post("/createGame", new CreateGameRequest(), new FreeMarkerEngine());
     Spark.get("/seeCurrentGames", new SeeCurrentGamesRequest());
     Spark.post("/addPlayer", new AddPlayerRequest(), new FreeMarkerEngine());
-    Spark.get("/getGame", new GetGameRequest(), new FreeMarkerEngine());
-    Spark.get("/getUpdate", getUpdateRequest, new FreeMarkerEngine());
-    Spark.post("/addStoryCard", new AddStoryCardRequest(),
-        new FreeMarkerEngine());
-    Spark.post("/addNonStoryCard", new AddNonStoryCardRequest(),
-        new FreeMarkerEngine());
-    Spark.post("/removeNonStoryCard", new RemoveNonStoryCardRequest(),
-        new FreeMarkerEngine());
-    Spark.post("/voteForCard", new VoteForCardRequest(), new FreeMarkerEngine());
-    Spark.post("/removeVoteForCard", new RemoveVoteForCardRequest(),
-        new FreeMarkerEngine());
-    Spark.post("/addChat", new AddChatRequest(), new FreeMarkerEngine());
+    Spark.get("/getGame", new GetGameRequest());
+    Spark.get("/getUpdate", getUpdateRequest);
+    Spark.post("/addStoryCard", new AddStoryCardRequest());
+    Spark.post("/addNonStoryCard", new AddNonStoryCardRequest());
+    Spark.post("/removeNonStoryCard", new RemoveNonStoryCardRequest());
+    Spark.post("/voteForCard", new VoteForCardRequest());
+    Spark.post("/removeVoteForCard", new RemoveVoteForCardRequest());
+    Spark.post("/addChat", new AddChatRequest());
     Spark.get("/joinOptions/:gameName", new DixitJoinOptionsPage(),
         new FreeMarkerEngine());
     Spark.get("/", new DixitHomePage(), new FreeMarkerEngine());

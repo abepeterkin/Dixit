@@ -5,13 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
-import spark.TemplateViewRoute;
+import spark.Route;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
@@ -22,13 +20,13 @@ import gamestuff.ChatLine;
 import gamestuff.Game;
 import gamestuff.Player;
 
-public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber {
+public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
   private Map<Game, DixitUpdateList> dixitUpdateListMap = new HashMap<Game, DixitUpdateList>();
   private Map<Player, Long> playerTimeMap = new HashMap<Player, Long>();
 
   @Override
-  public ModelAndView handle(
+  public Object handle(
       Request req,
       Response res) {
     QueryParamsMap qm = req.queryMap();
@@ -47,9 +45,7 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
     JsonElement tempJson = tempUpdateList.getJson(tempTime, tempPlayer);
     playerTimeMap.put(tempPlayer, System.currentTimeMillis());
 
-    Map<String, Object> variables = ImmutableMap.of("response",
-        tempJson.toString());
-    return new ModelAndView(variables, "response.ftl");
+    return tempJson.toString();
   }
 
   private void addUpdate(
