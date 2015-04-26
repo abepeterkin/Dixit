@@ -1,3 +1,5 @@
+var isWaitingForUpdateRequest = false;
+
 (function() {
   // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
   // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
@@ -36,6 +38,18 @@
  * var game = new Game(1, { numCards : 6 });
  */
 
+function processUpdates(responseObject) {
+  console.log(responseObject);
+  isWaitingForUpdateRequest = false
+}
+
+function sendUpdateRequestIfReady() {
+  if (!isWaitingForUpdateRequest) {
+    isWaitingForUpdateRequest = true;
+    getUpdateRequest(processUpdates);
+  }
+}
+
 function retreiveGame(responseObject) {
   console.log(responseObject);
   game = new Game(responseObject.name, {
@@ -47,6 +61,8 @@ function retreiveGame(responseObject) {
 
   // var board = new Board(game, "board", sessionStorage.playerId);
   // game.board = board;
+  
+  setInterval(sendUpdateRequestIfReady, 500);
 }
 /*
  * var player1 = new Player("1", "Esteban", "blue", false, game); var player2 =

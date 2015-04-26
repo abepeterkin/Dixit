@@ -186,7 +186,10 @@ public class DixitSerializationUtil {
    */
   public JsonElement serializeChatLine(
       ChatLine chatLine) {
-    return GSON.toJsonTree(chatLine.getMessage());
+    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+        .put("playerId", chatLine.getPlayerId())
+        .put("message", chatLine.getMessage()).build();
+    return GSON.toJsonTree(variables);
   }
 
   /**

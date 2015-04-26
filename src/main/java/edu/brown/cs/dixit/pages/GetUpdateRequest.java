@@ -41,7 +41,13 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     if (tempGame == null) {
       return "false";
     }
-    DixitUpdateList tempUpdateList = dixitUpdateListMap.get(tempGame);
+    DixitUpdateList tempUpdateList;
+    if (dixitUpdateListMap.containsKey(tempGame)) {
+      tempUpdateList = dixitUpdateListMap.get(tempGame);
+    } else {
+      tempUpdateList = new DixitUpdateList();
+      dixitUpdateListMap.put(tempGame, tempUpdateList);
+    }
     Player tempPlayer = tempGame.getPlayerWithId(playerId);
     if (tempPlayer == null) {
       return "false";
@@ -292,7 +298,8 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
     public ChatUpdate(Game game) {
       this.game = game;
-      chatLine = null;
+      List<ChatLine> tempList = game.getChat().getLines();
+      chatLine = tempList.get(tempList.size() - 1);
     }
 
     @Override

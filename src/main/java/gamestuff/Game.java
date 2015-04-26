@@ -174,10 +174,10 @@ public class Game {
    * adds a line to the game's chat log
    */
   public void addToChat(
-      String playerName,
+      Player player,
       String message) {
-    String color = colorMap.get(playerName);
-    ChatLine line = new ChatLine(playerName, message, color);
+    String color = colorMap.get(player.getChatName());
+    ChatLine line = new ChatLine(player, message, color);
     chat.addLine(line);
     subscriber.chatChanged(this);
   }

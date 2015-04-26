@@ -29,7 +29,7 @@ public class AddChatRequest implements Route {
     if (player == null) {
       return "false";
     } else {
-      game.addToChat(player.getChatName(), message);
+      game.addToChat(player, message);
       return "true";
     }
   }
