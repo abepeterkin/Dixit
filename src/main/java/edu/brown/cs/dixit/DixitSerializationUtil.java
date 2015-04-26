@@ -119,6 +119,8 @@ public class DixitSerializationUtil {
       tempValue = "SCORING";
     } else if (phase == Phase.CLEANUP) {
       tempValue = "CLEANUP";
+    } else if (phase == Phase.PREGAME) {
+      tempValue = "PREGAME";
     }
     return GSON.toJsonTree(tempValue);
   }

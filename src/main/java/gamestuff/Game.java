@@ -25,10 +25,10 @@ public class Game {
   private String name;
   private final int HAND_SIZE;
   private final int MAX_PLAYERS;
-  //we should have min players too, which is always 3
+  // we should have min players too, which is always 3
   private List<Player> players;
   private String story = "";
-  private Phase phase = Phase.STORYTELLER;
+  private Phase phase = Phase.PREGAME;
   private Chat chat = new Chat();
   private Stack<Card> deck = new Stack<Card>();
   private Stack<Card> trash = new Stack<Card>();
@@ -50,8 +50,8 @@ public class Game {
       playerIdMap.put(p.getId(), p);
       colorMap.put(p.getChatName(), p.getColor());
     }
-    this.deck = CardInitilizer.load(
-        new File("src/main/resources/static/images/cards"));
+    this.deck = CardInitilizer.load(new File(
+        "src/main/resources/static/images/cards"));
     for (Card card : deck) {
       cardIdMap.put(card.getId(), card);
     }
@@ -65,18 +65,22 @@ public class Game {
   }
 
   /**
-   * @param id a player id
+   * @param id
+   *          a player id
    * @return the id of the player to return
    */
-  public Player getPlayerWithId(String id) {
+  public Player getPlayerWithId(
+      String id) {
     return playerIdMap.get(id);
   }
 
   /**
-   * @param a card id
+   * @param a
+   *          card id
    * @return the card with that id
    */
-  public Card getCardWithId(String id) {
+  public Card getCardWithId(
+      String id) {
     return cardIdMap.get(id);
   }
 
@@ -133,7 +137,9 @@ public class Game {
   /**
    * adds a line to the game's chat log
    */
-  public void addToChat(String playerName, String message) {
+  public void addToChat(
+      String playerName,
+      String message) {
     String color = colorMap.get(playerName);
     ChatLine line = new ChatLine(playerName, message, color);
     chat.addLine(line);
@@ -168,12 +174,16 @@ public class Game {
     return this.story;
   }
 
-  /** Adds a player to the game. Will fail if the game is at capacity or if
-   * a player with that ID already exists.
-   * @param p the player to add
+  /**
+   * Adds a player to the game. Will fail if the game is at capacity or if a
+   * player with that ID already exists.
+   * 
+   * @param p
+   *          the player to add
    * @return whether the player was successfully added
    */
-  public boolean addPlayer(Player p) {
+  public boolean addPlayer(
+      Player p) {
     if (players.size() < MAX_PLAYERS && playerIdMap.get(p.getId()) == null) {
       players.add(p);
       return true;
@@ -183,45 +193,49 @@ public class Game {
   }
 
   /**
-   * @param p the player to remove
+   * @param p
+   *          the player to remove
    */
-  public void removePlayer(Player p) {
-    //TODO: figure out the best way to remove a player from the game
+  public void removePlayer(
+      Player p) {
+    // TODO: figure out the best way to remove a player from the game
   }
 
   /**
-   * sets up game board
-   * deck is filled w/ all possible cards
-   * trash is empty
-   * all players given x cards depending on custom hand size
+   * sets up game board deck is filled w/ all possible cards trash is empty all
+   * players given x cards depending on custom hand size
    */
   public void newGame() {
     Collections.shuffle(this.deck);
-    for(Player p: this.players) {
+    for (Player p : this.players) {
       trashPlayerCards(p);
     }
     refillDeck();
-    for(int i = 0; i < this.HAND_SIZE; i++) {
-      for(Player p: this.players) {
+    for (int i = 0; i < this.HAND_SIZE; i++) {
+      for (Player p : this.players) {
         p.draw(this.deck.pop());
         subscriber.handChanged(this, p);
       }
     }
-    updatePhase(Phase.WAITINGFORFIRSTSTORY);
+    updatePhase(Phase.PREGAME);
   }
 
   /**
-   * When first player volunteers to share story,
-   * Player is set to storyteller
+   * When first player volunteers to share story, Player is set to storyteller
    * Story is stored
    *
    * phase to NONSTORYCARDS and continues as normal
    *
-   * @param player   Player who submitted first story
-   * @param s        Story submitted
+   * @param player
+   *          Player who submitted first story
+   * @param s
+   *          Story submitted
    */
-  public void firstStory(Player player, String s, Card c) {
-    for (Player p: this.players) {
+  public void firstStory(
+      Player player,
+      String s,
+      Card c) {
+    for (Player p : this.players) {
       if (player.equals(p)) {
         p.setIsStoryteller(true);
       } else {
@@ -234,13 +248,17 @@ public class Game {
   }
 
   /**
-   * @param s the story
-   * @param c the card attributed to the story
+   * @param s
+   *          the story
+   * @param c
+   *          the card attributed to the story
    */
-  public void submitStory(String s, Card c) {
-    for (Player p: this.players) {
+  public void submitStory(
+      String s,
+      Card c) {
+    for (Player p : this.players) {
       if (p.isStoryteller()) {
-        addCardToTable(p,c);
+        addCardToTable(p, c);
       }
     }
     this.story = s;
@@ -260,9 +278,12 @@ public class Game {
    * again we need to figure out how we're doing votes, player will submit vote
    * if votes full, advance to scoring
    *
-   * @param v the vote being cast
+   * @param v
+   *          the vote being cast
    */
-  public void castVote(Player p, Card c) {
+  public void castVote(
+      Player p,
+      Card c) {
     Vote vote = new Vote(p, c);
     votes.add(vote);
     if (this.votes.size() == this.players.size() - 1) {
@@ -270,7 +291,8 @@ public class Game {
     }
   }
 
-  private void trashPlayerCards(Player player) {
+  private void trashPlayerCards(
+      Player player) {
     List<Card> hand = player.getHand();
     for (Card card : hand) {
       trash.push(card);
@@ -282,11 +304,10 @@ public class Game {
   /**
    * Tallies up the votes and increases the scores of the players accordingly.
    *
-   * If nobody or everybody finds the correct picture,
-   * the storyteller scores 0, and each of the other players scores 2.
-   * Otherwise the storyteller and all players who found the correct answer
-   * score 3. Players other than the storyteller score 1 point for each vote
-   * their own pictures receive.
+   * If nobody or everybody finds the correct picture, the storyteller scores 0,
+   * and each of the other players scores 2. Otherwise the storyteller and all
+   * players who found the correct answer score 3. Players other than the
+   * storyteller score 1 point for each vote their own pictures receive.
    */
   public void scoringPhase() {
     updatePhase(Phase.SCORING);
@@ -333,7 +354,7 @@ public class Game {
       Collections.sort(this.players);
       gameOver = true;
     } else {
-      for(Player p: this.players) {
+      for (Player p : this.players) {
         p.draw(this.deck.pop());
         subscriber.playerChanged(this, p);
       }
@@ -346,21 +367,13 @@ public class Game {
     subscriber.gameChanged(this);
   }
 
-  /*private List<Player> determineWinners() {
-    int highestScore = 0;
-    for (Player p : players){
-      if (p.getScore() > highestScore) {
-        highestScore = p.getScore();
-      }
-    }
-    List<Player> winningPlayers = new ArrayList<Player>();
-    for (Player p : players){
-      if (p.getScore() == highestScore) {
-        winningPlayers.add(p);
-      }
-    }
-    return winningPlayers;
-  }*/
+  /*
+   * private List<Player> determineWinners() { int highestScore = 0; for (Player
+   * p : players){ if (p.getScore() > highestScore) { highestScore =
+   * p.getScore(); } } List<Player> winningPlayers = new ArrayList<Player>();
+   * for (Player p : players){ if (p.getScore() == highestScore) {
+   * winningPlayers.add(p); } } return winningPlayers; }
+   */
 
   /**
    * Give storyteller status to the next player in line, and revoke the current
@@ -394,10 +407,14 @@ public class Game {
 
   /**
    *
-   * @param p the player adding the card
-   * @param c the card to be added
+   * @param p
+   *          the player adding the card
+   * @param c
+   *          the card to be added
    */
-  public void addCardToTable(Player p, Card c) {
+  public void addCardToTable(
+      Player p,
+      Card c) {
     this.tableCards.add(c);
     p.removeFromHand(c);
     p.draw(drawFromDeck());
@@ -429,24 +446,29 @@ public class Game {
   /**
    * updates phase in game.
    */
-  public void updatePhase(Phase p) {
+  public void updatePhase(
+      Phase p) {
     this.phase = p;
   }
 
   /**
-   * @param p Player in game
-   * @return  List of cards
+   * @param p
+   *          Player in game
+   * @return List of cards
    */
-  public List<Card> getPlayerHand(Player p) {
+  public List<Card> getPlayerHand(
+      Player p) {
     return p.getHand();
   }
 
   /**
-   * @param name    string name of player
-   * @return        Player object
+   * @param name
+   *          string name of player
+   * @return Player object
    */
-  public Player getPlayerByName(String name) {
-    for (Player p: players) {
+  public Player getPlayerByName(
+      String name) {
+    for (Player p : players) {
       if (p.getChatName() == name) {
         return p;
       }
@@ -469,8 +491,10 @@ public class Game {
     private final Card card;
 
     /**
-     * @param player the player who cast the vote
-     * @param card the card the vote was cast for
+     * @param player
+     *          the player who cast the vote
+     * @param card
+     *          the card the vote was cast for
      */
     public Vote(Player player, Card card) {
       this.player = player;

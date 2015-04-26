@@ -1,11 +1,13 @@
 package gamestuff;
+
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
 import edu.brown.cs.dixit.Main;
-import static org.junit.Assert.assertTrue;
 
 public class GameTest {
 
@@ -95,7 +97,7 @@ public class GameTest {
     players.add(p3);
     Game g = new Game("CoolGame", 3, 5, players);
     g.newGame();
-    assertTrue(g.getPhase().equals(Phase.WAITINGFORFIRSTSTORY));
+    assertTrue(g.getPhase().equals(Phase.PREGAME));
   }
 
   @Test
@@ -135,9 +137,5 @@ public class GameTest {
     assertTrue(h2.size() == 7);
     assertTrue(h3.size() == 7);
   }
-
-
-
-
 
 }
