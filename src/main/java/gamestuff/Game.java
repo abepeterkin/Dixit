@@ -32,8 +32,9 @@ public class Game {
   private Chat chat = new Chat();
   private Stack<Card> deck = new Stack<Card>();
   private Stack<Card> trash = new Stack<Card>();
-  private List<Card> tableCards = new ArrayList<Card>();
+  //private List<Card> tableCards = new ArrayList<Card>();
   private List<Vote> votes = new ArrayList<Vote>();
+  private HashMap<Card, Player> tableCards = new HashMap<>();
   private HashMap<String, Card> cardIdMap = new HashMap<>();
   private HashMap<String, Player> playerIdMap = new HashMap<>();
   private HashMap<String, String> colorMap = new HashMap<>();
@@ -208,7 +209,7 @@ public class Game {
   /**
    * Adds a player to the game. Will fail if the game is at capacity or if a
    * player with that ID already exists.
-   * 
+   *
    * @param p
    *          the player to add
    * @return whether the player was successfully added
@@ -306,7 +307,6 @@ public class Game {
    * Updates the phase to the voting phase.
    */
   public void votingPhase() {
-    Collections.shuffle(this.tableCards);
     updatePhase(Phase.VOTING);
     subscriber.gameChanged(this);
     subscriber.tableCardsChanged(this);
@@ -316,8 +316,7 @@ public class Game {
    * again we need to figure out how we're doing votes, player will submit vote
    * if votes full, advance to scoring
    *
-   * @param v
-   *          the vote being cast
+   * @param v the vote being cast
    */
   public boolean castVote(
       Player p,
@@ -377,9 +376,9 @@ public class Game {
         }
       }
       for (Vote v : this.votes) {
-        Player votePlayer = v.getPlayer();
-        votePlayer.incrementScore(1);
-        subscriber.playerChanged(this, votePlayer);
+        Player votedFor = tableCards.get(v.getCard());
+        votedFor.incrementScore(1);
+        subscriber.playerChanged(this, votedFor);
       }
       prepareForNextRound();
     }
@@ -443,7 +442,7 @@ public class Game {
    * Puts all the cards in the table in the trash.
    */
   public void trashTable() {
-    trash.addAll(this.tableCards);
+    trash.addAll(this.tableCards.keySet());
     this.tableCards.clear();
     subscriber.tableCardsChanged(this);
   }
@@ -461,7 +460,7 @@ public class Game {
     if (this.phase != Phase.STORYTELLER && this.phase != Phase.NONSTORYCARDS) {
       return false;
     }
-    this.tableCards.add(c);
+    this.tableCards.put(c, p);
     p.removeFromHand(c);
     p.draw(drawFromDeck());
     subscriber.handChanged(this, p);
