@@ -128,6 +128,24 @@ public class Game {
   }
 
   /**
+   * @param card the card to remove
+   */
+  public void removeVote(Card card) {
+    for (Vote v : votes) {
+      if (v.card.equals(card)) {
+        votes.remove(v);
+      }
+    }
+  }
+
+  /**
+   * @param c the card to remove
+   */
+  public void removeNonStoryCard(Card card) {
+    tableCards.remove(card);
+  }
+
+  /**
    * @return the game's chat
    */
   public Chat getChat() {
