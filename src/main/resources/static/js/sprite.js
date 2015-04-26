@@ -18,8 +18,31 @@ Sprite.prototype.render = function(ctx, index) {
   var col = this.frameIndex - (row * this.numberOfCols);
   var sx = col * this.width / this.numberOfCols;
   var sy = row * this.height;
-  var y = board.canvas.width - (board.canvas.width / 8);
-  var x = (index * 128 / 5) - board.canvas.height / 2.8;
+  /*var y = board.canvas.width - (board.canvas.width / 8);
+  var x = (index * 128 / 5) - board.canvas.height / 2.8;*/
+  var yCenter = board.canvas.width - (board.canvas.width / 8);
+  var xCenter = (/*index*/ 2 * 128 / 5)  - board.canvas.height / 2.8;
+  var x;
+  var y;
+  if (index === 0) {
+    x = xCenter + board.canvas.height / 40;
+    y = yCenter;
+  } else if (index === 1) {
+    x = xCenter + board.canvas.height / 40;
+    y = yCenter + board.canvas.width / 40;
+  } else if (index === 2) {
+    x = xCenter;
+    y = yCenter + board.canvas.width / 40;
+  } else if (index === 3) {
+    x = xCenter - board.canvas.height / 40;
+    y = yCenter + board.canvas.width / 40;
+  } else if (index === 4) {
+    x = xCenter;
+    y = yCenter - board.canvas.width / 40;
+  } else {
+    x = xCenter - board.canvas.height / 40;
+    y = yCenter;
+  }
   var rotateParams = this.rotate(-1);
   // Draw the animation
   ctx.save();
