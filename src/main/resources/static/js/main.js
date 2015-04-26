@@ -31,18 +31,16 @@
 }());
 
 // TODO: get these from the server
-//var game;
+// var game;
 var game = new Game(1, {
   numCards : 6
 });
 
-/*function retreiveGame(responseObject) {
-  console.log(responseObject);
-  game = new Game(responseObject.name, {
-    numCards : responseObject.handsize
-  });
-  game.addPlayers(responseObject.players);
-}*/
+/*
+ * function retreiveGame(responseObject) { console.log(responseObject); game =
+ * new Game(responseObject.name, { numCards : responseObject.handsize });
+ * game.addPlayers(responseObject.players); }
+ */
 
 var player1 = new Player("1", "Esteban", "blue", false, game);
 var player2 = new Player("2", "Zach", "blue", false, game);
@@ -78,20 +76,17 @@ function makeHandArray(handUrls) {
 }
 
 window.onload = function() {
-<<<<<<< HEAD
-  //alert(sessionStorage.gameName + " " + sessionStorage.playerId);
+  // alert(sessionStorage.gameName + " " + sessionStorage.playerId);
   console.log(sessionStorage.gameName);
   console.log(sessionStorage.playerId);
-  if (sessionStorage.gameName === undefined 
+  if (sessionStorage.gameName === undefined
       || sessionStorage.playerId === undefined) {
     alert("ERROR: you have not joined a game!");
     throw new Error("No game defined.");
   } else {
-    //getGameRequest(retreiveGame);
+    // getGameRequest(retreiveGame);
   }
-=======
   game.setStoryTeller(player2);
->>>>>>> gui
   var board = new Board(game, "board", player1.id);
   game.board = board;
   player1.addHand(makeTestHand());
