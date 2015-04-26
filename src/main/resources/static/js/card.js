@@ -58,11 +58,10 @@ Card.prototype.reveal = function() {
 
 Card.prototype.makeBig = function(index) {
   this.height = this.canvas.height / 3;
-  this.width = this.canvas.width / 5;
+  this.width = this.canvas.width / 7;
 }
 
 Card.prototype.makeSmall = function(index) {
-  index = 4;
   this.x = index * this.canvas.width / 6 + this.width / 2;
   this.y = this.canvas.height / 1.7;
 }

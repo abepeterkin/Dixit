@@ -77,9 +77,7 @@ Board.prototype.drawSmall = function() {
     height : hMin,
     callback : function() {
       board.smallBoard = false;
-      for (var i = 0; i < board.cards.length; i++) {
-        board.cards[i].makeSmall(i);
-      }
+      board.adjustCardsPos();
       board.clue.makeSmall(board);
     },
     name : "max"
@@ -123,9 +121,7 @@ var drawBigHelper = function() {
     height : hMin,
     callback : function() {
       board.smallBoard = true;
-      for (var i = 0; i < board.cards.length; i++) {
-        board.cards[i].makeBig(i);
-      }
+      board.adjustCardsPos();
       board.clue.makeBig(board);
     },
     name : "min"
@@ -191,6 +187,7 @@ Board.prototype.adjustCardsPos = function() {
     board.cards[0].y = board.canvas.height / 20;
     board.cards[0].makeBig(0);
   } else {
+    board.cards[0].makeSmall(0);
 
   }
   var width = board.cards[0].width;

@@ -108,4 +108,5 @@ window.onload = function() {
   game.nextPhase();
   board.draw();
   var chat = new Chat(game);
+  $('#chat-text').scrollTop($('#chat-text').prop("scrollHeight"));
 }
