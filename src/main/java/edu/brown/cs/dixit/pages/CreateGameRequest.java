@@ -22,9 +22,7 @@ import gamestuff.Player;
 public class CreateGameRequest implements TemplateViewRoute {
 
   @Override
-  public ModelAndView handle(
-      Request req,
-      Response res) {
+  public ModelAndView handle(Request req, Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
     String playerName = qm.value("playerName");
@@ -44,12 +42,11 @@ public class CreateGameRequest implements TemplateViewRoute {
       Main.addGame(gameName, tempGame);
       Map<String, Object> variables = ImmutableMap.of("response",
           "Game created.", "gameName", gameName, "playerId", newId);
-      return new ModelAndView(variables, "success.ftl");
+      return new ModelAndView(variables, "board.ftl");
     }
   }
 
-  private ModelAndView failure(
-      String message) {
+  private ModelAndView failure(String message) {
     Map<String, Object> variables = ImmutableMap.of("response", message);
     return new ModelAndView(variables, "response.ftl");
   }

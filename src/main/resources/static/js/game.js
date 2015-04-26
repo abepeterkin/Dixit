@@ -49,3 +49,12 @@ Game.prototype.nextPhase = function() {
   $('#currentPhase').text('Current phase: ' + phases[this.currPhase]);
   this.board.changePhase(this.currPhase);
 }
+
+// gets a player object given the player id
+Game.prototype.getPlayer = function(id) {
+  for (var i = 0; i < this.players.length; i++) {
+    if (this.players[i].id === id) {
+      return this.players[i];
+    }
+  }
+}

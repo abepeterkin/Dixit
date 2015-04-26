@@ -1,4 +1,6 @@
 <#assign content>
+<input type="text" id="gameName" value="${gameName}" style="display: none">
+<input type="text" id="playerId" value="${playerId}" style="display: none">
 <div id="container2">
 	<div id="container1">
 		<div id="col1">
@@ -134,6 +136,7 @@
 </div>
 </#assign>
 <#assign js>
+	<script src="/js/infostore.js"></script>
 	<script src="/js/icon.js"></script>
     <script src="/js/card.js"></script>
     <script src="/js/clue.js"></script>
