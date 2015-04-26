@@ -38,8 +38,10 @@ public class VoteForCardRequest implements Route {
     if (card == null) {
       return "false";
     }
-    game.castVote(player, card);
-
-    return "true";
+    if (game.castVote(player, card)) {
+      return "true";
+    } else {
+      return "false";
+    }
   }
 }

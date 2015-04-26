@@ -184,7 +184,8 @@ public class Game {
    */
   public boolean addPlayer(
       Player p) {
-    if (players.size() < MAX_PLAYERS && playerIdMap.get(p.getId()) == null) {
+    if (players.size() < MAX_PLAYERS && playerIdMap.get(p.getId()) == null
+        && this.phase == Phase.PREGAME) {
       players.add(p);
       return true;
     } else {
@@ -253,16 +254,21 @@ public class Game {
    * @param c
    *          the card attributed to the story
    */
-  public void submitStory(
+  public boolean submitStory(
       String s,
       Card c) {
+    if (this.phase != Phase.STORYTELLER) {
+      return false;
+    }
     for (Player p : this.players) {
       if (p.isStoryteller()) {
         addCardToTable(p, c);
       }
     }
     this.story = s;
+    updatePhase(Phase.NONSTORYCARDS);
     subscriber.gameChanged(this);
+    return true;
   }
 
   /**
@@ -281,14 +287,18 @@ public class Game {
    * @param v
    *          the vote being cast
    */
-  public void castVote(
+  public boolean castVote(
       Player p,
       Card c) {
+    if (this.phase != Phase.VOTING) {
+      return false;
+    }
     Vote vote = new Vote(p, c);
     votes.add(vote);
     if (this.votes.size() == this.players.size() - 1) {
       scoringPhase();
     }
+    return true;
   }
 
   private void trashPlayerCards(
@@ -412,9 +422,12 @@ public class Game {
    * @param c
    *          the card to be added
    */
-  public void addCardToTable(
+  public boolean addCardToTable(
       Player p,
       Card c) {
+    if (this.phase != Phase.STORYTELLER && this.phase != Phase.NONSTORYCARDS) {
+      return false;
+    }
     this.tableCards.add(c);
     p.removeFromHand(c);
     p.draw(drawFromDeck());
@@ -422,6 +435,7 @@ public class Game {
     if (this.tableCards.size() == this.players.size()) {
       votingPhase();
     }
+    return true;
   }
 
   /**

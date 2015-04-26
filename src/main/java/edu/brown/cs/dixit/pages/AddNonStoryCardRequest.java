@@ -4,15 +4,10 @@ import edu.brown.cs.dixit.Main;
 import gamestuff.Card;
 import gamestuff.Game;
 import gamestuff.Player;
-
-import java.util.Map;
-
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Allows a non-storyteller to add a card.
@@ -43,9 +38,10 @@ public class AddNonStoryCardRequest implements Route {
     if (card == null) {
       return "false";
     }
-    game.addCardToTable(player, card);
-
-    Map<String, Object> variables = ImmutableMap.of("response", "true");
-    return "true";
+    if (game.addCardToTable(player, card)) {
+      return "true";
+    } else {
+      return "false";
+    }
   }
 }

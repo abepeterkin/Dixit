@@ -39,8 +39,11 @@ public class AddStoryCardRequest implements Route {
     if (card == null) {
       return "false";
     }
-    game.submitStory(clue, card);
+    if (game.submitStory(clue, card)) {
+      return "true";
+    } else {
+      return "false";
+    }
 
-    return "true";
   }
 }
