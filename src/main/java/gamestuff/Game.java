@@ -536,7 +536,7 @@ public class Game {
    * @return Table cards.
    */
   public List<Card> getTableCards() {
-    return tableCards;
+    return new ArrayList<Card>(tableCards.keySet());
   }
 
   /**
