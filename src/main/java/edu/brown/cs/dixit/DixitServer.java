@@ -19,10 +19,19 @@ import edu.brown.cs.dixit.pages.RemoveVoteForCardRequest;
 import edu.brown.cs.dixit.pages.SeeCurrentGamesRequest;
 import edu.brown.cs.dixit.pages.VoteForCardRequest;
 
+/**
+ * Runs the spark server of the Dixit game.
+ */
 public class DixitServer {
   private static final int DEFAULT_PORT = 2345;
   private static GetUpdateRequest getUpdateRequest = new GetUpdateRequest();
 
+  /**
+   * Initializes all of the pages.
+   * 
+   * @param port
+   *          The port on which to run the server.
+   */
   public static void runSparkSever(
       Integer port) {
     port = port != null ? port : DEFAULT_PORT;
@@ -47,6 +56,12 @@ public class DixitServer {
     Spark.get("/joinGamePage", new DixitJoinGamePage(), new FreeMarkerEngine());
   }
 
+  /**
+   * Retrieves the Dixit game subscriber. This object is used to notify clients
+   * when a change has occurred in the game.
+   * 
+   * @return The game subscriber.
+   */
   public static DixitGameSubscriber getDixitGameSubscriber() {
     return getUpdateRequest;
   }
