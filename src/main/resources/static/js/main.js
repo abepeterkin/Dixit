@@ -31,16 +31,18 @@
 }());
 
 // TODO: get these from the server
+//var game;
 var game = new Game(1, {
   numCards : 6
 });
 
-function retreiveGame(responseObject) {
+/*function retreiveGame(responseObject) {
   console.log(responseObject);
   game = new Game(responseObject.name, {
-    numCards : gameInfo
+    numCards : responseObject.handsize
   });
-}
+  game.addPlayers(responseObject.players);
+}*/
 
 var player1 = new Player("1", "Esteban", "blue", false, game);
 var player2 = new Player("2", "Zach", "blue", true, game);
@@ -75,11 +77,15 @@ function makeHandArray(handUrls) {
 
 window.onload = function() {
   //alert(sessionStorage.gameName + " " + sessionStorage.playerId);
+  console.log(sessionStorage.gameName);
+  console.log(sessionStorage.playerId);
   if (sessionStorage.gameName === undefined 
       || sessionStorage.playerId === undefined) {
-    alert("WARNING: you have not joined a game.");
+    alert("ERROR: you have not joined a game!");
+    throw new Error("No game defined.");
+  } else {
+    //getGameRequest(retreiveGame);
   }
-  getGameRequest(retreiveGame);
   var board = new Board(game, "board", player1.id);
   player1.addHand(makeTestHand());
   board.addListeners();
