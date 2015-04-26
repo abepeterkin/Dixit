@@ -128,21 +128,33 @@ public class Game {
   }
 
   /**
-   * @param card the card to remove
+   * @param card
+   *          the card to remove
    */
-  public void removeVote(Card card) {
+  public boolean removeVote(
+      Card card) {
+    if (this.phase != Phase.VOTING) {
+      return false;
+    }
     for (Vote v : votes) {
       if (v.card.equals(card)) {
         votes.remove(v);
       }
     }
+    return true;
   }
 
   /**
-   * @param c the card to remove
+   * @param c
+   *          the card to remove
    */
-  public void removeNonStoryCard(Card card) {
+  public boolean removeNonStoryCard(
+      Card card) {
+    if (this.phase != Phase.NONSTORYCARDS) {
+      return false;
+    }
     tableCards.remove(card);
+    return true;
   }
 
   /**

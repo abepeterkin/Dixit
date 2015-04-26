@@ -32,8 +32,11 @@ public class RemoveVoteForCardRequest implements Route {
     if (player.isStoryteller()) {
       return "false";
     }
-    // TODO: Remove vote.
-
-    return "true";
+    // TODO: Find the card for which the player voted.
+    if (game.removeVote(null)) {
+      return "true";
+    } else {
+      return "false";
+    }
   }
 }
