@@ -187,8 +187,14 @@ Board.prototype.adjustCardsPos = function() {
     board.cards[0].y = board.canvas.height / 20;
     board.cards[0].makeBig(0);
   } else {
+    board.cards[0].x = board.canvas.width / 25;
+    board.cards[0].y = board.canvas.height / 1.7;
     board.cards[0].makeSmall(0);
-
+    board.cards[1].makeSmall(1);
+    board.cards[2].makeSmall(2);
+    board.cards[3].makeSmall(3);
+    board.cards[4].makeSmall(4);
+    board.cards[5].makeSmall(5);
   }
   var width = board.cards[0].width;
   var height = board.cards[0].height
@@ -208,7 +214,18 @@ Board.prototype.adjustCardsPos = function() {
         }
       }
     } else {
-
+      //if (i < 3) {
+        board.cards[i].x = board.cards[i - 1].x + width + width / 1.5;
+        board.cards[i].y = board.cards[i - 1].y;
+      /*} else {
+        if (i == 3) {
+          board.cards[i].x = board.cards[0].x;
+          board.cards[i].y = board.cards[0].y + height + height / 10;
+        } else {
+          board.cards[i].x = board.cards[i - 1].x + width + width / 10;
+          board.cards[i].y = board.cards[i - 1].y;
+        }
+      }*/
     }
   }
 }

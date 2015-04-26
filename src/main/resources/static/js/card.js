@@ -62,6 +62,6 @@ Card.prototype.makeBig = function(index) {
 }
 
 Card.prototype.makeSmall = function(index) {
-  this.x = index * this.canvas.width / 6 + this.width / 2;
-  this.y = this.canvas.height / 1.7;
+  this.height = this.canvas.height / 5;
+  this.width = this.canvas.width / 10;
 }
