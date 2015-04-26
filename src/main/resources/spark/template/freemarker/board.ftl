@@ -1,19 +1,46 @@
 <#assign content>
-	<div class="container">	
-	 <div class="rightCol">
-	   <div class="border"id="music">music controls go here</div>
-	   <div class="chat">
-	     <div class="border" id="text"> chat text goes here</div>
-	     <div class="msg border">
-	       <textarea id="msg-txt"></textarea>
-	       <input class="btn btn-primary" id="send-msg-btn" type="button" value="Send">
-	     </div>
-	   </div>
-	 </div>
-	 <div class="leftCol">
-	   <canvas class="border" id="board"></canvas>
-	 </div>
+<div id="container2">
+	<div id="container1">
+		<div id="col1">
+			<canvas id="board">No canvas support</canvas>
+		</div>
+		<div id="col2">
+			<div id="music">music buttons go here</div>
+			<div id="chat">
+				<div id="chat-text">
+					<p>chat text which sometimes could be very long because you know people like to make jokes and stuff but the text will still wrap nicely</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+					<p>chat text</p>
+				</div>
+				<div class="row" id="chat-input">
+					<div class="col-md-12">
+						<textarea class="form-control" rows="3"></textarea>
+						<button class="form-control btn btn-primary">Send</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+</div>
+<button class ="btn btn-default" id="advancePhase">advance phase</button>
+<p id="currentPhase"></p>
+<p id="storyTeller"></p>
+<p id="clientPlayer"></p>
 <div class="modal fade" id="cardModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -105,10 +132,6 @@
     </div>
   </div>
 </div>
-<button class ="btn btn-default" id="advancePhase">advance phase</button>
-<p id="currentPhase"></p>
-<p id="storyTeller"></p>
-<p id="clientPlayer"></p>
 </#assign>
 <#assign js>
 	<script src="/js/icon.js"></script>

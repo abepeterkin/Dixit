@@ -1,65 +1,80 @@
-body, html {
-  height: 100%;
+body {
+	margin:0;
+	padding:0;
 }
-img {
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
+#header h1,
+#header h2,
+#header p {
+	margin-left:2%;
+	padding-right:2%;
 }
-.rightCol {
-  width: 250px;
-  float: right;
-  background: #aafed6;
+#active2 #tab2,
+#active3 #tab3,
+#active4 #tab4,
+#active5 #tab5 {
+	font-weight:bold;
+	text-decoration:none;
+	color:#000;
 }
-
-.leftCol {
-  float: none;
-  background: #e8f6fe;
-  width: auto;
-  overflow: hidden;
+#footer {
+	clear:both;
+	float:left;
+	width:100%;
 }
-
-#board {
-  width: 100%;
-  height: 100vh;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-}
-div#music {
-  height: 20vh;  
+#footer p {
+	margin-left:2%;
+	padding-right:2%;
 }
 
-div#text {
-  height:60vh;  
-  word-wrap: break-word;
+/* Start of Column CSS */
+#container2 {
+	clear:left;
+	float:left;
+	width:100%;
+	overflow:hidden;
+	background:#ffa7a7; /* column 2 background colour */
+}
+#container1 {
+	float:left;
+	width:100%;
+	position:relative;
+	right:20%;
+	background:#fff689; /* column 1 background colour */
+}
+#col1 {
+	float:left;
+	width:80%;
+	position:relative;
+	left:20%;
+	overflow:hidden;
+}
+#col2 {
+	float:left;
+	width:20%;
+	position:relative;
+	left:20%;
+	overflow:hidden;
 }
 
-div.msg{
-  height: 20vh;  
-}
-.chat {
-  position: relative;
-  width: 100%;
+canvas {
+	width:100%;	
 }
 
-.border {
-  border: 1px solid black;
+#music{
+ height:10vh;
 }
-
+#chat{
+ height:90vh;
+}
+#chat-text{
+  height:70vh;
+  overflow:auto;
+}
+#chat-input{
+  height:20vh;
+}
 textarea{
-  resize:none;
-}
-
-textarea#msg-txt {
-  width:100%;
-  height: 13vh;
-}
-
-input#send-msg-btn{
-  float:right;
-}
-
-.modal-content {
- width:350px;
+ margin:0;
+ padding:0;
+ resize:none;
 }
