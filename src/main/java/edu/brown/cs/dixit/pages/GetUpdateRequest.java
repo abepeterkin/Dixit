@@ -86,6 +86,12 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   }
 
   @Override
+  public void tableCardsChanged(
+      Game game) {
+    addUpdate(game, new TableCardsUpdate(game));
+  }
+
+  @Override
   public void gameChanged(
       Game game) {
     addUpdate(game, new GameUpdate(game));
@@ -210,6 +216,34 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
       JsonElement tempJson = serializationUtil.serializePlayer(player,
           inputPlayer);
       return serializationUtil.serializeUpdate("player", tempJson);
+    }
+
+    @Override
+    public long getTime() {
+      return time;
+    }
+
+  }
+
+  /**
+   * Represents a change to cards on the table.
+   */
+  private static class TableCardsUpdate implements DixitUpdate {
+
+    private Game game;
+    private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
+    private long time = System.currentTimeMillis();
+
+    public TableCardsUpdate(Game game) {
+      this.game = game;
+    }
+
+    @Override
+    public JsonElement getJson(
+        Player inputPlayer) {
+      JsonElement tempJson = serializationUtil.serializeHand(game
+          .getTableCards());
+      return serializationUtil.serializeUpdate("tablecards", tempJson);
     }
 
     @Override

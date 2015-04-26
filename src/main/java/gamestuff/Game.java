@@ -154,6 +154,7 @@ public class Game {
       return false;
     }
     tableCards.remove(card);
+    subscriber.tableCardsChanged(this);
     return true;
   }
 
@@ -308,6 +309,7 @@ public class Game {
     Collections.shuffle(this.tableCards);
     updatePhase(Phase.VOTING);
     subscriber.gameChanged(this);
+    subscriber.tableCardsChanged(this);
   }
 
   /**
@@ -443,6 +445,7 @@ public class Game {
   public void trashTable() {
     trash.addAll(this.tableCards);
     this.tableCards.clear();
+    subscriber.tableCardsChanged(this);
   }
 
   /**
@@ -462,6 +465,7 @@ public class Game {
     p.removeFromHand(c);
     p.draw(drawFromDeck());
     subscriber.handChanged(this, p);
+    subscriber.tableCardsChanged(this);
     if (this.tableCards.size() == this.players.size()) {
       votingPhase();
     }
@@ -525,6 +529,15 @@ public class Game {
    */
   public List<Player> getPlayers() {
     return players;
+  }
+
+  /**
+   * Retrieves cards placed on the table.
+   *
+   * @return Table cards.
+   */
+  public List<Card> getTableCards() {
+    return tableCards;
   }
 
   /**
