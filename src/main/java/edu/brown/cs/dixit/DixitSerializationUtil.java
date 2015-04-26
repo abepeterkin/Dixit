@@ -24,6 +24,13 @@ public class DixitSerializationUtil {
 
   private final static Gson GSON = new Gson();
 
+  /**
+   * Converts a card to JSON.
+   *
+   * @param card
+   *          The card to convert.
+   * @return JSON.
+   */
   public JsonElement serializeCard(
       Card card) {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
@@ -32,6 +39,13 @@ public class DixitSerializationUtil {
     return GSON.toJsonTree(variables);
   }
 
+  /**
+   * Converts a hand to JSON.
+   *
+   * @param hand
+   *          The hand to convert.
+   * @return JSON.
+   */
   public JsonElement serializeHand(
       List<Card> hand) {
     ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
@@ -44,6 +58,15 @@ public class DixitSerializationUtil {
     return GSON.toJsonTree(tempBuilder.build());
   }
 
+  /**
+   * Shallow conversion of player to JSON. Only includes top level properties.
+   *
+   * @param player
+   *          The player to convert.
+   * @param currentPlayer
+   *          The player who will be viewing the JSON.
+   * @return JSON.
+   */
   public JsonElement serializePlayer(
       Player player,
       Player currentPlayer) {
@@ -54,6 +77,16 @@ public class DixitSerializationUtil {
     return GSON.toJsonTree(variables);
   }
 
+  /**
+   * Deep conversion of player to JSON. Includes nested objects. Will hide cards
+   * from other players.
+   *
+   * @param player
+   *          The player to convert.
+   * @param currentPlayer
+   *          The player who will be viewing the JSON.
+   * @return JSON.
+   */
   public JsonElement deepSerializePlayer(
       Player player,
       Player currentPlayer) {
@@ -66,6 +99,13 @@ public class DixitSerializationUtil {
     return GSON.toJsonTree(tempBuilder.build());
   }
 
+  /**
+   * Converts the game phase to JSON.
+   *
+   * @param phase
+   *          The phase of the game.
+   * @return JSON.
+   */
   public JsonElement serializePhase(
       Phase phase) {
     String tempValue = "none";
@@ -83,6 +123,15 @@ public class DixitSerializationUtil {
     return GSON.toJsonTree(tempValue);
   }
 
+  /**
+   * Shallow conversion of game to JSON. Only includes top level properties.
+   *
+   * @param game
+   *          The game to convert.
+   * @param currentPlayer
+   *          The player who will view the JSON.
+   * @return JSON.
+   */
   public JsonElement serializeGame(
       Game game,
       Player currentPlayer) {
@@ -93,6 +142,16 @@ public class DixitSerializationUtil {
     return GSON.toJsonTree(variables);
   }
 
+  /**
+   * Deep conversion of game to JSON. Includes nested properties. Hides certain
+   * information from currentPlayer.
+   *
+   * @param game
+   *          The game to convert.
+   * @param currentPlayer
+   *          The player who will view the JSON.
+   * @return JSON.
+   */
   public JsonElement deepSerializeGame(
       Game game,
       Player currentPlayer) {
@@ -113,11 +172,25 @@ public class DixitSerializationUtil {
     return GSON.toJsonTree(variables);
   }
 
+  /**
+   * Converts a chat line to JSON.
+   *
+   * @param chatLine
+   *          The chat line to convert.
+   * @return JSON.
+   */
   public JsonElement serializeChatLine(
       ChatLine chatLine) {
     return GSON.toJsonTree(chatLine.getMessage());
   }
 
+  /**
+   * Converts a chat object to JSON.
+   *
+   * @param chat
+   *          The chat to convert.
+   * @return JSON.
+   */
   public JsonElement serializeChat(
       Chat chat) {
     List<ChatLine> chatLineList = chat.getLines();
@@ -131,6 +204,15 @@ public class DixitSerializationUtil {
     return GSON.toJsonTree(tempBuilder.build());
   }
 
+  /**
+   * Serializes an update for GetUpdateRequest.
+   *
+   * @param updateName
+   *          The name of the update.
+   * @param json
+   *          The JSON contained in the update.
+   * @return JSON.
+   */
   public JsonElement serializeUpdate(
       String updateName,
       JsonElement json) {
