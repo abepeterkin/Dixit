@@ -30,6 +30,20 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="clueCardModal" tabindex="-1" role="dialog" aria-labelledby="clueCardModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="clueTitle"></h4>
+      </div>
+      <div class="modal-body">
+      	<p id="clueText"></p>
+        <img id="cardImg" src="">
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="sendClueModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true"data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">

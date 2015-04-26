@@ -26,6 +26,8 @@ Card.prototype.resize = function(canvas) {
   if (this.inHand) {
     this.height = canvas.height / 5.5;
     this.width = canvas.width / 10;
+  } else {
+
   }
 }
 // function for drawing the card
@@ -44,12 +46,6 @@ Card.prototype.draw = function(ctx) {
   }
 }
 
-Card.prototype.setAsClue = function(canvas) {
-  this.x = 0;
-  this.y = 0;
-  return this;
-}
-
 // to see if this card was clicked
 Card.prototype.clicked = function(clickX, clickY) {
   return ((clickX > this.x) && (clickX < this.x + this.width)
@@ -61,8 +57,8 @@ Card.prototype.reveal = function() {
 }
 
 Card.prototype.makeBig = function(index) {
-  this.x = 0;
-  this.y = 0;
+  this.height = this.canvas.height / 3;
+  this.width = this.canvas.width / 5;
 }
 
 Card.prototype.makeSmall = function(index) {
