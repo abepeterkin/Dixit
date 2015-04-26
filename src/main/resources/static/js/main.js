@@ -43,9 +43,10 @@ function retreiveGame(responseObject) {
   });
   game.addPlayers(responseObject.players);
   // start chat
-  var chat = new Chat(session);
-  var board = new Board(game, "board", sessionStorage.playerId);
-  game.board = board;
+  var chat = new Chat(game.getPlayer(sessionStorage.playerId));
+
+  // var board = new Board(game, "board", sessionStorage.playerId);
+  // game.board = board;
 }
 /*
  * var player1 = new Player("1", "Esteban", "blue", false, game); var player2 =

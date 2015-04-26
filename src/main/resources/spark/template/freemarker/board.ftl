@@ -10,29 +10,11 @@
 			<div id="music">music buttons go here</div>
 			<div id="chat">
 				<div id="chat-text">
-					<p>chat text which sometimes could be very long because you know people like to make jokes and stuff but the text will still wrap nicely</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
-					<p>chat text</p>
 				</div>
 				<div class="row" id="chat-input">
 					<div class="col-md-12">
-						<textarea class="form-control" rows="3"></textarea>
-						<button class="form-control btn btn-primary">Send</button>
+						<textarea id="msg-txt" class="form-control" rows="3"></textarea>
+						<button id="send-msg-btn" class="form-control btn btn-primary">Send</button>
 					</div>
 				</div>
 			</div>
