@@ -8,6 +8,9 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Allows a player to undo a vote for a card.
+ */
 public class RemoveVoteForCardRequest implements Route {
 
   @Override

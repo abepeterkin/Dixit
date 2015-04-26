@@ -8,6 +8,9 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Adds a chat line to game chat.
+ */
 public class AddChatRequest implements Route {
 
   @Override

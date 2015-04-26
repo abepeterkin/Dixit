@@ -12,10 +12,15 @@ import com.google.common.collect.ImmutableMap;
 
 import edu.brown.cs.dixit.Main;
 
+/**
+ * Presents the user with a page where they can join a game.
+ */
 public class DixitJoinGamePage implements TemplateViewRoute {
 
   @Override
-  public ModelAndView handle(Request req, Response res) {
+  public ModelAndView handle(
+      Request req,
+      Response res) {
     List<String> tempList = Main.getGameNameList();
     Map<String, Object> variables = ImmutableMap.<String, Object> builder()
         .put("title", "Dixit").put("games", tempList).build();

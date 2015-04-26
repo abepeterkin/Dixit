@@ -16,10 +16,15 @@ import com.google.common.collect.ImmutableMap;
 import edu.brown.cs.dixit.Main;
 import gamestuff.Game;
 
+/**
+ * Presents the user with a page where they can change options of their player.
+ */
 public class DixitJoinOptionsPage implements TemplateViewRoute {
 
   @Override
-  public ModelAndView handle(Request req, Response res) {
+  public ModelAndView handle(
+      Request req,
+      Response res) {
     String gameName = "";
     try {
       gameName = URLDecoder.decode(req.params(":gameName"), "UTF-8");
@@ -33,7 +38,8 @@ public class DixitJoinOptionsPage implements TemplateViewRoute {
       colors = game.getColorsInUse();
       playerNames = game.getPlayerNames();
       Map<String, Object> variables = ImmutableMap.of("title", "Dixit",
-          "gameName", gameName, "playerNames", playerNames, "usedColors", colors);
+          "gameName", gameName, "playerNames", playerNames, "usedColors",
+          colors);
       return new ModelAndView(variables, "joinoptions.ftl");
     } else {
       String response = "Game not found.";

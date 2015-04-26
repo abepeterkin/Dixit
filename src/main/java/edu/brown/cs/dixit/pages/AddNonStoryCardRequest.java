@@ -14,6 +14,9 @@ import spark.Route;
 
 import com.google.common.collect.ImmutableMap;
 
+/**
+ * Allows a non-storyteller to add a card.
+ */
 public class AddNonStoryCardRequest implements Route {
 
   @Override

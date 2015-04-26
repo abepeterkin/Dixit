@@ -12,6 +12,9 @@ import edu.brown.cs.dixit.Main;
 import gamestuff.Game;
 import gamestuff.Player;
 
+/**
+ * Retrieves a deep serialization of a game.
+ */
 public class GetGameRequest implements Route {
 
   private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();

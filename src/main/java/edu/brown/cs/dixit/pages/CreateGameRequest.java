@@ -16,10 +16,15 @@ import edu.brown.cs.dixit.Main;
 import gamestuff.Game;
 import gamestuff.Player;
 
+/**
+ * Creates a new game.
+ */
 public class CreateGameRequest implements TemplateViewRoute {
 
   @Override
-  public ModelAndView handle( Request req, Response res) {
+  public ModelAndView handle(
+      Request req,
+      Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
     String playerName = qm.value("playerName");
@@ -34,18 +39,17 @@ public class CreateGameRequest implements TemplateViewRoute {
       Player tempPlayer = new Player(newId, playerName, colorName);
       List<Player> tempPlayerList = new ArrayList<Player>();
       tempPlayerList.add(tempPlayer);
-      Game tempGame =
-          new Game(gameName, numberOfPlayers, numberOfCards, tempPlayerList);
+      Game tempGame = new Game(gameName, numberOfPlayers, numberOfCards,
+          tempPlayerList);
       Main.addGame(gameName, tempGame);
-      Map<String, Object> variables =
-          ImmutableMap.of("response", "Game created.",
-              "gameName", gameName,
-              "playerId", newId);
+      Map<String, Object> variables = ImmutableMap.of("response",
+          "Game created.", "gameName", gameName, "playerId", newId);
       return new ModelAndView(variables, "success.ftl");
     }
   }
 
-  private ModelAndView failure(String message) {
+  private ModelAndView failure(
+      String message) {
     Map<String, Object> variables = ImmutableMap.of("response", message);
     return new ModelAndView(variables, "response.ftl");
   }

@@ -8,6 +8,9 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Lets a non-storyteller remove a card.
+ */
 public class RemoveNonStoryCardRequest implements Route {
 
   @Override

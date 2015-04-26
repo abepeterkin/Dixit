@@ -14,6 +14,9 @@ import edu.brown.cs.dixit.Main;
 import gamestuff.Game;
 import gamestuff.Player;
 
+/**
+ * Lets a player join a game.
+ */
 public class AddPlayerRequest implements TemplateViewRoute {
 
   @Override
@@ -32,10 +35,9 @@ public class AddPlayerRequest implements TemplateViewRoute {
       Player player = new Player(newId, playerName, colorName);
       Game game = Main.getGame(gameName);
       if (game.addPlayer(player)) {
-        Map<String, Object> variables =
-            ImmutableMap.of("response", "Game join successful.",
-                "gameName", game.getName(),
-                "playerId", newId);
+        Map<String, Object> variables = ImmutableMap.of("response",
+            "Game join successful.", "gameName", game.getName(), "playerId",
+            newId);
         return new ModelAndView(variables, "success.ftl");
       } else {
         return failure("player could not be added");
@@ -44,7 +46,8 @@ public class AddPlayerRequest implements TemplateViewRoute {
 
   }
 
-  private ModelAndView failure(String message) {
+  private ModelAndView failure(
+      String message) {
     Map<String, Object> variables = ImmutableMap.of("success", "false",
         "error", message);
     return new ModelAndView(variables, "reponse.ftl");

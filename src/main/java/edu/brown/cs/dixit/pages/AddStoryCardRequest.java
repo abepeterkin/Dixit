@@ -9,6 +9,9 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Allows the storyteller to add a card with a clue.
+ */
 public class AddStoryCardRequest implements Route {
 
   @Override

@@ -20,6 +20,10 @@ import gamestuff.ChatLine;
 import gamestuff.Game;
 import gamestuff.Player;
 
+/**
+ * Retrieves all of the game updates which have occurred since the player last
+ * called this page.
+ */
 public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
   private Map<Game, DixitUpdateList> dixitUpdateListMap = new HashMap<Game, DixitUpdateList>();

@@ -9,6 +9,9 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Allows a player to vote for a card.
+ */
 public class VoteForCardRequest implements Route {
 
   @Override
