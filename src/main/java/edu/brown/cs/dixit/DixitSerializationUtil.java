@@ -73,7 +73,7 @@ public class DixitSerializationUtil {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("score", player.getScore()).put("chatName", player.getChatName())
         .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
-        .build();
+        .put("color", player.getColor()).build();
     return GSON.toJsonTree(variables);
   }
 
@@ -92,7 +92,8 @@ public class DixitSerializationUtil {
       Player currentPlayer) {
     ImmutableMap.Builder<String, Object> tempBuilder = new ImmutableMap.Builder<String, Object>()
         .put("score", player.getScore()).put("chatName", player.getChatName())
-        .put("isStoryTeller", player.isStoryteller()).put("id", player.getId());
+        .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
+        .put("color", player.getColor());
     if (currentPlayer == player) {
       tempBuilder.put("hand", serializeHand(player.getHand()));
     }
