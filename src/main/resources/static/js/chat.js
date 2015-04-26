@@ -1,4 +1,5 @@
 function Chat(player) {
+  this.messageBody = $('#chat-text');
   var messageText = $("#msg-txt");
   var sendButton = $("#send-msg-btn");
   sendButton.on("click", function() {
@@ -13,4 +14,7 @@ function Chat(player) {
      */
     messageText.val("");
   });
+}
+Chat.prototype.addMsg = function(msg) {
+  this.messageBody.append('<p>' + msg + '</p>');
 }

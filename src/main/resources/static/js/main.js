@@ -1,4 +1,5 @@
 var isWaitingForUpdateRequest = false;
+var chat;
 
 (function() {
   // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -41,6 +42,12 @@ var isWaitingForUpdateRequest = false;
 function processUpdates(responseObject) {
   console.log(responseObject);
   isWaitingForUpdateRequest = false
+  for (var i = 0; i < responseObject.length; i++) {
+    switch (responseObject[i][0]) {
+      case "chat":
+        chat.addMsg(responseObject[i][1].message);
+    }
+  }
 }
 
 function sendUpdateRequestIfReady() {
@@ -57,11 +64,11 @@ function retreiveGame(responseObject) {
   });
   game.addPlayers(responseObject.players);
   // start chat
-  var chat = new Chat(game.getPlayer(sessionStorage.playerId));
+  chat = new Chat(game.getPlayer(sessionStorage.playerId));
 
   // var board = new Board(game, "board", sessionStorage.playerId);
   // game.board = board;
-  
+
   setInterval(sendUpdateRequestIfReady, 500);
 }
 /*
@@ -85,8 +92,12 @@ function retreiveGame(responseObject) {
  */
 window.onload = function() {
   if (typeof (Storage) !== "undefined") {
-    sessionStorage.gameName = $("#gameName").val();
-    sessionStorage.playerId = $("#playerId").val();
+    var gameName = $("#gameName").val();
+    var playerId = $("#playerId").val();
+    if (gameName.length > 0 && playerId.length > 0) {
+      sessionStorage.gameName = gameName;
+      sessionStorage.playerId = playerId;
+    }
     console.log(sessionStorage.gameName + " " + sessionStorage.playerId);
   } else {
     alert("ERROR: This browser doesn't support HTML5 local storage."

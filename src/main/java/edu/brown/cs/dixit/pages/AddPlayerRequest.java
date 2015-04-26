@@ -20,9 +20,7 @@ import gamestuff.Player;
 public class AddPlayerRequest implements TemplateViewRoute {
 
   @Override
-  public ModelAndView handle(
-      Request req,
-      Response res) {
+  public ModelAndView handle(Request req, Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
     String playerName = qm.value("playerName");
@@ -38,7 +36,7 @@ public class AddPlayerRequest implements TemplateViewRoute {
         Map<String, Object> variables = ImmutableMap.of("response",
             "Game join successful.", "gameName", game.getName(), "playerId",
             newId);
-        return new ModelAndView(variables, "success.ftl");
+        return new ModelAndView(variables, "board.ftl");
       } else {
         return failure("player could not be added");
       }
@@ -46,8 +44,7 @@ public class AddPlayerRequest implements TemplateViewRoute {
 
   }
 
-  private ModelAndView failure(
-      String message) {
+  private ModelAndView failure(String message) {
     Map<String, Object> variables = ImmutableMap.of("success", "false",
         "error", message);
     return new ModelAndView(variables, "reponse.ftl");
