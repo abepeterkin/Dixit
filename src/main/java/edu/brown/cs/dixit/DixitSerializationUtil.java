@@ -168,7 +168,8 @@ public class DixitSerializationUtil {
         .put("name", game.getName())
         .put("phase", serializePhase(game.getPhase()))
         .put("story", game.getStory()).put("players", playerJsonList)
-        .put("chat", serializeChat(game.getChat())).build();
+        .put("chat", serializeChat(game.getChat()))
+        .put("handsize", Integer.toString(game.getHandSize())).build();
     return GSON.toJsonTree(variables);
   }
 
