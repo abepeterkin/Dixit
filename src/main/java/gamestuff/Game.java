@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import edu.brown.cs.dixit.DixitGameSubscriber;
@@ -32,12 +33,12 @@ public class Game {
   private Chat chat = new Chat();
   private Stack<Card> deck = new Stack<Card>();
   private Stack<Card> trash = new Stack<Card>();
-  //private List<Card> tableCards = new ArrayList<Card>();
+  // private List<Card> tableCards = new ArrayList<Card>();
   private List<Vote> votes = new ArrayList<Vote>();
-  private HashMap<Card, Player> tableCards = new HashMap<>();
-  private HashMap<String, Card> cardIdMap = new HashMap<>();
-  private HashMap<String, Player> playerIdMap = new HashMap<>();
-  private HashMap<String, String> colorMap = new HashMap<>();
+  private Map<Card, Player> tableCards = new HashMap<>();
+  private Map<String, Card> cardIdMap = new HashMap<>();
+  private Map<String, Player> playerIdMap = new HashMap<>();
+  private Map<String, String> colorMap = new HashMap<>();
   private boolean gameOver = false;
 
   private DixitGameSubscriber subscriber = DixitServer.getDixitGameSubscriber();
@@ -154,7 +155,10 @@ public class Game {
     if (this.phase != Phase.NONSTORYCARDS) {
       return false;
     }
+    Player tempPlayer = tableCards.get(card);
     tableCards.remove(card);
+    tempPlayer.draw(card);
+    subscriber.handChanged(this, tempPlayer);
     subscriber.tableCardsChanged(this);
     return true;
   }
@@ -316,7 +320,8 @@ public class Game {
    * again we need to figure out how we're doing votes, player will submit vote
    * if votes full, advance to scoring
    *
-   * @param v the vote being cast
+   * @param v
+   *          the vote being cast
    */
   public boolean castVote(
       Player p,
