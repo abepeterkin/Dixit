@@ -223,6 +223,7 @@ public class Game {
     if (players.size() < MAX_PLAYERS && playerIdMap.get(p.getId()) == null
         && this.phase == Phase.PREGAME) {
       players.add(p);
+      playerIdMap.put(p.getId(), p);
       return true;
     } else {
       return false;
