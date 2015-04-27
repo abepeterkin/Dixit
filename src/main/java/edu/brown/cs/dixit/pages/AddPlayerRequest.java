@@ -15,13 +15,14 @@ import gamestuff.Game;
 import gamestuff.Player;
 
 /**
- * 
+ *
  * Lets a player join a game.
  */
 public class AddPlayerRequest implements TemplateViewRoute {
 
   @Override
   public ModelAndView handle(Request req, Response res) {
+    System.out.println("AddPlayerRequest handle called");
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
     String playerName = qm.value("playerName");
@@ -30,10 +31,12 @@ public class AddPlayerRequest implements TemplateViewRoute {
     if (!Main.gameExists(gameName)) {
       return failure("game does not exist");
     } else {
+      System.out.println("game exists, adding player " + playerName);
       String newId = Main.newId();
       Player player = new Player(newId, playerName, colorName);
       Game game = Main.getGame(gameName);
       if (game.addPlayer(player)) {
+        System.out.println("player " + player.getChatName() + "added successfully, creating response...");
         Map<String, Object> variables = ImmutableMap.of("response",
             "Game join successful.", "gameName", game.getName(), "playerId",
             newId);

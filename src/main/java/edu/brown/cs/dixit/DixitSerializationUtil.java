@@ -31,7 +31,7 @@ public class DixitSerializationUtil {
    *          The card to convert.
    * @return JSON.
    */
-  public JsonElement serializeCard(Card card) {
+  public static JsonElement serializeCard(Card card) {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("id", card.getId())
         .put("image", card.getImage())
@@ -46,7 +46,7 @@ public class DixitSerializationUtil {
    *          The hand to convert.
    * @return JSON.
    */
-  public JsonElement serializeHand(List<Card> hand) {
+  public static JsonElement serializeHand(List<Card> hand) {
     ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
     int index = 0;
     while (index < hand.size()) {
@@ -66,7 +66,7 @@ public class DixitSerializationUtil {
    *          The player who will be viewing the JSON.
    * @return JSON.
    */
-  public JsonElement serializePlayer(Player player, Player currentPlayer) {
+  public static JsonElement serializePlayer(Player player, Player currentPlayer) {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("score", player.getScore())
         .put("chatName", player.getChatName())
@@ -86,7 +86,7 @@ public class DixitSerializationUtil {
    *          The player who will be viewing the JSON.
    * @return JSON.
    */
-  public JsonElement deepSerializePlayer(Player player, Player currentPlayer) {
+  public static JsonElement deepSerializePlayer(Player player, Player currentPlayer) {
     ImmutableMap.Builder<String, Object> tempBuilder = new ImmutableMap.Builder<String, Object>()
         .put("score", player.getScore())
         .put("chatName", player.getChatName())
@@ -106,7 +106,7 @@ public class DixitSerializationUtil {
    *          The phase of the game.
    * @return JSON.
    */
-  public JsonElement serializePhase(Phase phase) {
+  public static JsonElement serializePhase(Phase phase) {
     String tempValue = "none";
     if (phase == Phase.STORYTELLER) {
       tempValue = "STORYTELLER";
@@ -133,7 +133,7 @@ public class DixitSerializationUtil {
    *          The player who will view the JSON.
    * @return JSON.
    */
-  public JsonElement serializeGame(Game game, Player currentPlayer) {
+  public static JsonElement serializeGame(Game game, Player currentPlayer) {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("name", game.getName())
         .put("phase", serializePhase(game.getPhase()))
@@ -151,7 +151,7 @@ public class DixitSerializationUtil {
    *          The player who will view the JSON.
    * @return JSON.
    */
-  public JsonElement deepSerializeGame(Game game, Player currentPlayer) {
+  public static JsonElement deepSerializeGame(Game game, Player currentPlayer) {
     List<Player> playerList = game.getPlayers();
     ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
     int index = 0;
@@ -179,7 +179,7 @@ public class DixitSerializationUtil {
    *          The chat line to convert.
    * @return JSON.
    */
-  public JsonElement serializeChatLine(ChatLine chatLine) {
+  public static JsonElement serializeChatLine(ChatLine chatLine) {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("playerId", chatLine.getPlayerId())
         .put("message", chatLine.getMessage()).build();
@@ -193,7 +193,7 @@ public class DixitSerializationUtil {
    *          The chat to convert.
    * @return JSON.
    */
-  public JsonElement serializeChat(Chat chat) {
+  public static JsonElement serializeChat(Chat chat) {
     List<ChatLine> chatLineList = chat.getLines();
     ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
     int index = 0;
@@ -214,7 +214,7 @@ public class DixitSerializationUtil {
    *          The JSON contained in the update.
    * @return JSON.
    */
-  public JsonElement serializeUpdate(String updateName, JsonElement json) {
+  public static JsonElement serializeUpdate(String updateName, JsonElement json) {
     List<JsonElement> tempList = new ArrayList<JsonElement>();
     tempList.add(GSON.toJsonTree(updateName));
     tempList.add(json);
