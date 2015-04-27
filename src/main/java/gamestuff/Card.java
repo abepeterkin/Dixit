@@ -5,6 +5,11 @@ public class Card {
   private final String IMAGE;
   private boolean isStoryteller = false;
 
+  public Card(int id, String image) {
+    this.ID = id;
+    this.IMAGE = image;
+  }
+  
   public int getId() {
     return ID;
   }
@@ -19,11 +24,6 @@ public class Card {
 
   public boolean getStoryteller() {
     return isStoryteller;
-  }
-
-  public Card(int id, String image) {
-    this.ID = id;
-    this.IMAGE = image;
   }
 
 }
