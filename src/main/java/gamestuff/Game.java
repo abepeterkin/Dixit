@@ -217,6 +217,7 @@ public class Game {
         && this.phase == Phase.PREGAME) {
       players.add(p);
       playerIdMap.put(p.getId(), p);
+      subscriber.playerAdded(this, p);
       return true;
     } else {
       return false;

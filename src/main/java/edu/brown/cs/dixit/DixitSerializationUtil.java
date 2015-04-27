@@ -33,7 +33,8 @@ public class DixitSerializationUtil {
    */
   public JsonElement serializeCard(Card card) {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-        .put("id", card.getId()).put("image", card.getImage())
+        .put("id", card.getId())
+        .put("image", card.getImage())
         .put("isStoryTeller", card.getStoryteller()).build();
     return GSON.toJsonTree(variables);
   }
@@ -67,8 +68,10 @@ public class DixitSerializationUtil {
    */
   public JsonElement serializePlayer(Player player, Player currentPlayer) {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-        .put("score", player.getScore()).put("chatName", player.getChatName())
-        .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
+        .put("score", player.getScore())
+        .put("chatName", player.getChatName())
+        .put("isStoryTeller", player.isStoryteller())
+        .put("id", player.getId())
         .put("color", player.getColor()).build();
     return GSON.toJsonTree(variables);
   }
@@ -85,8 +88,10 @@ public class DixitSerializationUtil {
    */
   public JsonElement deepSerializePlayer(Player player, Player currentPlayer) {
     ImmutableMap.Builder<String, Object> tempBuilder = new ImmutableMap.Builder<String, Object>()
-        .put("score", player.getScore()).put("chatName", player.getChatName())
-        .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
+        .put("score", player.getScore())
+        .put("chatName", player.getChatName())
+        .put("isStoryTeller", player.isStoryteller())
+        .put("id", player.getId())
         .put("color", player.getColor());
     if (currentPlayer == player) {
       tempBuilder.put("hand", serializeHand(player.getHand()));
@@ -159,7 +164,8 @@ public class DixitSerializationUtil {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("name", game.getName())
         .put("phase", serializePhase(game.getPhase()))
-        .put("story", game.getStory()).put("players", playerJsonList)
+        .put("story", game.getStory())
+        .put("players", playerJsonList)
         .put("chat", serializeChat(game.getChat()))
         .put("handsize", Integer.toString(game.getHandSize()))
         .put("tablecards", serializeHand(game.getTableCards())).build();
