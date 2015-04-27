@@ -154,6 +154,9 @@ public class GameTest {
     assertTrue(g.getStory().equals("Test Story"));
     assertTrue(g.getPhase() == Phase.NONSTORYCARDS);
     assertTrue(g.getTableCards().get(0).equals(storyCard));
+    assertTrue(p1.isStoryteller() == false);
+    assertTrue(p2.isStoryteller() == true);
+    assertTrue(p3.isStoryteller() == false);
   }
 
 }
