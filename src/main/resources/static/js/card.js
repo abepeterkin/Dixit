@@ -56,12 +56,12 @@ Card.prototype.reveal = function() {
   this.visible = true;
 }
 
-Card.prototype.makeBig = function(index) {
+Card.prototype.makeBig = function() {
   this.height = this.canvas.height / 3;
   this.width = this.canvas.width / 7;
 }
 
-Card.prototype.makeSmall = function(index) {
-  this.x = index * this.canvas.width / 6 + this.width / 2;
-  this.y = this.canvas.height / 1.7;
+Card.prototype.makeSmall = function() {
+  this.height = this.canvas.height / 5;
+  this.width = this.canvas.width / 10;
 }

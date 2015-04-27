@@ -185,16 +185,18 @@ Board.prototype.adjustCardsPos = function() {
   if (board.smallBoard) {
     board.cards[0].x = board.canvas.width / 5;
     board.cards[0].y = board.canvas.height / 20;
-    board.cards[0].makeBig(0);
+    board.cards[0].makeBig();
   } else {
-    board.cards[0].makeSmall(0);
+    board.cards[0].x = board.canvas.width / 25;
+    board.cards[0].y = board.canvas.height / 1.7;
+    board.cards[0].makeSmall();
 
   }
   var width = board.cards[0].width;
   var height = board.cards[0].height
   for (var i = 1; i < board.cards.length; i++) {
     if (board.smallBoard) {
-      board.cards[i].makeBig(i);
+      board.cards[i].makeBig();
       if (i < 3) {
         board.cards[i].x = board.cards[i - 1].x + width + width / 10;
         board.cards[i].y = board.cards[i - 1].y;
@@ -208,6 +210,9 @@ Board.prototype.adjustCardsPos = function() {
         }
       }
     } else {
+      board.cards[i].makeSmall();
+      board.cards[i].x = board.cards[i - 1].x + width + width / 1.5;
+      board.cards[i].y = board.cards[i - 1].y;
 
     }
   }
