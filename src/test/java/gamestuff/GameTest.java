@@ -289,65 +289,59 @@ public class GameTest {
 
   /**
    * Tests that storyteller cannot vote in voting phase
-   * 
-   * #FIX: Storyteller cannot vote in voting phase
    */
-//  @Test
-//  public void StorytellerVoteBlockTest() {
-//    List<Player> players = new ArrayList<Player>();
-//    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
-//    Player p2 = new Player(Main.newId(), "Esteban", "RED");
-//    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
-//    players.add(p1);
-//    players.add(p2);
-//    players.add(p3);
-//    Game g = new Game("CoolGame", 3, 7, players);
-//    g.newGame();
-//    Card storyCard = g.getPlayerHand(p2).get(0);
-//    Card nonStory1 = g.getPlayerHand(p3).get(3);
-//    Card nonStory2 = g.getPlayerHand(p1).get(5);
-//    g.firstStory(p2, "Test Story", storyCard);
-//    g.addCardToTable(p3, nonStory1);
-//    g.addCardToTable(p1, nonStory2);
-//    boolean isLegal = g.castVote(p2, storyCard);
-//    assertTrue(!isLegal);
-//  }
+  @Test
+  public void StorytellerVoteBlockTest() {
+    List<Player> players = new ArrayList<Player>();
+    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
+    players.add(p1);
+    players.add(p2);
+    players.add(p3);
+    Game g = new Game("CoolGame", 3, 7, players);
+    g.newGame();
+    Card storyCard = g.getPlayerHand(p2).get(0);
+    Card nonStory1 = g.getPlayerHand(p3).get(3);
+    Card nonStory2 = g.getPlayerHand(p1).get(5);
+    g.firstStory(p2, "Test Story", storyCard);
+    g.addCardToTable(p3, nonStory1);
+    g.addCardToTable(p1, nonStory2);
+    boolean isLegal = g.castVote(p2, storyCard);
+    assertTrue(!isLegal);
+  }
   
   /**
    * Test that players cannot vote for own cards
-   * 
-   * #FIX: Players cannot vote for own card
    */
-//  @Test
-//  public void SelfVoteBlockTest() {
-//    List<Player> players = new ArrayList<Player>();
-//    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
-//    Player p2 = new Player(Main.newId(), "Esteban", "RED");
-//    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
-//    players.add(p1);
-//    players.add(p2);
-//    players.add(p3);
-//    Game g = new Game("CoolGame", 3, 7, players);
-//    g.newGame();
-//    Card storyCard = g.getPlayerHand(p2).get(0);
-//    Card nonStory1 = g.getPlayerHand(p3).get(3);
-//    Card nonStory2 = g.getPlayerHand(p1).get(5);
-//    g.firstStory(p2, "Test Story", storyCard);
-//    g.addCardToTable(p3, nonStory1);
-//    g.addCardToTable(p1, nonStory2);
-//    boolean isLegal1 = g.castVote(p3, nonStory1);
-//    boolean isLegal2 = g.castVote(p1, nonStory2);
-//    assertTrue(!isLegal1);
-//    assertTrue(!isLegal2);
-//  }
+  @Test
+  public void SelfVoteBlockTest() {
+    List<Player> players = new ArrayList<Player>();
+    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
+    players.add(p1);
+    players.add(p2);
+    players.add(p3);
+    Game g = new Game("CoolGame", 3, 7, players);
+    g.newGame();
+    Card storyCard = g.getPlayerHand(p2).get(0);
+    Card nonStory1 = g.getPlayerHand(p3).get(3);
+    Card nonStory2 = g.getPlayerHand(p1).get(5);
+    g.firstStory(p2, "Test Story", storyCard);
+    g.addCardToTable(p3, nonStory1);
+    g.addCardToTable(p1, nonStory2);
+    boolean isLegal1 = g.castVote(p3, nonStory1);
+    boolean isLegal2 = g.castVote(p1, nonStory2);
+    assertTrue(!isLegal1);
+    assertTrue(!isLegal2);
+  }
   
   /**
    * If all votes for storycard, then all players
    * should receive two points and storyteller should
    * receive 0 points.
    * 
-   * #FIX: Voting not working
-   * [Right now both non storytellers get 0 points, storyteller 5]
    */
   @Test
   public void ScoreAllVotesForStoryTest() {
@@ -368,9 +362,6 @@ public class GameTest {
     g.addCardToTable(p1, nonStory2);
     g.castVote(p3, storyCard);
     g.castVote(p1, storyCard);
-    System.out.println("ALLVOTES");
-    System.out.println("NS1: " + p1.getScore() + " NS2: " + 
-            p3.getScore() + " S: " + p2.getScore());
     assertTrue(p3.getScore() == 2);
     assertTrue(p1.getScore() == 2);
     assertTrue(p2.getScore() == 0);
@@ -382,8 +373,6 @@ public class GameTest {
    * receive 0 points. Players should also receive a point
    * for each vote on their card.
    * 
-   * #FIX: Voting not working
-   * [Right now both non storytellers get two points, storyteller 0]
    */
   @Test
   public void ScoreNoVotesForStoryTest() {
@@ -404,9 +393,6 @@ public class GameTest {
     g.addCardToTable(p1, nonStory2);
     g.castVote(p3, nonStory2);
     g.castVote(p1, nonStory1);
-    System.out.println("NO VOTES");
-    System.out.println("NS1: " + p1.getScore() + " NS2: " + 
-            p3.getScore() + " S: " + p2.getScore());
     assertTrue(p3.getScore() == 3);
     assertTrue(p1.getScore() == 3);
     assertTrue(p2.getScore() == 0);
@@ -435,9 +421,6 @@ public class GameTest {
     g.addCardToTable(p1, nonStory2);
     g.castVote(p3, nonStory2);
     g.castVote(p1, storyCard);
-    System.out.println("ONE STORY VOTE");
-    System.out.println("NS1: " + p1.getScore() + " NS2: " + 
-            p3.getScore() + " S: " + p2.getScore());
     assertTrue(p3.getScore() == 0);
     assertTrue(p1.getScore() == 3);
     assertTrue(p2.getScore() == 2);
@@ -473,6 +456,37 @@ public class GameTest {
     assertTrue(p3.isStoryteller());
     assertTrue(!p1.isStoryteller());
     assertTrue(!p2.isStoryteller());
+  }
+  
+  @Test
+  public void ScoreTestFourPlayers() {
+    List<Player> players = new ArrayList<Player>();
+    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
+    Player p4 = new Player(Main.newId(), "Abraham", "PURPLE");
+    players.add(p1);
+    players.add(p2);
+    players.add(p3);
+    players.add(p4);
+    Game g = new Game("CoolGame", 5, 7, players);
+    g.newGame();
+    Card s = g.getPlayerHand(p1).get(0);
+    Card c1 = g.getPlayerHand(p2).get(3);
+    Card c2 = g.getPlayerHand(p3).get(5);
+    Card c3 = g.getPlayerHand(p4).get(4);
+    g.firstStory(p1, "Test Story", s);
+    g.addCardToTable(p1, s);
+    g.addCardToTable(p2, c1);
+    g.addCardToTable(p3, c2);
+    g.addCardToTable(p4, c3);
+    g.castVote(p2, s);
+    g.castVote(p3, c1);
+    g.castVote(p4, s);
+    assertTrue(p1.getScore() == 3);
+    assertTrue(p2.getScore() == 3);
+    assertTrue(p3.getScore() == 0);
+    assertTrue(p4.getScore() == 2);
   }
   
   

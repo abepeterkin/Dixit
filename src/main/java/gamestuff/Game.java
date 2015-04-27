@@ -313,7 +313,9 @@ public class Game {
    *          the vote being cast
    */
   public boolean castVote(Player p, Card c) {
-    if (this.phase != Phase.VOTING) {
+    if ((this.phase != Phase.VOTING)
+            || p.isStoryteller()
+            || this.tableCards.get(c).equals(p)) {
       return false;
     }
     Vote vote = new Vote(p, c);
@@ -344,35 +346,52 @@ public class Game {
   public void scoringPhase() {
     updatePhase(Phase.SCORING);
     subscriber.gameChanged(this);
-    int totalCorrectFinds = 0;
-    List<Player> correctPlayers = new ArrayList<Player>();
+    int storyVotes = 0;
     for (Vote v : this.votes) {
       Card voteCard = v.getCard();
       if (voteCard.getStoryteller()) {
-        totalCorrectFinds++;
+        storyVotes++;
       }
     }
-    if (totalCorrectFinds == 0 || totalCorrectFinds == players.size()) {
+    Player storyTeller = null;
+    for (Player p : getPlayers()) {
+      if (p.isStoryteller()) {
+        storyTeller = p;
+      }
+    }
+    boolean allStoryVotes = storyVotes == players.size() - 1;
+    boolean noStoryVotes = storyVotes == 0;
+    
+    if (allStoryVotes || noStoryVotes) {
       for (Player p : players) {
         if (!p.isStoryteller()) {
           p.incrementScore(2);
           subscriber.playerChanged(this, p);
         }
       }
-    } else {
-      for (Player p : players) {
-        if (p.isStoryteller() || correctPlayers.contains(p)) {
-          p.incrementScore(3);
-          subscriber.playerChanged(this, p);
+    } 
+    if (!allStoryVotes) {
+      boolean storyHasBeenVoted = false;
+      for (Vote v : this.votes) {
+        Card voteCard = v.getCard();
+        if (voteCard.getStoryteller()) {
+          v.getPlayer().incrementScore(2);
+          if (!storyHasBeenVoted) {
+            storyTeller.incrementScore(2);
+            storyHasBeenVoted = true;
+          } else {
+            storyTeller.incrementScore(1);
+          }
+          subscriber.playerChanged(this, v.getPlayer());
+          subscriber.playerChanged(this, storyTeller);
+        } else {
+          Player votedFor = tableCards.get(voteCard);
+          votedFor.incrementScore(1);
+          subscriber.playerChanged(this, votedFor);
         }
       }
-      for (Vote v : this.votes) {
-        Player votedFor = tableCards.get(v.getCard());
-        votedFor.incrementScore(1);
-        subscriber.playerChanged(this, votedFor);
-      }
-      prepareForNextRound();
     }
+    prepareForNextRound();
   }
 
   /**
