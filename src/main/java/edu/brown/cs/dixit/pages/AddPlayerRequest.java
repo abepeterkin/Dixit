@@ -15,6 +15,7 @@ import gamestuff.Game;
 import gamestuff.Player;
 
 /**
+ * 
  * Lets a player join a game.
  */
 public class AddPlayerRequest implements TemplateViewRoute {

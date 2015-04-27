@@ -1,5 +1,6 @@
 var isWaitingForUpdateRequest = false;
 var chat;
+;
 
 (function() {
   // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -45,7 +46,8 @@ function processUpdates(responseObject) {
   for (var i = 0; i < responseObject.length; i++) {
     switch (responseObject[i][0]) {
       case "chat":
-        chat.addMsg(responseObject[i][1].message);
+        chat.addMsg(responseObject[i][1].message, game
+            .getPlayer(responseObject[i][1].playerId));
     }
   }
 }
@@ -64,7 +66,12 @@ function retreiveGame(responseObject) {
   });
   game.addPlayers(responseObject.players);
   // start chat
-  chat = new Chat(game.getPlayer(sessionStorage.playerId));
+  chat = new Chat();
+  var chatLines = responseObject.chat;
+  // add all the existing chat lines
+  for (var i = 0; i < chatLines.length; i++) {
+    chat.addMsg(chatLines[i].message, game.getPlayer(chatLines[i].playerId));
+  }
 
   // var board = new Board(game, "board", sessionStorage.playerId);
   // game.board = board;

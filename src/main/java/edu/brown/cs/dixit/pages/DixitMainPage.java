@@ -15,10 +15,9 @@ import com.google.common.collect.ImmutableMap;
 public class DixitMainPage implements TemplateViewRoute {
 
   @Override
-  public ModelAndView handle(
-      Request req,
-      Response res) {
-    Map<String, Object> variables = ImmutableMap.of("title", "Dixit");
+  public ModelAndView handle(Request req, Response res) {
+    Map<String, Object> variables = ImmutableMap.of("title", "Dixit",
+        "gameName", "", "playerId", "");
     return new ModelAndView(variables, "board.ftl");
   }
 

@@ -1,13 +1,12 @@
-function Player(id, name, color, isStoryTeller, game) {
-  this.id = id;
-  this.name = name
-  this.color = color;
-  this.isStoryTeller = isStoryTeller;
-  this.hand = new Array(game.rules.numCards);
-  this.game = game;
+function Player(options) {
+  this.id = options.id;
+  this.name = options.chatName;
+  this.color = options.color.toLowerCase();
+  this.isStoryTeller = options.isStoryTeller;
+  this.hand = [];
   this.img = {};
   this.img.idle = new Image();
-  this.img.idle.src = "/images/rabbits/" + color + "/idle.png";
+  this.img.idle.src = "/images/rabbits/" + this.color + "/idle.png";
   this.idle = new Sprite({
     width : 1024,
     height : 128,
@@ -23,7 +22,7 @@ Player.prototype.refresh = function(canvas) {
   var card;
   for (var i = 0; i < this.hand.length; i++) {
     card = this.hand[i];
-    card.x = i * (canvas  .width / 9) + (canvas.width / 4);
+    card.x = i * (canvas.width / 9) + (canvas.width / 4);
     card.y = canvas.height - (canvas.height / 5);
     card.resize(canvas);
   }
@@ -40,9 +39,7 @@ Player.prototype.addHand = function(hand) {
 
 // add card to player’s hand
 Player.prototype.addCard = function(card) {
-  if (this.hand.length < this.game.rules.numCards) {
-    this.hand.push(card)
-  }
+  this.hand.push(card)
 }
 
 // removes a card from player’s hand
@@ -84,14 +81,16 @@ Player.prototype.drawIdle = function(board, index) {
   }
 }
 
-//submits a line to the chat box
+// submits a line to the chat box
 Player.prototype.addChatLine = function(message) {
   console.log("gets called");
-  /*var color = "blue";
-  var name = "Abe";*/
-  $("#text").html(text.html() + "<p style=\"color:" + this.color + "\">"
-      + this.name + ": " + message + "<\p>");
-  //messageText.val("");
+  /*
+   * var color = "blue"; var name = "Abe";
+   */
+  $("#text").html(
+      text.html() + "<p style=\"color:" + this.color + "\">" + this.name + ": "
+          + message + "<\p>");
+  // messageText.val("");
 }
 
 Player.prototype.drawSmall = function(board, index) {

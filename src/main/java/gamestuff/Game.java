@@ -71,8 +71,7 @@ public class Game {
    *          a player id
    * @return the id of the player to return
    */
-  public Player getPlayerWithId(
-      String id) {
+  public Player getPlayerWithId(String id) {
     return playerIdMap.get(id);
   }
 
@@ -81,8 +80,7 @@ public class Game {
    *          card id
    * @return the card with that id
    */
-  public Card getCardWithId(
-      String id) {
+  public Card getCardWithId(String id) {
     return cardIdMap.get(id);
   }
 
@@ -133,8 +131,7 @@ public class Game {
    * @param card
    *          the card to remove
    */
-  public boolean removeVote(
-      Card card) {
+  public boolean removeVote(Card card) {
     if (this.phase != Phase.VOTING) {
       return false;
     }
@@ -150,8 +147,7 @@ public class Game {
    * @param c
    *          the card to remove
    */
-  public boolean removeNonStoryCard(
-      Card card) {
+  public boolean removeNonStoryCard(Card card) {
     if (this.phase != Phase.NONSTORYCARDS) {
       return false;
     }
@@ -173,9 +169,7 @@ public class Game {
   /**
    * adds a line to the game's chat log
    */
-  public void addToChat(
-      Player player,
-      String message) {
+  public void addToChat(Player player, String message) {
     String color = colorMap.get(player.getChatName());
     ChatLine line = new ChatLine(player, message, color);
     chat.addLine(line);
@@ -218,8 +212,7 @@ public class Game {
    *          the player to add
    * @return whether the player was successfully added
    */
-  public boolean addPlayer(
-      Player p) {
+  public boolean addPlayer(Player p) {
     if (players.size() < MAX_PLAYERS && playerIdMap.get(p.getId()) == null
         && this.phase == Phase.PREGAME) {
       players.add(p);
@@ -234,8 +227,7 @@ public class Game {
    * @param p
    *          the player to remove
    */
-  public void removePlayer(
-      Player p) {
+  public void removePlayer(Player p) {
     // TODO: figure out the best way to remove a player from the game
   }
 
@@ -269,10 +261,7 @@ public class Game {
    * @param s
    *          Story submitted
    */
-  public void firstStory(
-      Player player,
-      String s,
-      Card c) {
+  public void firstStory(Player player, String s, Card c) {
     for (Player p : this.players) {
       if (player.equals(p)) {
         p.setIsStoryteller(true);
@@ -291,9 +280,7 @@ public class Game {
    * @param c
    *          the card attributed to the story
    */
-  public boolean submitStory(
-      String s,
-      Card c) {
+  public boolean submitStory(String s, Card c) {
     if (this.phase != Phase.STORYTELLER) {
       return false;
     }
@@ -324,9 +311,7 @@ public class Game {
    * @param v
    *          the vote being cast
    */
-  public boolean castVote(
-      Player p,
-      Card c) {
+  public boolean castVote(Player p, Card c) {
     if (this.phase != Phase.VOTING) {
       return false;
     }
@@ -338,8 +323,7 @@ public class Game {
     return true;
   }
 
-  private void trashPlayerCards(
-      Player player) {
+  private void trashPlayerCards(Player player) {
     List<Card> hand = player.getHand();
     for (Card card : hand) {
       trash.push(card);
@@ -460,9 +444,7 @@ public class Game {
    * @param c
    *          the card to be added
    */
-  public boolean addCardToTable(
-      Player p,
-      Card c) {
+  public boolean addCardToTable(Player p, Card c) {
     if (this.phase != Phase.STORYTELLER && this.phase != Phase.NONSTORYCARDS) {
       return false;
     }
@@ -499,8 +481,7 @@ public class Game {
   /**
    * updates phase in game.
    */
-  public void updatePhase(
-      Phase p) {
+  public void updatePhase(Phase p) {
     this.phase = p;
   }
 
@@ -509,8 +490,7 @@ public class Game {
    *          Player in game
    * @return List of cards
    */
-  public List<Card> getPlayerHand(
-      Player p) {
+  public List<Card> getPlayerHand(Player p) {
     return p.getHand();
   }
 
@@ -519,8 +499,7 @@ public class Game {
    *          string name of player
    * @return Player object
    */
-  public Player getPlayerByName(
-      String name) {
+  public Player getPlayerByName(String name) {
     for (Player p : players) {
       if (p.getChatName() == name) {
         return p;
