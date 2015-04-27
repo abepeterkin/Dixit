@@ -16,6 +16,7 @@ function Player(id, name, color, isStoryTeller, game) {
     ticksPerFrame : 3,
     numberOfCols : 8
   })
+  this.score = 0;
   // TODO: add a vote so that a player is linked to its vote card
 }
 

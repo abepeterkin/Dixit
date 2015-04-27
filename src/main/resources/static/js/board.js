@@ -13,7 +13,7 @@ var selectedCard;
 var sentCard = false;
 // should hold to array of game.players to display their score and color
 function Board(game, canvasId, playerId) {
-  this.clientPlayer = game.players[playerId - 1]; // the player this client
+  this.clientPlayer = game.players[playerId]; // the player this client
   this.game = game;
   this.cards = []// cards currently at play
   this.canvas = document.getElementById(canvasId);
@@ -144,7 +144,7 @@ var drawBigHelper = function() {
 Board.prototype.drawPlayersBig = function() {
   for (var i = 0; i < this.game.players.length; i++) {
     board.game.players[i].idle.update();
-    board.game.players[i].idle.render(board.ctx, i);
+    board.game.players[i].idle.render(board.ctx, i, game.players[i]);
   }
 }
 
@@ -271,22 +271,22 @@ Board.prototype.addListeners = function() {
 
 Board.prototype.changePhase = function(phase) {
   switch (phase) {
-    case this.game.phases['StoryTeller']:
-      if (this.clientPlayer.isStoryTeller) {
-        var card;
-        for (var i = 0; i < board.clientPlayer.hand.length; i++) {
-          card = board.clientPlayer.hand[i];
-          board.clueModal.find('#card' + i)[0].src = card.frontImg.src;
-        }
-        board.clueModal.modal('show');
-        break;
-      } else {
-        this.sendBtn.prop("disabled", true);
+  case this.game.phases['StoryTeller']:
+    if (this.clientPlayer.isStoryTeller) {
+      var card;
+      for (var i = 0; i < board.clientPlayer.hand.length; i++) {
+        card = board.clientPlayer.hand[i];
+        board.clueModal.find('#card' + i)[0].src = card.frontImg.src;
       }
-    case this.game.phases['NonStoryCards']:
-      if (!this.clientPlayer.isStoryTeller) {
-        this.sendBtn.prop("disabled", false);
-      }
+      board.clueModal.modal('show');
+      break;
+    } else {
+      this.sendBtn.prop("disabled", true);
+    }
+  case this.game.phases['NonStoryCards']:
+    if (!this.clientPlayer.isStoryTeller) {
+      this.sendBtn.prop("disabled", false);
+    }
   }
 }
 

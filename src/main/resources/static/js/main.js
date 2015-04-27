@@ -34,12 +34,12 @@ var game = new Game(1, {
   numCards : 5
 });
 
-var player1 = new Player("1", "Esteban", "blue", false, game);
-var player2 = new Player("2", "Zach", "blue", false, game);
-var player3 = new Player("3", "Abe", "blue", false, game);
-var player4 = new Player("4", "Jack", "blue", false, game);
+var player1 = new Player("0", "Esteban", "blue", false, game);
+var player2 = new Player("1", "Zach", "blue", false, game);
+var player3 = new Player("2", "Abe", "blue", false, game);
+var player4 = new Player("3", "Jack", "blue", false, game);
 var player5 = new Player("4", "Jack", "blue", false, game);
-var player6 = new Player("4", "Jack", "blue", false, game);
+var player6 = new Player("5", "Jack", "blue", false, game);
 
 var players = [ player1, player2, player3, player4, player5, player6 ];
 game.addPlayers(players);
@@ -103,4 +103,8 @@ window.onload = function() {
   board.draw();
   var chat = new Chat(game);
   $('#chat-text').scrollTop($('#chat-text').prop("scrollHeight"));
+  game.updateScore(0, 14);
+  game.updateScore(1, 15);
+  game.updateScore(2, 16);
+  game.updateScore(3, 18);
 }
