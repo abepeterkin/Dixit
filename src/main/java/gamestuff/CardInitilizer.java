@@ -23,7 +23,7 @@ public class CardInitilizer {
             || file.getName().endsWith(".jpe")
             || file.getName().endsWith(".jfif")
             || file.getName().endsWith(".png"))) {
-          toReturn.push(new Card(idCount, file.getName()));
+          toReturn.push(new Card(Integer.toString(idCount), file.getName()));
           idCount++;
         }
     }

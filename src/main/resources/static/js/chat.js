@@ -1,22 +1,15 @@
-function Chat(game) {
-  var text = $("#text");
+function Chat() {
+  this.messageBody = $('#chat-text');
   var messageText = $("#msg-txt");
   var sendButton = $("#send-msg-btn");
   sendButton.on("click", function() {
-    var color = "blue"; //TEMPORARY
-    var playerName = "Abe"; //TEMPORARY
-    var gameName = "game"; //TEMPORARY
     var message = messageText.val();
-    var postParameters = {
-        gameName: gameName,
-        playerName: playerName,
-        message: message
-    } 
-    $.post("/addChat", postParameters, function(responseJSON){ 
-      //do something with a response?
-    });
-    /*text.html(text.html() + "<p style=\"color:" + color + "\">"
-        + name + ": " + messageText.val() + "<\p>");*/
+    addChatRequest(message, function(responseObj) {
+    })
     messageText.val("");
   });
+}
+Chat.prototype.addMsg = function(msg, player) {
+  this.messageBody.append('<p><span style="color:' + player.color + '"' + ">"
+      + player.name + ":</span> " + msg + '</p>');
 }

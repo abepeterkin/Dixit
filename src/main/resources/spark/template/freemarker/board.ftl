@@ -1,19 +1,30 @@
 <#assign content>
-	<div class="container">	
-	 <div class="rightCol">
-	   <div class="border"id="music">music controls go here</div>
-	   <div class="chat">
-	     <div class="border" id="text"> chat text goes here</div>
-	     <div class="msg border">
-	       <textarea id="msg-txt"></textarea>
-	       <input class="btn btn-primary" id="send-msg-btn" type="button" value="Send">
-	     </div>
-	   </div>
-	 </div>
-	 <div class="leftCol">
-	   <canvas class="border" id="board"></canvas>
-	 </div>
+<input type="text" id="gameName" value="${gameName}" style="display: none">
+<input type="text" id="playerId" value="${playerId}" style="display: none">
+<div id="container2">
+	<div id="container1">
+		<div id="col1">
+			<canvas id="board">No canvas support</canvas>
+		</div>
+		<div id="col2">
+			<div id="music">music buttons go here</div>
+			<div id="chat">
+				<div id="chat-text">
+				</div>
+				<div class="row" id="chat-input">
+					<div class="col-md-12">
+						<textarea id="msg-txt" class="form-control" rows="3"></textarea>
+						<button id="send-msg-btn" class="form-control btn btn-primary">Send</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+</div>
+<button class ="btn btn-default" id="advancePhase">advance phase</button>
+<p id="currentPhase"></p>
+<p id="storyTeller"></p>
+<p id="clientPlayer"></p>
 <div class="modal fade" id="cardModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -25,12 +36,26 @@
         <img id="cardImg" src="">
       </div>
       <div class="modal-footer">
-      	<button id="send-card-btn" type="button" class="btn btn-default">Send Card</button>
+      	<button id="send-card-btn" type="button" class="btn btn-default" disabled>Send Card</button>
       </div>
     </div>
   </div>
 </div>
-<div class="modal fade" id="sendClueModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true">
+<div class="modal fade" id="clueCardModal" tabindex="-1" role="dialog" aria-labelledby="clueCardModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="clueTitle"></h4>
+      </div>
+      <div class="modal-body">
+      	<p id="clueText"></p>
+        <img id="cardImg" src="">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="sendClueModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true"data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -53,18 +78,23 @@
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">
     <div class="item active">
+      <input id="cardId" value="0"hidden/>
       <img id="card0" src="">
     </div>
     <div class="item">
+     <input id="cardId" value="1"hidden/>
        <img id="card1" src="">
     </div>
      <div class="item">
+      <input id="cardId" value="2"hidden/>
        <img id="card2" src="">
     </div>
      <div class="item">
+      <input id="cardId" value="3"hidden/>
        <img id="card3" src="">
     </div>
      <div class="item">
+      <input id="cardId" value="4"hidden/>
        <img id="card4" src="">
 
     </div>
@@ -81,21 +111,23 @@
 </div>
       </div>
       <div class="modal-footer">
-      	<button id="send-card-btn" type="button" class="btn btn-default">Send Clue</button>
+      	<button id="send-clue-btn" type="button" class="btn btn-default" disabled>Send Clue</button>
       </div>
     </div>
   </div>
 </div>
-<button type="button" class="btn btn-default" id="clueBtn">Clue</button>
 </#assign>
 <#assign js>
-	<script src="js/icon.js"></script>
+	<script src="/js/infostore.js"></script>
+	<script src="/js/icon.js"></script>
     <script src="/js/card.js"></script>
+    <script src="/js/clue.js"></script>
     <script src="/js/game.js"></script>
-        <script src="/js/sprite.js"></script>
+    <script src="/js/sprite.js"></script>
     <script src="/js/player.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/board.js"></script>
     <script src="/js/chat.js"></script>
+    <script src="/js/ajax.js"></script>
 </#assign>
 <#include "main.ftl">

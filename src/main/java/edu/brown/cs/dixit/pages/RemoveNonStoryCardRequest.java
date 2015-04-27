@@ -1,26 +1,42 @@
 package edu.brown.cs.dixit.pages;
 
-import java.util.Map;
-
-import spark.ModelAndView;
+import edu.brown.cs.dixit.Main;
+import gamestuff.Game;
+import gamestuff.Player;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
-import spark.TemplateViewRoute;
+import spark.Route;
 
-import com.google.common.collect.ImmutableMap;
+/**
+ * Lets a non-storyteller remove a card.
+ */
+public class RemoveNonStoryCardRequest implements Route {
 
-public class RemoveNonStoryCardRequest implements TemplateViewRoute {
+  @Override
+  public Object handle(
+      Request req,
+      Response res) {
+    QueryParamsMap qm = req.queryMap();
+    String gameName = qm.value("gameName");
+    String playerId = qm.value("playerId");
 
-	@Override
-	public ModelAndView handle(Request req, Response res) {
-		QueryParamsMap qm = req.queryMap();
-		String gameName = qm.value("gameName");
-		String playerName = qm.value("playerName");
-
-		// TODO: Remove non story card.
-
-		Map<String, Object> variables = ImmutableMap.of("response", "true");
-		return new ModelAndView(variables, "response.ftl");
-	}
+    Game game = Main.getGame(gameName);
+    if (game == null) {
+      return "false";
+    }
+    Player player = game.getPlayerWithId(playerId);
+    if (player == null) {
+      return "false";
+    }
+    if (player.isStoryteller()) {
+      return "false";
+    }
+    // TODO: Find the card which the player added.
+    if (game.removeNonStoryCard(null)) {
+      return "true";
+    } else {
+      return "false";
+    }
+  }
 }

@@ -5,13 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
-import spark.TemplateViewRoute;
+import spark.Route;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
@@ -22,23 +20,38 @@ import gamestuff.ChatLine;
 import gamestuff.Game;
 import gamestuff.Player;
 
-public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber {
+/**
+ * Retrieves all of the game updates which have occurred since the player last
+ * called this page.
+ */
+public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
   private Map<Game, DixitUpdateList> dixitUpdateListMap = new HashMap<Game, DixitUpdateList>();
   private Map<Player, Long> playerTimeMap = new HashMap<Player, Long>();
 
   @Override
-  public ModelAndView handle(
+  public Object handle(
       Request req,
       Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
-    String playerName = qm.value("playerName");
+    String playerId = qm.value("playerId");
 
     Game tempGame = Main.getGame(gameName);
-    DixitUpdateList tempUpdateList = dixitUpdateListMap.get(tempGame);
-    // Game does not have accessors for players.
-    Player tempPlayer = null;
+    if (tempGame == null) {
+      return "false";
+    }
+    DixitUpdateList tempUpdateList;
+    if (dixitUpdateListMap.containsKey(tempGame)) {
+      tempUpdateList = dixitUpdateListMap.get(tempGame);
+    } else {
+      tempUpdateList = new DixitUpdateList();
+      dixitUpdateListMap.put(tempGame, tempUpdateList);
+    }
+    Player tempPlayer = tempGame.getPlayerWithId(playerId);
+    if (tempPlayer == null) {
+      return "false";
+    }
     long tempTime;
     if (playerTimeMap.containsKey(tempPlayer)) {
       tempTime = playerTimeMap.get(tempPlayer);
@@ -48,9 +61,7 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
     JsonElement tempJson = tempUpdateList.getJson(tempTime, tempPlayer);
     playerTimeMap.put(tempPlayer, System.currentTimeMillis());
 
-    Map<String, Object> variables = ImmutableMap.of("response",
-        tempJson.toString());
-    return new ModelAndView(variables, "response.ftl");
+    return tempJson.toString();
   }
 
   private void addUpdate(
@@ -78,6 +89,12 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
       Game game,
       Player player) {
     addUpdate(game, new PlayerUpdate(player));
+  }
+
+  @Override
+  public void tableCardsChanged(
+      Game game) {
+    addUpdate(game, new TableCardsUpdate(game));
   }
 
   @Override
@@ -215,6 +232,34 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
   }
 
   /**
+   * Represents a change to cards on the table.
+   */
+  private static class TableCardsUpdate implements DixitUpdate {
+
+    private Game game;
+    private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
+    private long time = System.currentTimeMillis();
+
+    public TableCardsUpdate(Game game) {
+      this.game = game;
+    }
+
+    @Override
+    public JsonElement getJson(
+        Player inputPlayer) {
+      JsonElement tempJson = serializationUtil.serializeHand(game
+          .getTableCards());
+      return serializationUtil.serializeUpdate("tablecards", tempJson);
+    }
+
+    @Override
+    public long getTime() {
+      return time;
+    }
+
+  }
+
+  /**
    * Represents a change to a game.
    */
   private static class GameUpdate implements DixitUpdate {
@@ -253,7 +298,8 @@ public class GetUpdateRequest implements TemplateViewRoute, DixitGameSubscriber 
 
     public ChatUpdate(Game game) {
       this.game = game;
-      chatLine = null;
+      List<ChatLine> tempList = game.getChat().getLines();
+      chatLine = tempList.get(tempList.size() - 1);
     }
 
     @Override

@@ -7,13 +7,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
+
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
 public class Main {
 
+  public static final Gson GSON = new Gson();
   private static Map<String, Game> gameMap = new HashMap<String, Game>();
+  private static int nextId = 0;
 
   public static void main(
       String[] args) {
@@ -26,6 +30,17 @@ public class Main {
     } catch (RuntimeException e) {
       System.err.println("ERROR: " + e.getMessage());
     }
+  }
+
+  /** Returns the next id to be assigned to a player, and increments the value
+   * so that the next player will get a new id.
+   *
+   * @return an id for a new player
+   */
+  public static String newId() {
+    String toReturn = Integer.toString(nextId);
+    nextId++;
+    return toReturn;
   }
 
   public static boolean gameExists(

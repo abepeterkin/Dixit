@@ -1,6 +1,7 @@
 package edu.brown.cs.dixit;
 
 import gamestuff.Card;
+import gamestuff.Chat;
 import gamestuff.ChatLine;
 import gamestuff.Game;
 import gamestuff.Phase;
@@ -23,16 +24,28 @@ public class DixitSerializationUtil {
 
   private final static Gson GSON = new Gson();
 
-  public JsonElement serializeCard(
-      Card card) {
-    Map<String, Object> variables = new ImmutableMap.Builder()
+  /**
+   * Converts a card to JSON.
+   *
+   * @param card
+   *          The card to convert.
+   * @return JSON.
+   */
+  public JsonElement serializeCard(Card card) {
+    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("id", card.getId()).put("image", card.getImage())
         .put("isStoryTeller", card.getStoryteller()).build();
     return GSON.toJsonTree(variables);
   }
 
-  public JsonElement serializeHand(
-      List<Card> hand) {
+  /**
+   * Converts a hand to JSON.
+   *
+   * @param hand
+   *          The hand to convert.
+   * @return JSON.
+   */
+  public JsonElement serializeHand(List<Card> hand) {
     ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
     int index = 0;
     while (index < hand.size()) {
@@ -43,25 +56,52 @@ public class DixitSerializationUtil {
     return GSON.toJsonTree(tempBuilder.build());
   }
 
-  public JsonElement serializePlayer(
-      Player player,
-      Player currentPlayer) {
-    Map<String, Object> variables = new ImmutableMap.Builder()
+  /**
+   * Shallow conversion of player to JSON. Only includes top level properties.
+   *
+   * @param player
+   *          The player to convert.
+   * @param currentPlayer
+   *          The player who will be viewing the JSON.
+   * @return JSON.
+   */
+  public JsonElement serializePlayer(Player player, Player currentPlayer) {
+    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("score", player.getScore()).put("chatName", player.getChatName())
-        .put("isStoryTeller", player.isStoryteller()).build();
+        .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
+        .put("color", player.getColor()).build();
     return GSON.toJsonTree(variables);
   }
 
-  public JsonElement deepSerializePlayer(
-      Player player,
-      Player currentPlayer) {
-    // TODO: Serialize.
-    // Cannot serialize yet because player has no accessor for hand.
-    return GSON.toJsonTree("");
+  /**
+   * Deep conversion of player to JSON. Includes nested objects. Will hide cards
+   * from other players.
+   *
+   * @param player
+   *          The player to convert.
+   * @param currentPlayer
+   *          The player who will be viewing the JSON.
+   * @return JSON.
+   */
+  public JsonElement deepSerializePlayer(Player player, Player currentPlayer) {
+    ImmutableMap.Builder<String, Object> tempBuilder = new ImmutableMap.Builder<String, Object>()
+        .put("score", player.getScore()).put("chatName", player.getChatName())
+        .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
+        .put("color", player.getColor());
+    if (currentPlayer == player) {
+      tempBuilder.put("hand", serializeHand(player.getHand()));
+    }
+    return GSON.toJsonTree(tempBuilder.build());
   }
 
-  public JsonElement serializePhase(
-      Phase phase) {
+  /**
+   * Converts the game phase to JSON.
+   *
+   * @param phase
+   *          The phase of the game.
+   * @return JSON.
+   */
+  public JsonElement serializePhase(Phase phase) {
     String tempValue = "none";
     if (phase == Phase.STORYTELLER) {
       tempValue = "STORYTELLER";
@@ -73,36 +113,102 @@ public class DixitSerializationUtil {
       tempValue = "SCORING";
     } else if (phase == Phase.CLEANUP) {
       tempValue = "CLEANUP";
+    } else if (phase == Phase.PREGAME) {
+      tempValue = "PREGAME";
     }
-    Map<String, Object> variables = new ImmutableMap.Builder().put("value",
-        tempValue).build();
+    return GSON.toJsonTree(tempValue);
+  }
+
+  /**
+   * Shallow conversion of game to JSON. Only includes top level properties.
+   *
+   * @param game
+   *          The game to convert.
+   * @param currentPlayer
+   *          The player who will view the JSON.
+   * @return JSON.
+   */
+  public JsonElement serializeGame(Game game, Player currentPlayer) {
+    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+        .put("name", game.getName())
+        .put("phase", serializePhase(game.getPhase()))
+        .put("story", game.getStory()).build();
     return GSON.toJsonTree(variables);
   }
 
-  public JsonElement serializeGame(
-      Game game,
-      Player currentPlayer) {
-    // TODO: Serialize.
-    // Need accessors for serialization.
-    return GSON.toJsonTree("");
+  /**
+   * Deep conversion of game to JSON. Includes nested properties. Hides certain
+   * information from currentPlayer.
+   *
+   * @param game
+   *          The game to convert.
+   * @param currentPlayer
+   *          The player who will view the JSON.
+   * @return JSON.
+   */
+  public JsonElement deepSerializeGame(Game game, Player currentPlayer) {
+    List<Player> playerList = game.getPlayers();
+    ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
+    int index = 0;
+    while (index < playerList.size()) {
+      Player tempPlayer = playerList.get(index);
+      tempBuilder.add(deepSerializePlayer(tempPlayer, currentPlayer));
+      index += 1;
+    }
+    JsonElement playerJsonList = GSON.toJsonTree(tempBuilder.build());
+    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+        .put("name", game.getName())
+        .put("phase", serializePhase(game.getPhase()))
+        .put("story", game.getStory()).put("players", playerJsonList)
+        .put("chat", serializeChat(game.getChat()))
+        .put("handsize", Integer.toString(game.getHandSize()))
+        .put("tablecards", serializeHand(game.getTableCards())).build();
+    return GSON.toJsonTree(variables);
   }
 
-  public JsonElement deepSerializeGame(
-      Game Game,
-      Player currentPlayer) {
-    // TODO: Serialize.
-    // Need accessors for serialization.
-    return GSON.toJsonTree("");
+  /**
+   * Converts a chat line to JSON.
+   *
+   * @param chatLine
+   *          The chat line to convert.
+   * @return JSON.
+   */
+  public JsonElement serializeChatLine(ChatLine chatLine) {
+    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+        .put("playerId", chatLine.getPlayerId())
+        .put("message", chatLine.getMessage()).build();
+    return GSON.toJsonTree(variables);
   }
 
-  public JsonElement serializeChatLine(
-      ChatLine chatLine) {
-    return GSON.toJsonTree(chatLine.getMessage());
+  /**
+   * Converts a chat object to JSON.
+   *
+   * @param chat
+   *          The chat to convert.
+   * @return JSON.
+   */
+  public JsonElement serializeChat(Chat chat) {
+    List<ChatLine> chatLineList = chat.getLines();
+    ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
+    int index = 0;
+    while (index < chatLineList.size()) {
+      ChatLine tempChatLine = chatLineList.get(index);
+      tempBuilder.add(serializeChatLine(tempChatLine));
+      index += 1;
+    }
+    return GSON.toJsonTree(tempBuilder.build());
   }
 
-  public JsonElement serializeUpdate(
-      String updateName,
-      JsonElement json) {
+  /**
+   * Serializes an update for GetUpdateRequest.
+   *
+   * @param updateName
+   *          The name of the update.
+   * @param json
+   *          The JSON contained in the update.
+   * @return JSON.
+   */
+  public JsonElement serializeUpdate(String updateName, JsonElement json) {
     List<JsonElement> tempList = new ArrayList<JsonElement>();
     tempList.add(GSON.toJsonTree(updateName));
     tempList.add(json);

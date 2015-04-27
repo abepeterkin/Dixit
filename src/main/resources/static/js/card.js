@@ -1,15 +1,17 @@
 var backImg = new Image();
 backImg.src = "/images/back_of_card.jpg";
-function Card(id, img, x, y, canvas) {
-  this.id = id; // / dont take img as constructor so ppl dont CHEAT
-  this.x = x;
-  this.y = y;
+function Card(options) {
+  this.id = options.id; // / dont take img as constructor so ppl dont CHEAT
+  this.x = options.x;
+  this.y = options.y;
   this.visible = true;
-  this.height = canvas.height / 5.5;
-  this.width = canvas.width / 10;
+  this.canvas = options.canvas;
+  this.height = options.canvas.height / 5.5;
+  this.width = options.canvas.width / 10;
   this.frontImg = new Image();
-  this.frontImg.src = img;
+  this.frontImg.src = options.img;
   this.backImg = backImg;
+  this.inHand = options.inHand;
 }
 // returns img obj of card
 Card.prototype.getImg = function() {
@@ -21,8 +23,12 @@ Card.prototype.getImg = function() {
 }
 
 Card.prototype.resize = function(canvas) {
-  this.height = canvas.height / 5.5;
-  this.width = canvas.width / 10;
+  if (this.inHand) {
+    this.height = canvas.height / 5.5;
+    this.width = canvas.width / 10;
+  } else {
+
+  }
 }
 // function for drawing the card
 Card.prototype.draw = function(ctx) {
@@ -48,4 +54,14 @@ Card.prototype.clicked = function(clickX, clickY) {
 
 Card.prototype.reveal = function() {
   this.visible = true;
+}
+
+Card.prototype.makeBig = function(index) {
+  this.height = this.canvas.height / 3;
+  this.width = this.canvas.width / 7;
+}
+
+Card.prototype.makeSmall = function(index) {
+  this.height = this.canvas.height / 5;
+  this.width = this.canvas.width / 10;
 }

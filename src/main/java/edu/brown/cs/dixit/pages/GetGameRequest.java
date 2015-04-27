@@ -1,14 +1,10 @@
 package edu.brown.cs.dixit.pages;
 
-import java.util.Map;
-
-import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
-import spark.TemplateViewRoute;
+import spark.Route;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 
 import edu.brown.cs.dixit.DixitSerializationUtil;
@@ -16,26 +12,32 @@ import edu.brown.cs.dixit.Main;
 import gamestuff.Game;
 import gamestuff.Player;
 
-public class GetGameRequest implements TemplateViewRoute {
+/**
+ * Retrieves a deep serialization of a game.
+ */
+public class GetGameRequest implements Route {
 
   private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
 
   @Override
-  public ModelAndView handle(
+  public Object handle(
       Request req,
       Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
-    String playerName = qm.value("playerName");
-
+    String playerId = qm.value("playerId");
     Game tempGame = Main.getGame(gameName);
-    // Need accessor for player.
-    Player tempPlayer = null;
+    if (tempGame == null) {
+      return "false";
+    }
+    Player tempPlayer = tempGame.getPlayerWithId(playerId);
+    if (tempPlayer == null) {
+      return "false";
+    }
     JsonElement tempJson = serializationUtil.deepSerializeGame(tempGame,
         tempPlayer);
 
-    Map<String, Object> variables = ImmutableMap.of("response",
-        tempJson.toString());
-    return new ModelAndView(variables, "response.ftl");
+    System.out.println(tempJson);
+    return tempJson.toString();
   }
 }

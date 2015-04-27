@@ -1,21 +1,26 @@
 package gamestuff;
 
-/** Class containing info that will be passed to the game's chat box
+/**
+ * Class containing info that will be passed to the game's chat box
  */
 public class ChatLine {
   private String message;
-  private String playerName;
+  private Player player;
   private String color;
 
-  /** Constructor for ChatLines.
+  /**
+   * Constructor for ChatLines.
    *
-   * @param message the content of the message
-   * @param playerName the name of the player who sent the message
-   * @param color the player's color
+   * @param message
+   *          the content of the message
+   * @param playerName
+   *          the name of the player who sent the message
+   * @param color
+   *          the player's color
    */
-  public ChatLine(String playerName, String message, String color) {
+  public ChatLine(Player player, String message, String color) {
     this.message = message;
-    this.playerName = playerName;
+    this.player = player;
     this.color = color;
   }
 
@@ -30,7 +35,14 @@ public class ChatLine {
    * @return the name of the player who sent the message
    */
   public String getPlayerName() {
-    return playerName;
+    return player.getChatName();
+  }
+
+  /**
+   * @return the id of the player who sent the message
+   */
+  public String getPlayerId() {
+    return player.getId();
   }
 
   /**

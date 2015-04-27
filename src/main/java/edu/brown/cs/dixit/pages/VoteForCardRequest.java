@@ -1,27 +1,47 @@
 package edu.brown.cs.dixit.pages;
 
-import java.util.Map;
-
-import spark.ModelAndView;
+import edu.brown.cs.dixit.Main;
+import gamestuff.Card;
+import gamestuff.Game;
+import gamestuff.Player;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
-import spark.TemplateViewRoute;
+import spark.Route;
 
-import com.google.common.collect.ImmutableMap;
+/**
+ * Allows a player to vote for a card.
+ */
+public class VoteForCardRequest implements Route {
 
-public class VoteForCardRequest implements TemplateViewRoute {
+  @Override
+  public Object handle(
+      Request req,
+      Response res) {
+    QueryParamsMap qm = req.queryMap();
+    String gameName = qm.value("gameName");
+    String playerId = qm.value("playerId");
+    String cardId = qm.value("cardId");
 
-	@Override
-	public ModelAndView handle(Request req, Response res) {
-		QueryParamsMap qm = req.queryMap();
-		String gameName = qm.value("gameName");
-		String playerName = qm.value("playerName");
-		int cardId = Integer.parseInt(qm.value("cardId"));
-
-		// TODO: Vote for card.
-
-		Map<String, Object> variables = ImmutableMap.of("response", "true");
-		return new ModelAndView(variables, "response.ftl");
-	}
+    Game game = Main.getGame(gameName);
+    if (game == null) {
+      return "false";
+    }
+    Player player = game.getPlayerWithId(playerId);
+    if (player == null) {
+      return "false";
+    }
+    if (player.isStoryteller()) {
+      return "false";
+    }
+    Card card = game.getCardWithId(cardId);
+    if (card == null) {
+      return "false";
+    }
+    if (game.castVote(player, card)) {
+      return "true";
+    } else {
+      return "false";
+    }
+  }
 }

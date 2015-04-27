@@ -1,26 +1,42 @@
 package edu.brown.cs.dixit.pages;
 
-import java.util.Map;
-
-import spark.ModelAndView;
+import edu.brown.cs.dixit.Main;
+import gamestuff.Game;
+import gamestuff.Player;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
-import spark.TemplateViewRoute;
+import spark.Route;
 
-import com.google.common.collect.ImmutableMap;
+/**
+ * Allows a player to undo a vote for a card.
+ */
+public class RemoveVoteForCardRequest implements Route {
 
-public class RemoveVoteForCardRequest implements TemplateViewRoute {
+  @Override
+  public Object handle(
+      Request req,
+      Response res) {
+    QueryParamsMap qm = req.queryMap();
+    String gameName = qm.value("gameName");
+    String playerId = qm.value("playerId");
 
-	@Override
-	public ModelAndView handle(Request req, Response res) {
-		QueryParamsMap qm = req.queryMap();
-		String gameName = qm.value("gameName");
-		String playerName = qm.value("playerName");
-
-		// TODO: Remove vote for card.
-
-		Map<String, Object> variables = ImmutableMap.of("response", "true");
-		return new ModelAndView(variables, "response.ftl");
-	}
+    Game game = Main.getGame(gameName);
+    if (game == null) {
+      return "false";
+    }
+    Player player = game.getPlayerWithId(playerId);
+    if (player == null) {
+      return "false";
+    }
+    if (player.isStoryteller()) {
+      return "false";
+    }
+    // TODO: Find the card for which the player voted.
+    if (game.removeVote(null)) {
+      return "true";
+    } else {
+      return "false";
+    }
+  }
 }

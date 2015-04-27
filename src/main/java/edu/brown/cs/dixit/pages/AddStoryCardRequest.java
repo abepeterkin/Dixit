@@ -1,28 +1,49 @@
 package edu.brown.cs.dixit.pages;
 
-import java.util.Map;
-
-import spark.ModelAndView;
+import edu.brown.cs.dixit.Main;
+import gamestuff.Card;
+import gamestuff.Game;
+import gamestuff.Player;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
-import spark.TemplateViewRoute;
+import spark.Route;
 
-import com.google.common.collect.ImmutableMap;
+/**
+ * Allows the storyteller to add a card with a clue.
+ */
+public class AddStoryCardRequest implements Route {
 
-public class AddStoryCardRequest implements TemplateViewRoute {
+  @Override
+  public Object handle(
+      Request req,
+      Response res) {
+    QueryParamsMap qm = req.queryMap();
+    String gameName = qm.value("gameName");
+    String playerId = qm.value("playerId");
+    String cardId = qm.value("cardId");
+    String clue = qm.value("clue");
 
-	@Override
-	public ModelAndView handle(Request req, Response res) {
-		QueryParamsMap qm = req.queryMap();
-		String gameName = qm.value("gameName");
-		String playerName = qm.value("playerName");
-		int cardId = Integer.parseInt(qm.value("cardId"));
-		String clue = qm.value("clue");
+    Game game = Main.getGame(gameName);
+    if (game == null) {
+      return "false";
+    }
+    Player player = game.getPlayerWithId(playerId);
+    if (player == null) {
+      return "false";
+    }
+    if (!player.isStoryteller()) {
+      return "false";
+    }
+    Card card = game.getCardWithId(cardId);
+    if (card == null) {
+      return "false";
+    }
+    if (game.submitStory(clue, card)) {
+      return "true";
+    } else {
+      return "false";
+    }
 
-		// TODO: Add story card.
-
-		Map<String, Object> variables = ImmutableMap.of("response", "true");
-		return new ModelAndView(variables, "response.ftl");
-	}
+  }
 }

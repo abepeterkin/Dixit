@@ -12,17 +12,17 @@ import spark.TemplateViewRoute;
 
 import com.google.common.collect.ImmutableMap;
 
-import edu.brown.cs.dixit.DixitSerializationUtil;
 import edu.brown.cs.dixit.Main;
 import gamestuff.Game;
 import gamestuff.Player;
 
+/**
+ * Creates a new game.
+ */
 public class CreateGameRequest implements TemplateViewRoute {
 
-  private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
-
   @Override
-  public ModelAndView handle( Request req, Response res) {
+  public ModelAndView handle(Request req, Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
     String playerName = qm.value("playerName");
@@ -30,21 +30,24 @@ public class CreateGameRequest implements TemplateViewRoute {
     int numberOfPlayers = Integer.parseInt(qm.value("numberOfPlayers"));
     int numberOfCards = Integer.parseInt(qm.value("numberOfCards"));
 
-    //System.out.println(gameName + " " + playerName + " " + colorName + " " + numberOfPlayers + " " + numberOfCards);
-    String response;
     if (Main.gameExists(gameName)) {
-      response = "game already exists";
+      return failure("A game with that name already exists.");
     } else {
-      Player tempPlayer = new Player(playerName, colorName);
+      String newId = Main.newId();
+      Player tempPlayer = new Player(newId, playerName, colorName);
       List<Player> tempPlayerList = new ArrayList<Player>();
       tempPlayerList.add(tempPlayer);
-      Game tempGame =
-          new Game(gameName, numberOfPlayers, numberOfCards, tempPlayerList);
+      Game tempGame = new Game(gameName, numberOfPlayers, numberOfCards,
+          tempPlayerList);
       Main.addGame(gameName, tempGame);
-      response = "created successfully";
+      Map<String, Object> variables = ImmutableMap.of("response",
+          "Game created.", "gameName", gameName, "playerId", newId);
+      return new ModelAndView(variables, "board.ftl");
     }
+  }
 
-    Map<String, Object> variables = ImmutableMap.of("response", response);
+  private ModelAndView failure(String message) {
+    Map<String, Object> variables = ImmutableMap.of("response", message);
     return new ModelAndView(variables, "response.ftl");
   }
 }

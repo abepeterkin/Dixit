@@ -1,0 +1,61 @@
+package edu.brown.cs.dixit.pages;
+
+import edu.brown.cs.dixit.Main;
+import gamestuff.Game;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import spark.Request;
+import spark.Response;
+import spark.Route;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
+
+/**
+ * Retrieves a list of all games. Includes player names.
+ */
+public class SeeCurrentGamesRequest implements Route {
+
+  private final static Gson GSON = new Gson();
+
+  @Override
+  public Object handle(
+      Request req,
+      Response res) {
+    // QueryParamsMap qm = req.queryMap();
+
+    List<Game> gameList = Main.getGameList();
+    // DixitSerializationUtil serializer = new DixitSerializationUtil();
+    // List<String> serializedGameList = new ArrayList<String>();
+    List<BasicGameData> gameDataList = new ArrayList<>();
+    for (Game game : gameList) {
+      BasicGameData data = new BasicGameData(game.getName(),
+          game.getPlayerNames(), game.getColorsInUse(),
+          game.getNumberOfPlayers(), game.getMaxPlayers());
+      gameDataList.add(data);
+    }
+    Map<String, Object> variables = ImmutableMap.of("title", "Dixit", "data",
+        gameDataList);
+    return GSON.toJson(variables);
+  }
+
+  private class BasicGameData {
+    String gameName;
+    List<String> playerNames;
+    List<String> colors;
+    int numberOfPlayers;
+    int maxPlayers;
+
+    public BasicGameData(String gameName, List<String> playerNames,
+        List<String> colors, int numberOfPlayers, int maxPlayers) {
+      this.gameName = gameName;
+      this.playerNames = playerNames;
+      this.colors = colors;
+      this.numberOfPlayers = numberOfPlayers;
+      this.maxPlayers = maxPlayers;
+    }
+  }
+}

@@ -4,47 +4,66 @@ import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
 import edu.brown.cs.dixit.pages.AddChatRequest;
 import edu.brown.cs.dixit.pages.AddNonStoryCardRequest;
+import edu.brown.cs.dixit.pages.AddPlayerRequest;
 import edu.brown.cs.dixit.pages.AddStoryCardRequest;
 import edu.brown.cs.dixit.pages.CreateGameRequest;
 import edu.brown.cs.dixit.pages.DixitHomePage;
 import edu.brown.cs.dixit.pages.DixitJoinGamePage;
+import edu.brown.cs.dixit.pages.DixitJoinOptionsPage;
 import edu.brown.cs.dixit.pages.DixitMainPage;
 import edu.brown.cs.dixit.pages.DixitNewGamePage;
-import edu.brown.cs.dixit.pages.GetGameListRequest;
 import edu.brown.cs.dixit.pages.GetGameRequest;
 import edu.brown.cs.dixit.pages.GetUpdateRequest;
-import edu.brown.cs.dixit.pages.JoinGameRequest;
 import edu.brown.cs.dixit.pages.RemoveNonStoryCardRequest;
 import edu.brown.cs.dixit.pages.RemoveVoteForCardRequest;
+import edu.brown.cs.dixit.pages.SeeCurrentGamesRequest;
 import edu.brown.cs.dixit.pages.VoteForCardRequest;
 
+/**
+ * Runs the spark server of the Dixit game.
+ */
 public class DixitServer {
   private static final int DEFAULT_PORT = 2345;
+  private static GetUpdateRequest getUpdateRequest = new GetUpdateRequest();
 
-  public static void runSparkSever(Integer port) {
+  /**
+   * Initializes all of the pages.
+   * 
+   * @param port
+   *          The port on which to run the server.
+   */
+  public static void runSparkSever(
+      Integer port) {
     port = port != null ? port : DEFAULT_PORT;
     Spark.setPort(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.get("/board", new DixitMainPage(), new FreeMarkerEngine());
     Spark.post("/createGame", new CreateGameRequest(), new FreeMarkerEngine());
-    Spark.get("/getGameList", new GetGameListRequest(), new FreeMarkerEngine());
-    Spark.get("/joinGame", new JoinGameRequest(), new FreeMarkerEngine());
-    Spark.get("/getGame", new GetGameRequest(), new FreeMarkerEngine());
-    Spark.get("/getUpdate", new GetUpdateRequest(), new FreeMarkerEngine());
-    Spark.get("/addStoryCard", new AddStoryCardRequest(),
+    Spark.get("/seeCurrentGames", new SeeCurrentGamesRequest());
+    Spark.post("/addPlayer", new AddPlayerRequest(), new FreeMarkerEngine());
+    Spark.get("/getGame", new GetGameRequest());
+    Spark.get("/getUpdate", getUpdateRequest);
+    Spark.post("/addStoryCard", new AddStoryCardRequest());
+    Spark.post("/addNonStoryCard", new AddNonStoryCardRequest());
+    Spark.post("/removeNonStoryCard", new RemoveNonStoryCardRequest());
+    Spark.post("/voteForCard", new VoteForCardRequest());
+    Spark.post("/removeVoteForCard", new RemoveVoteForCardRequest());
+    Spark.post("/addChat", new AddChatRequest());
+    Spark.get("/joinOptions/:gameName", new DixitJoinOptionsPage(),
         new FreeMarkerEngine());
-    Spark.get("/addNonStoryCard", new AddNonStoryCardRequest(),
-        new FreeMarkerEngine());
-    Spark.get("/removeNonStoryCard", new RemoveNonStoryCardRequest(),
-        new FreeMarkerEngine());
-    Spark.get("/voteForCard", new VoteForCardRequest(), new FreeMarkerEngine());
-    Spark.get("/removeVoteForCard", new RemoveVoteForCardRequest(),
-        new FreeMarkerEngine());
-    Spark.post("/addChat", new AddChatRequest(), new FreeMarkerEngine());
     Spark.get("/", new DixitHomePage(), new FreeMarkerEngine());
-    Spark.get("/newgame", new DixitNewGamePage(), new FreeMarkerEngine());
-    Spark.get("/joingame", new DixitJoinGamePage(), new FreeMarkerEngine());
+    Spark.get("/newGamePage", new DixitNewGamePage(), new FreeMarkerEngine());
+    Spark.get("/joinGamePage", new DixitJoinGamePage(), new FreeMarkerEngine());
+  }
 
+  /**
+   * Retrieves the Dixit game subscriber. This object is used to notify clients
+   * when a change has occurred in the game.
+   * 
+   * @return The game subscriber.
+   */
+  public static DixitGameSubscriber getDixitGameSubscriber() {
+    return getUpdateRequest;
   }
 
 }
