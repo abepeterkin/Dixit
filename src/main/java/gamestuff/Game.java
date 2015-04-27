@@ -39,7 +39,6 @@ public class Game {
   private Map<String, Card> cardIdMap = new HashMap<>();
   private Map<String, Player> playerIdMap = new HashMap<>();
   private Map<String, String> colorMap = new HashMap<>();
-  private boolean gameOver = false;
 
   private DixitGameSubscriber subscriber = DixitServer.getDixitGameSubscriber();
 
@@ -184,13 +183,6 @@ public class Game {
   }
 
   /**
-   * @return whether or not the game is over
-   */
-  public boolean isGameOver() {
-    return gameOver;
-  }
-
-  /**
    * @return the phase of the game
    */
   public Phase getPhase() {
@@ -218,6 +210,9 @@ public class Game {
       players.add(p);
       playerIdMap.put(p.getId(), p);
       subscriber.playerAdded(this, p);
+      if (players.size() == MAX_PLAYERS) {
+        startGame();
+      }
       return true;
     } else {
       return false;
@@ -236,7 +231,7 @@ public class Game {
    * sets up game board deck is filled w/ all possible cards trash is empty all
    * players given x cards depending on custom hand size
    */
-  public void newGame() {
+  public void startGame() {
     Collections.shuffle(this.deck);
     for (Player p : this.players) {
       trashPlayerCards(p);
@@ -248,7 +243,7 @@ public class Game {
         subscriber.handChanged(this, p);
       }
     }
-    updatePhase(Phase.PREGAME);
+    updatePhase(Phase.STORYTELLER);
   }
 
   /**
@@ -273,7 +268,6 @@ public class Game {
     updatePhase(Phase.STORYTELLER);
     submitStory(s, c);
     updatePhase(Phase.NONSTORYCARDS);
-    subscriber.gameChanged(this);
   }
 
   /**
@@ -293,7 +287,6 @@ public class Game {
     }
     this.story = s;
     updatePhase(Phase.NONSTORYCARDS);
-    subscriber.gameChanged(this);
     return true;
   }
 
@@ -302,7 +295,6 @@ public class Game {
    */
   public void votingPhase() {
     updatePhase(Phase.VOTING);
-    subscriber.gameChanged(this);
     subscriber.tableCardsChanged(this);
   }
 
@@ -344,7 +336,6 @@ public class Game {
    */
   public void scoringPhase() {
     updatePhase(Phase.SCORING);
-    subscriber.gameChanged(this);
     int totalCorrectFinds = 0;
     List<Player> correctPlayers = new ArrayList<Player>();
     for (Vote v : this.votes) {
@@ -381,11 +372,10 @@ public class Game {
    */
   public void prepareForNextRound() {
     updatePhase(Phase.CLEANUP);
-    subscriber.gameChanged(this);
     // game ends when the deck is empty
     if (deck.isEmpty()) {
       Collections.sort(this.players);
-      gameOver = true;
+      updatePhase(Phase.GAMEOVER);
     } else {
       for (Player p : this.players) {
         p.draw(this.deck.pop());
@@ -397,7 +387,6 @@ public class Game {
       cycleStoryteller();
       updatePhase(Phase.STORYTELLER);
     }
-    subscriber.gameChanged(this);
   }
 
   /*
@@ -485,6 +474,7 @@ public class Game {
    */
   public void updatePhase(Phase p) {
     this.phase = p;
+    subscriber.gameChanged(this);
   }
 
   /**
