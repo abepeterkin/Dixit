@@ -57,9 +57,6 @@ Game.prototype.doPhase = function(phase) {
 
 // gets a player object given the player id
 Game.prototype.getPlayer = function(id) {
-  for (var i = 0; i < this.players.length; i++) {
-    if (this.players[i].id === id) {
-      return this.players[i];
-    }
-  }
+  return this.players[id];
+
 }
