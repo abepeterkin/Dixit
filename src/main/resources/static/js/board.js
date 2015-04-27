@@ -12,11 +12,12 @@ var board;
 var selectedCard;
 var sentCard = false;
 // should hold to array of game.players to display their score and color
-function Board(game, canvasId, playerId) {
-  this.clientPlayer = game.players[playerId - 1]; // the player this client
-  this.game = game;
+function Board(options) {
+  this.clientPlayer = game.players[options.playerId]; // the player this
+  // client
+  this.game = options.game;
   this.cards = [];// cards currently at play
-  this.canvas = document.getElementById(canvasId);
+  this.canvas = document.getElementById(options.canvasId);
   this.canvas.width = (window.innerWidth
       || document.documentElement.clientWidth || document.body.clientWidth);
   this.canvas.height = (window.innerHeight
@@ -142,15 +143,23 @@ var drawBigHelper = function() {
   board.drawVote();
 }
 Board.prototype.drawPlayersBig = function() {
-  for (var i = 0; i < this.game.players.length; i++) {
-    board.game.players[i].idle.update();
-    board.game.players[i].idle.render(board.ctx, i);
+  var i = 0;
+  for ( var id in board.game.players) {
+    if (board.game.players.hasOwnproperty(id)) {
+      board.game.players[id].idle.update();
+      board.game.players[id].idle.render(board.ctx, i);
+      i++;
+    }
   }
 }
 
 Board.prototype.drawPlayersSmall = function() {
-  for (var i = 0; i < this.game.players.length; i++) {
-    this.game.players[i].drawSmall(this, i);
+  var i = 0;
+  for ( var id in this.game.players) {
+    if (this.game.players.hasOwnProperty(id)) {
+      this.game.players[id].drawSmall(this, i);
+      i++;
+    }
   }
 }
 // draws the cards that are at play in the board
@@ -190,12 +199,8 @@ Board.prototype.addGenericCard = function() {
   board.adjustCardsPos();
 }
 Board.prototype.addCard = function(card) {
-  if (this.cards.length < this.game.players.length) {
-    this.cards.push(card);
-    board.adjustCardsPos();
-  } else {
-    console.log("trying to push more cards on board than there are players!");
-  }
+  this.cards.push(card);
+  board.adjustCardsPos();
 }
 Board.prototype.adjustCardsPos = function() {
   if (board.smallBoard) {
@@ -269,22 +274,22 @@ Board.prototype.addListeners = function() {
 
 Board.prototype.changePhase = function(phase) {
   switch (phase) {
-    case this.game.phases['StoryTeller']:
-      if (this.clientPlayer.isStoryTeller) {
-        var card;
-        for (var i = 0; i < board.clientPlayer.hand.length; i++) {
-          card = board.clientPlayer.hand[i];
-          board.clueModal.find('#card' + i)[0].src = card.frontImg.src;
-        }
-        board.clueModal.modal('show');
-        break;
-      } else {
-        this.sendBtn.prop("disabled", true);
+  case this.game.phases['StoryTeller']:
+    if (this.clientPlayer.isStoryTeller) {
+      var card;
+      for (var i = 0; i < board.clientPlayer.hand.length; i++) {
+        card = board.clientPlayer.hand[i];
+        board.clueModal.find('#card' + i)[0].src = card.frontImg.src;
       }
-    case this.game.phases['NonStoryCards']:
-      if (!this.clientPlayer.isStoryTeller) {
-        this.sendBtn.prop("disabled", false);
-      }
+      board.clueModal.modal('show');
+      break;
+    } else {
+      this.sendBtn.prop("disabled", true);
+    }
+  case this.game.phases['NonStoryCards']:
+    if (!this.clientPlayer.isStoryTeller) {
+      this.sendBtn.prop("disabled", false);
+    }
   }
 }
 

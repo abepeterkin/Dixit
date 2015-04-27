@@ -4,7 +4,7 @@ function Game(name, rules) {
   this.currPhase = -1;
   this.currClue = "";
   this.board = null;
-  this.players = [];
+  this.players = {};
   this.score = {};
   this.storyTeller = null;
 
@@ -30,13 +30,13 @@ Game.prototype.setStoryTeller = function(player) {
 Game.prototype.addPlayers = function(players) {
   for (var i = 0; i < players.length; i++) {
     this.score[players[i].id] = 0;
-    this.players.push(new Player(players[i]));
+    this.players[players[i].id] = new Player(players[i]);
   }
 }
 
 Game.prototype.addPlayer = function(player) {
   this.score[player.id] = 0;
-  this.players.push(new Player(player));
+  this.players[player.id] = new Player(player);
 }
 
 // if we only need to change one player’s score
@@ -48,8 +48,8 @@ Game.prototype.updateScores = function(newScores) {
   this.score = newScores;
 }
 
-Game.prototype.nextPhase = function() {
-  this.currPhase++
+Game.prototype.doPhase = function(phase) {
+  this.currPhase = phase;
   // TODO: add checks so that it cannot go pass the cleanup phase,aka game over
   $('#currentPhase').text('Current phase: ' + phases[this.currPhase]);
   this.board.changePhase(this.currPhase);
