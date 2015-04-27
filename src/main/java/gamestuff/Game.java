@@ -277,7 +277,8 @@ public class Game {
    *          the card attributed to the story
    */
   public boolean submitStory(String s, Card c) {
-  if (this.phase != Phase.STORYTELLER) {
+  if ((this.phase != Phase.STORYTELLER)
+          || (s.equals(""))) {
       return false;
     }
     for (Player p : this.players) {

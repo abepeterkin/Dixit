@@ -97,7 +97,7 @@ public class GameTest {
     players.add(p3);
     Game g = new Game("CoolGame", 3, 5, players);
     g.startGame();
-    assertTrue(g.getPhase().equals(Phase.PREGAME));
+    assertTrue(g.getPhase().equals(Phase.STORYTELLER));
   }
 
   @Test
@@ -136,26 +136,6 @@ public class GameTest {
     assertTrue(h1.size() == 7);
     assertTrue(h2.size() == 7);
     assertTrue(h3.size() == 7);
-  }
-  
-  /**
-   * Tests if regular addCardToTable() calls are blocked
-   * in prestory phase
-   */
-  @Test
-  public void PreGameCardBlockTest() {
-    List<Player> players = new ArrayList<Player>();
-    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
-    Player p2 = new Player(Main.newId(), "Esteban", "RED");
-    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
-    players.add(p1);
-    players.add(p2);
-    players.add(p3);
-    Game g = new Game("CoolGame", 3, 7, players);
-    g.startGame();
-    Card illegalCard = g.getPlayerHand(p2).get(3);
-    assertTrue(g.addCardToTable(p2, illegalCard) == false);
-    assertTrue(g.getTableCards().size() == 0);
   }
   
   //TEST: Cannot submit blank story ""
