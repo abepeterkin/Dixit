@@ -1,6 +1,5 @@
 var isWaitingForUpdateRequest = false;
 var chat;
-;
 
 (function() {
   // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -45,9 +44,15 @@ function processUpdates(responseObject) {
   isWaitingForUpdateRequest = false
   for (var i = 0; i < responseObject.length; i++) {
     switch (responseObject[i][0]) {
-      case "chat":
-        chat.addMsg(responseObject[i][1].message, game
-            .getPlayer(responseObject[i][1].playerId));
+    case "chat":
+      chat.addMsg(responseObject[i][1].message, game
+          .getPlayer(responseObject[i][1].playerId));
+      break;
+    case "added player":
+      var player = responseObject[i][1];
+      game.addPlayer(player);
+      chat.addSysMsg(player.chatName + " has joined the game.", player.color);
+      break;
     }
   }
 }
@@ -116,7 +121,7 @@ window.onload = function() {
   if (sessionStorage.gameName === undefined
       || sessionStorage.playerId === undefined) {
     alert("ERROR: you have not joined a game!");
-    throw new Error("No game defined.");
+    window.location = '/';
   } else {
     getGameRequest(retreiveGame);
   }

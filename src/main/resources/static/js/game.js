@@ -34,6 +34,11 @@ Game.prototype.addPlayers = function(players) {
   }
 }
 
+Game.prototype.addPlayer = function(player) {
+  this.score[player.id] = 0;
+  this.players.push(new Player(player));
+}
+
 // if we only need to change one player’s score
 Game.prototype.updateScore = function(playerId, newScore) {
   this.score[playerId] = newScore;

@@ -15,6 +15,7 @@ function Player(options) {
     ticksPerFrame : 3,
     numberOfCols : 8
   })
+  this.score = options.score;
   // TODO: add a vote so that a player is linked to its vote card
 }
 

@@ -13,3 +13,9 @@ Chat.prototype.addMsg = function(msg, player) {
   this.messageBody.append('<p><span style="color:' + player.color + '"' + ">"
       + player.name + ":</span> " + msg + '</p>');
 }
+
+Chat.prototype.addSysMsg = function(msg, color) {
+  console.log("system says", msg);
+  this.messageBody
+      .append(('<p style="color:' + color + '"' + ">" + msg + '</p>'));
+}
