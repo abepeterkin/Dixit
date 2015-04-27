@@ -7,7 +7,16 @@
 			<canvas id="board">No canvas support</canvas>
 		</div>
 		<div id="col2">
-			<div id="music">music buttons go here</div>
+			<div id="music">
+			    <audio controls loop>
+                    <source src="/music/Teller_of_the_Tales.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <audio controls loop>
+                    <source src="/music/Suonatore_di_Liuto.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
 			<div id="chat">
 				<div id="chat-text">
 				</div>
