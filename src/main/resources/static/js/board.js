@@ -37,7 +37,7 @@ function Board(game, canvasId, playerId) {
   this.cardModal = $('#cardModal');
   this.clueCardModal = $('#clueCardModal');
   this.clueModal = $('#sendClueModal');
-  this.smallBoard = true;
+  this.smallBoard = false;
   $('#clientPlayer').text('Client player: ' + this.clientPlayer.name);
 }
 // draws the entire game board, including client player's hand
