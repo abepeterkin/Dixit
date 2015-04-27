@@ -137,5 +137,23 @@ public class GameTest {
     assertTrue(h2.size() == 7);
     assertTrue(h3.size() == 7);
   }
+  
+  @Test
+  public void FirstStoryTest() {
+    List<Player> players = new ArrayList<Player>();
+    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
+    players.add(p1);
+    players.add(p2);
+    players.add(p3);
+    Game g = new Game("CoolGame", 3, 7, players);
+    g.newGame();
+    Card storyCard = g.getPlayerHand(p2).get(0);
+    g.firstStory(p2, "Test Story", storyCard);
+    assertTrue(g.getStory().equals("Test Story"));
+    assertTrue(g.getPhase() == Phase.NONSTORYCARDS);
+    assertTrue(g.getTableCards().get(0).equals(storyCard));
+  }
 
 }

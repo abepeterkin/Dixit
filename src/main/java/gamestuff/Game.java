@@ -269,6 +269,7 @@ public class Game {
         p.setIsStoryteller(false);
       }
     }
+    updatePhase(Phase.STORYTELLER);
     submitStory(s, c);
     updatePhase(Phase.NONSTORYCARDS);
     subscriber.gameChanged(this);
@@ -281,7 +282,7 @@ public class Game {
    *          the card attributed to the story
    */
   public boolean submitStory(String s, Card c) {
-    if (this.phase != Phase.STORYTELLER) {
+  if (this.phase != Phase.STORYTELLER) {
       return false;
     }
     for (Player p : this.players) {
