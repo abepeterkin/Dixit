@@ -355,7 +355,7 @@ public class Game {
     }
     boolean allStoryVotes = storyVotes == players.size() - 1;
     boolean noStoryVotes = storyVotes == 0;
-    
+
     if (allStoryVotes || noStoryVotes) {
       for (Player p : players) {
         if (!p.isStoryteller()) {
@@ -363,7 +363,7 @@ public class Game {
           subscriber.playerChanged(this, p);
         }
       }
-    } 
+    }
     if (!allStoryVotes) {
       boolean storyHasBeenVoted = false;
       for (Vote v : this.votes) {

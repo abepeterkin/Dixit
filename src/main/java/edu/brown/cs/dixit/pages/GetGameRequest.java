@@ -17,8 +17,6 @@ import gamestuff.Player;
  */
 public class GetGameRequest implements Route {
 
-  private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
-
   @Override
   public Object handle(
       Request req,
@@ -34,7 +32,7 @@ public class GetGameRequest implements Route {
     if (tempPlayer == null) {
       return "false";
     }
-    JsonElement tempJson = serializationUtil.deepSerializeGame(tempGame,
+    JsonElement tempJson = DixitSerializationUtil.deepSerializeGame(tempGame,
         tempPlayer);
 
     System.out.println(tempJson);

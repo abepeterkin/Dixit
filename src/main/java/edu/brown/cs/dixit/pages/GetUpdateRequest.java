@@ -166,7 +166,6 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   private static class HandUpdate implements DixitUpdate {
 
     private Player player;
-    private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
     private long time = System.currentTimeMillis();
 
     public HandUpdate(Player player) {
@@ -177,9 +176,9 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     public JsonElement getJson(Player inputPlayer) {
       if (player == inputPlayer) {
         // There is no accessor for Hand in Player yet.
-        JsonElement tempJson = serializationUtil
+        JsonElement tempJson = DixitSerializationUtil
             .serializeHand(player.getHand());
-        return serializationUtil.serializeUpdate("hand", tempJson);
+        return DixitSerializationUtil.serializeUpdate("hand", tempJson);
       } else {
         return null;
       }
@@ -198,7 +197,6 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   private static class PlayerUpdate implements DixitUpdate {
 
     private Player player;
-    private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
     private long time = System.currentTimeMillis();
 
     public PlayerUpdate(Player player) {
@@ -207,9 +205,9 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
     @Override
     public JsonElement getJson(Player inputPlayer) {
-      JsonElement tempJson = serializationUtil.serializePlayer(player,
+      JsonElement tempJson = DixitSerializationUtil.serializePlayer(player,
           inputPlayer);
-      return serializationUtil.serializeUpdate("player", tempJson);
+      return DixitSerializationUtil.serializeUpdate("player", tempJson);
     }
 
     @Override
@@ -225,7 +223,6 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   private static class TableCardsUpdate implements DixitUpdate {
 
     private Game game;
-    private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
     private long time = System.currentTimeMillis();
 
     public TableCardsUpdate(Game game) {
@@ -234,9 +231,9 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
     @Override
     public JsonElement getJson(Player inputPlayer) {
-      JsonElement tempJson = serializationUtil.serializeHand(game
+      JsonElement tempJson = DixitSerializationUtil.serializeHand(game
           .getTableCards());
-      return serializationUtil.serializeUpdate("tablecards", tempJson);
+      return DixitSerializationUtil.serializeUpdate("tablecards", tempJson);
     }
 
     @Override
@@ -252,7 +249,6 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   private static class GameUpdate implements DixitUpdate {
 
     private Game game;
-    private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
     private long time = System.currentTimeMillis();
 
     public GameUpdate(Game game) {
@@ -261,8 +257,8 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
     @Override
     public JsonElement getJson(Player player) {
-      JsonElement tempJson = serializationUtil.serializeGame(game, player);
-      return serializationUtil.serializeUpdate("game", tempJson);
+      JsonElement tempJson = DixitSerializationUtil.serializeGame(game, player);
+      return DixitSerializationUtil.serializeUpdate("game", tempJson);
     }
 
     @Override
@@ -278,7 +274,6 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   private static class ChatUpdate implements DixitUpdate {
 
     private Game game;
-    private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
     private long time = System.currentTimeMillis();
     private ChatLine chatLine;
 
@@ -290,8 +285,8 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
     @Override
     public JsonElement getJson(Player player) {
-      JsonElement tempJson = serializationUtil.serializeChatLine(chatLine);
-      return serializationUtil.serializeUpdate("chat", tempJson);
+      JsonElement tempJson = DixitSerializationUtil.serializeChatLine(chatLine);
+      return DixitSerializationUtil.serializeUpdate("chat", tempJson);
     }
 
     @Override
@@ -303,7 +298,6 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
   private static class AddPlayerUpdate implements DixitUpdate {
 
-    private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
     private Player addedPlayer;
     private long time = System.currentTimeMillis();
 
@@ -313,9 +307,9 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
     @Override
     public JsonElement getJson(Player inputPlayer) {
-      JsonElement tempJson = serializationUtil.serializePlayer(
+      JsonElement tempJson = DixitSerializationUtil.serializePlayer(
           this.addedPlayer, inputPlayer);
-      return serializationUtil.serializeUpdate("added player", tempJson);
+      return DixitSerializationUtil.serializeUpdate("added player", tempJson);
     }
 
     @Override

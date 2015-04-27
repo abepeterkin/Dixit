@@ -28,7 +28,6 @@ public class SeeCurrentGamesRequest implements Route {
     // QueryParamsMap qm = req.queryMap();
 
     List<Game> gameList = Main.getGameList();
-    // DixitSerializationUtil serializer = new DixitSerializationUtil();
     // List<String> serializedGameList = new ArrayList<String>();
     List<BasicGameData> gameDataList = new ArrayList<>();
     for (Game game : gameList) {
