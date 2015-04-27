@@ -10,7 +10,7 @@ public interface DixitGameSubscriber {
 
   /**
    * Should be called if a player's hand changes.
-   * 
+   *
    * @param game
    *          The game containing the player.
    * @param player
@@ -22,7 +22,7 @@ public interface DixitGameSubscriber {
 
   /**
    * Should be called if a shallow player property has changed (ex: score).
-   * 
+   *
    * @param game
    *          The game containing the player.
    * @param player
@@ -34,7 +34,7 @@ public interface DixitGameSubscriber {
 
   /**
    * Should be called if the table cards have changed.
-   * 
+   *
    * @param game
    *          The game containing the table cards.
    */
@@ -52,11 +52,18 @@ public interface DixitGameSubscriber {
 
   /**
    * Should be called if a game's chat has changed.
-   * 
+   *
    * @param game
    *          The game whose chat has changed.
    */
   void chatChanged(
       Game game);
+
+  /**
+   * Should be called if a player gets added
+   * @param game
+   */
+  void playerAdded(
+      Game game, Player player);
 
 }

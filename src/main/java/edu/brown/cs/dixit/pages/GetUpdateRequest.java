@@ -109,6 +109,12 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     addUpdate(game, new ChatUpdate(game));
   }
 
+  @Override
+  public void playerAdded(
+      Game game, Player player) {
+    addUpdate(game, new AddPlayerUpdate(player));
+  }
+
   /**
    * Contains convenience methods for managing many dixit updates.
    */
@@ -316,4 +322,27 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
   }
 
+  private static class AddPlayerUpdate implements DixitUpdate {
+
+    private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
+    private Player addedPlayer;
+    private long time = System.currentTimeMillis();
+
+    public AddPlayerUpdate(Player player) {
+      this.addedPlayer = player;
+    }
+
+    @Override
+    public JsonElement getJson(Player inputPlayer) {
+      JsonElement tempJson = serializationUtil.serializePlayer(
+          this.addedPlayer, inputPlayer);
+      return serializationUtil.serializeUpdate("added player", tempJson);
+    }
+
+    @Override
+    public long getTime() {
+      return time;
+    }
+
+  }
 }

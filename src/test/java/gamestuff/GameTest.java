@@ -96,7 +96,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 5, players);
-    g.newGame();
+    g.startGame();
     assertTrue(g.getPhase().equals(Phase.PREGAME));
   }
 
@@ -110,7 +110,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 5, players);
-    g.newGame();
+    g.startGame();
     List<Card> h1 = g.getPlayerHand(p1);
     List<Card> h2 = g.getPlayerHand(p2);
     List<Card> h3 = g.getPlayerHand(p3);
@@ -129,7 +129,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 7, players);
-    g.newGame();
+    g.startGame();
     List<Card> h1 = g.getPlayerHand(p1);
     List<Card> h2 = g.getPlayerHand(p2);
     List<Card> h3 = g.getPlayerHand(p3);
@@ -152,7 +152,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 7, players);
-    g.newGame();
+    g.startGame();
     Card illegalCard = g.getPlayerHand(p2).get(3);
     assertTrue(g.addCardToTable(p2, illegalCard) == false);
     assertTrue(g.getTableCards().size() == 0);
@@ -170,7 +170,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 7, players);
-    g.newGame();
+    g.startGame();
     Card storyCard = g.getPlayerHand(p2).get(0);
     g.firstStory(p2, "Test Story", storyCard);
     assertTrue(g.getStory().equals("Test Story"));
@@ -221,7 +221,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 7, players);
-    g.newGame();
+    g.startGame();
     Card storyCard = g.getPlayerHand(p2).get(0);
     Card legalCard = g.getPlayerHand(p3).get(3);
     g.firstStory(p2, "Test Story", storyCard);
@@ -243,7 +243,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 7, players);
-    g.newGame();
+    g.startGame();
     Card storyCard = g.getPlayerHand(p2).get(0);
     Card nonStory1 = g.getPlayerHand(p3).get(3);
     Card nonStory2 = g.getPlayerHand(p1).get(5);
@@ -273,7 +273,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 7, players);
-    g.newGame();
+    g.startGame();
     Card storyCard = g.getPlayerHand(p2).get(0);
     Card nonStory1 = g.getPlayerHand(p3).get(3);
     Card nonStory2 = g.getPlayerHand(p1).get(5);
@@ -300,7 +300,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 7, players);
-    g.newGame();
+    g.startGame();
     Card storyCard = g.getPlayerHand(p2).get(0);
     Card nonStory1 = g.getPlayerHand(p3).get(3);
     Card nonStory2 = g.getPlayerHand(p1).get(5);
@@ -324,7 +324,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 7, players);
-    g.newGame();
+    g.startGame();
     Card storyCard = g.getPlayerHand(p2).get(0);
     Card nonStory1 = g.getPlayerHand(p3).get(3);
     Card nonStory2 = g.getPlayerHand(p1).get(5);
@@ -353,7 +353,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 7, players);
-    g.newGame();
+    g.startGame();
     Card storyCard = g.getPlayerHand(p2).get(0);
     Card nonStory1 = g.getPlayerHand(p3).get(3);
     Card nonStory2 = g.getPlayerHand(p1).get(5);
@@ -384,7 +384,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 7, players);
-    g.newGame();
+    g.startGame();
     Card storyCard = g.getPlayerHand(p2).get(0);
     Card nonStory1 = g.getPlayerHand(p3).get(3);
     Card nonStory2 = g.getPlayerHand(p1).get(5);
@@ -412,7 +412,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 7, players);
-    g.newGame();
+    g.startGame();
     Card storyCard = g.getPlayerHand(p2).get(0);
     Card nonStory1 = g.getPlayerHand(p3).get(3);
     Card nonStory2 = g.getPlayerHand(p1).get(5);
@@ -441,7 +441,7 @@ public class GameTest {
     players.add(p2);
     players.add(p3);
     Game g = new Game("CoolGame", 3, 7, players);
-    g.newGame();
+    g.startGame();
     Card storyCard = g.getPlayerHand(p2).get(0);
     Card nonStory1 = g.getPlayerHand(p3).get(3);
     Card nonStory2 = g.getPlayerHand(p1).get(5);
@@ -470,7 +470,7 @@ public class GameTest {
     players.add(p3);
     players.add(p4);
     Game g = new Game("CoolGame", 5, 7, players);
-    g.newGame();
+    g.startGame();
     Card s = g.getPlayerHand(p1).get(0);
     Card c1 = g.getPlayerHand(p2).get(3);
     Card c2 = g.getPlayerHand(p3).get(5);

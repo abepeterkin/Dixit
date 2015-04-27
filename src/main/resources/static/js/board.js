@@ -37,7 +37,7 @@ function Board(game, canvasId, playerId) {
   this.cardModal = $('#cardModal');
   this.clueCardModal = $('#clueCardModal');
   this.clueModal = $('#sendClueModal');
-  this.smallBoard = true;
+  this.smallBoard = false;
   $('#clientPlayer').text('Client player: ' + this.clientPlayer.name);
 }
 // draws the entire game board, including client player's hand
@@ -68,6 +68,7 @@ Board.prototype.drawSmall = function() {
   var yMin = 20;
   var wMin = board.canvas.width / 100;
   var hMin = board.canvas.height / 400;
+  board.ctx.fillStyle = "black";
   board.ctx.fillRect(xMin, yMin, wMin, hMin);
   board.ctx.fillRect(xMin + wMin / 2, yMin - wMin / 2, hMin, wMin);
   var ind = board.icons.push(new Icon({
@@ -87,6 +88,7 @@ Board.prototype.drawSmall = function() {
   this.clientPlayer.drawHand(this.ctx);
   this.drawCards();
   this.clue.draw(this.ctx);
+  this.drawVote();
 }
 // draws the scoreboard gets passed other objects to ensure
 // background board always gets drawn first
@@ -95,6 +97,12 @@ Board.prototype.drawBig = function() {
     drawBigHelper();
   } else {
     board.img.onload = drawBigHelper;
+  }
+}
+
+Board.prototype.drawVote = function() {
+  if (board.cardVoted) {
+    board.cardVoted.highlight(board.ctx);
   }
 }
 
@@ -131,6 +139,7 @@ var drawBigHelper = function() {
   board.drawPlayersBig();
   board.clue.draw(board.ctx);
   board.drawCards();
+  board.drawVote();
 }
 Board.prototype.drawPlayersBig = function() {
   for (var i = 0; i < this.game.players.length; i++) {
@@ -173,6 +182,13 @@ Board.prototype.refresh = function() {
   this.adjustCardsPos();
 }
 
+Board.prototype.addGenericCard = function() {
+  this.cards.push(new Card({
+    visible : false,
+    canvas : this.canvas
+  }));
+  board.adjustCardsPos();
+}
 Board.prototype.addCard = function(card) {
   if (this.cards.length < this.game.players.length) {
     this.cards.push(card);
@@ -185,22 +201,17 @@ Board.prototype.adjustCardsPos = function() {
   if (board.smallBoard) {
     board.cards[0].x = board.canvas.width / 5;
     board.cards[0].y = board.canvas.height / 20;
-    board.cards[0].makeBig(0);
+    board.cards[0].makeBig();
   } else {
     board.cards[0].x = board.canvas.width / 25;
     board.cards[0].y = board.canvas.height / 1.7;
-    board.cards[0].makeSmall(0);
-    board.cards[1].makeSmall(1);
-    board.cards[2].makeSmall(2);
-    board.cards[3].makeSmall(3);
-    board.cards[4].makeSmall(4);
-    board.cards[5].makeSmall(5);
+    board.cards[0].makeSmall();
   }
   var width = board.cards[0].width;
   var height = board.cards[0].height
   for (var i = 1; i < board.cards.length; i++) {
     if (board.smallBoard) {
-      board.cards[i].makeBig(i);
+      board.cards[i].makeBig();
       if (i < 3) {
         board.cards[i].x = board.cards[i - 1].x + width + width / 10;
         board.cards[i].y = board.cards[i - 1].y;
@@ -214,18 +225,9 @@ Board.prototype.adjustCardsPos = function() {
         }
       }
     } else {
-      //if (i < 3) {
-        board.cards[i].x = board.cards[i - 1].x + width + width / 1.5;
-        board.cards[i].y = board.cards[i - 1].y;
-      /*} else {
-        if (i == 3) {
-          board.cards[i].x = board.cards[0].x;
-          board.cards[i].y = board.cards[0].y + height + height / 10;
-        } else {
-          board.cards[i].x = board.cards[i - 1].x + width + width / 10;
-          board.cards[i].y = board.cards[i - 1].y;
-        }
-      }*/
+      board.cards[i].makeSmall();
+      board.cards[i].x = board.cards[i - 1].x + width + width / 1.5;
+      board.cards[i].y = board.cards[i - 1].y;
     }
   }
 }
@@ -339,6 +341,19 @@ function mouseClickListener(event) {
       }
     }
   }
+  if (board.game.currPhase === game.phases['Voting']) {
+    for (var i = 0; i < board.cards.length; i++) {
+      card = board.cards[i];
+      if (card.clicked(mouseX, mouseY)) {
+        if (board.cardVoted == card) {
+          board.cardVoted = null;
+        } else {
+          board.cardVoted = card;
+        }
+        // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
+      }
+    }
+  }
   if (!board.smallBoard) {
     if (board.clue.card) {
       if (board.clue.card.clicked(mouseX, mouseY)) {
@@ -431,6 +446,15 @@ function mouseMoveListener(evt) {
     if (card.clicked(mouseX, mouseY)) {
       // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
       hoveringCard = true;
+    }
+  }
+  if (board.game.currPhase === game.phases['Voting']) {
+    for (var i = 0; i < board.cards.length; i++) {
+      card = board.cards[i];
+      if (card.clicked(mouseX, mouseY)) {
+        // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
+        hoveringCard = true;
+      }
     }
   }
   if (!board.smallBoard) {

@@ -107,11 +107,14 @@ Player.prototype.drawSmall = function(board, index) {
   if (img.complete) {
     board.ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
     board.ctx.font = "30px Georgia"; // make this responsive
+    board.ctx.fillStyle = "black";
     board.ctx.fillText(score, x + w / 1.5, y + h / 1.7);
   } else {
     img.onload = function() {
       board.ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
       board.ctx.font = "30px Georgia"; // make this responsive
+      board.ctx.fillStyle = "black";
+
       board.ctx.fillText(score, x + w / 1.5, y + h);
     }
   }
