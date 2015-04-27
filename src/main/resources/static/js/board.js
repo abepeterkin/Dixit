@@ -68,6 +68,7 @@ Board.prototype.drawSmall = function() {
   var yMin = 20;
   var wMin = board.canvas.width / 100;
   var hMin = board.canvas.height / 400;
+  board.ctx.fillStyle = "black";
   board.ctx.fillRect(xMin, yMin, wMin, hMin);
   board.ctx.fillRect(xMin + wMin / 2, yMin - wMin / 2, hMin, wMin);
   var ind = board.icons.push(new Icon({
@@ -87,6 +88,7 @@ Board.prototype.drawSmall = function() {
   this.clientPlayer.drawHand(this.ctx);
   this.drawCards();
   this.clue.draw(this.ctx);
+  this.drawVote();
 }
 // draws the scoreboard gets passed other objects to ensure
 // background board always gets drawn first
@@ -95,6 +97,12 @@ Board.prototype.drawBig = function() {
     drawBigHelper();
   } else {
     board.img.onload = drawBigHelper;
+  }
+}
+
+Board.prototype.drawVote = function() {
+  if (board.cardVoted) {
+    board.cardVoted.highlight(board.ctx);
   }
 }
 
@@ -131,6 +139,7 @@ var drawBigHelper = function() {
   board.drawPlayersBig();
   board.clue.draw(board.ctx);
   board.drawCards();
+  board.drawVote();
 }
 Board.prototype.drawPlayersBig = function() {
   for (var i = 0; i < this.game.players.length; i++) {
@@ -173,6 +182,13 @@ Board.prototype.refresh = function() {
   this.adjustCardsPos();
 }
 
+Board.prototype.addGenericCard = function() {
+  this.cards.push(new Card({
+    visible : false,
+    canvas : this.canvas
+  }));
+  board.adjustCardsPos();
+}
 Board.prototype.addCard = function(card) {
   if (this.cards.length < this.game.players.length) {
     this.cards.push(card);
@@ -327,6 +343,19 @@ function mouseClickListener(event) {
       }
     }
   }
+  if (board.game.currPhase === game.phases['Voting']) {
+    for (var i = 0; i < board.cards.length; i++) {
+      card = board.cards[i];
+      if (card.clicked(mouseX, mouseY)) {
+        if (board.cardVoted == card) {
+          board.cardVoted = null;
+        } else {
+          board.cardVoted = card;
+        }
+        // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
+      }
+    }
+  }
   if (!board.smallBoard) {
     if (board.clue.card) {
       if (board.clue.card.clicked(mouseX, mouseY)) {
@@ -419,6 +448,15 @@ function mouseMoveListener(evt) {
     if (card.clicked(mouseX, mouseY)) {
       // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
       hoveringCard = true;
+    }
+  }
+  if (board.game.currPhase === game.phases['Voting']) {
+    for (var i = 0; i < board.cards.length; i++) {
+      card = board.cards[i];
+      if (card.clicked(mouseX, mouseY)) {
+        // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
+        hoveringCard = true;
+      }
     }
   }
   if (!board.smallBoard) {

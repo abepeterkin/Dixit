@@ -4,12 +4,14 @@ function Card(options) {
   this.id = options.id; // / dont take img as constructor so ppl dont CHEAT
   this.x = options.x;
   this.y = options.y;
-  this.visible = true;
+  this.visible = options.visible;
   this.canvas = options.canvas;
   this.height = options.canvas.height / 5.5;
   this.width = options.canvas.width / 10;
   this.frontImg = new Image();
-  this.frontImg.src = options.img;
+  if (options.img) {
+    this.frontImg.src = options.img;
+  }
   this.backImg = backImg;
   this.inHand = options.inHand;
 }
@@ -64,4 +66,9 @@ Card.prototype.makeBig = function() {
 Card.prototype.makeSmall = function() {
   this.height = this.canvas.height / 5;
   this.width = this.canvas.width / 10;
+}
+
+Card.prototype.highlight = function(ctx) {
+  ctx.fillStyle = "rgba(237, 243, 43, 0.5)";
+  ctx.fillRect(this.x, this.y, this.width, this.height);
 }

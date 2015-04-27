@@ -23,7 +23,7 @@ Player.prototype.refresh = function(canvas) {
   var card;
   for (var i = 0; i < this.hand.length; i++) {
     card = this.hand[i];
-    card.x = i * (canvas  .width / 9) + (canvas.width / 4);
+    card.x = i * (canvas.width / 9) + (canvas.width / 4);
     card.y = canvas.height - (canvas.height / 5);
     card.resize(canvas);
   }
@@ -84,14 +84,16 @@ Player.prototype.drawIdle = function(board, index) {
   }
 }
 
-//submits a line to the chat box
+// submits a line to the chat box
 Player.prototype.addChatLine = function(message) {
   console.log("gets called");
-  /*var color = "blue";
-  var name = "Abe";*/
-  $("#text").html(text.html() + "<p style=\"color:" + this.color + "\">"
-      + this.name + ": " + message + "<\p>");
-  //messageText.val("");
+  /*
+   * var color = "blue"; var name = "Abe";
+   */
+  $("#text").html(
+      text.html() + "<p style=\"color:" + this.color + "\">" + this.name + ": "
+          + message + "<\p>");
+  // messageText.val("");
 }
 
 Player.prototype.drawSmall = function(board, index) {
@@ -108,11 +110,14 @@ Player.prototype.drawSmall = function(board, index) {
   if (img.complete) {
     board.ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
     board.ctx.font = "30px Georgia"; // make this responsive
+    board.ctx.fillStyle = "black";
     board.ctx.fillText(score, x + w / 1.5, y + h / 1.7);
   } else {
     img.onload = function() {
       board.ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
       board.ctx.font = "30px Georgia"; // make this responsive
+      board.ctx.fillStyle = "black";
+
       board.ctx.fillText(score, x + w / 1.5, y + h);
     }
   }

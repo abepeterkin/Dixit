@@ -61,7 +61,8 @@ function makeHandArray(handUrls) {
       x : i * (board.canvas.width / 9) + (board.canvas.width / 4),
       y : board.canvas.height - (board.canvas.height / 5),
       canvas : board.canvas,
-      inHand : true
+      inHand : true,
+      visible : true
     }));
   }
   return hand;
@@ -73,38 +74,31 @@ window.onload = function() {
   game.board = board;
   player1.addHand(makeTestHand());
   board.addListeners();
-
-  board.addCard(new Card({
-    img : "/images/cards/dixit_card_01_012.jpg",
-    canvas : board.canvas,
-    inHand : false
-  }))
-  board.addCard(new Card({
-    img : "/images/cards/dixit_card_01_013.jpg",
-    canvas : board.canvas,
-    inHand : false
-  }))
-  board.addCard(new Card({
-    img : "/images/cards/dixit_card_01_014.jpg",
-    canvas : board.canvas,
-    inHand : false
-  }))
-  board.addCard(new Card({
-    img : "/images/cards/dixit_card_01_015.jpg",
-    canvas : board.canvas,
-    inHand : false
-  }))
+  /*
+   * board.addCard(new Card({ img : "/images/cards/dixit_card_01_012.jpg",
+   * canvas : board.canvas, inHand : false })) board.addCard(new Card({ img :
+   * "/images/cards/dixit_card_01_013.jpg", canvas : board.canvas, inHand :
+   * false })) board.addCard(new Card({ img :
+   * "/images/cards/dixit_card_01_014.jpg", canvas : board.canvas, inHand :
+   * false })) board.addCard(new Card({ img :
+   * "/images/cards/dixit_card_01_015.jpg", canvas : board.canvas, inHand :
+   * false }))
+   */
   board.addCard(new Card({
     img : "/images/cards/dixit_card_01_016.jpg",
     canvas : board.canvas,
-    inHand : false
+    inHand : false,
+    visible : true
   }))
+
   board.addCard(new Card({
     img : "/images/cards/dixit_card_01_017.jpg",
     canvas : board.canvas,
-    inHand : false
+    inHand : false,
+    visible : true
   }))
 
+  // board.addGenericCard();
   game.nextPhase();
   board.draw();
   var chat = new Chat(game);
