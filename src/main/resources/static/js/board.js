@@ -147,10 +147,10 @@ Board.prototype.drawPlayersBig = function() {
   for ( var id in board.game.players) {
     if (board.game.players.hasOwnProperty(id)) {
       board.game.players[id].idle.update();
-      board.game.players[id].idle.render(board.ctx, i);
+      board.game.players[id].idle.render(board.ctx, i, board.game.player[id]);
       i++;
     }
-  }
+}
 }
 
 Board.prototype.drawPlayersSmall = function() {
