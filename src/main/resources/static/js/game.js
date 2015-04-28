@@ -56,7 +56,7 @@ Game.prototype.updateScores = function(newScores) {
 Game.prototype.doPhase = function(phase) {
   this.currPhase = phase;
   // TODO: add checks so that it cannot go pass the cleanup phase,aka game over
-  $('#currentPhase').text('Current phase: ' + phases[this.currPhase]);
+  $('#currentPhase').text('Current phase: ' + phase);
   this.board.changePhase(this.currPhase);
 }
 

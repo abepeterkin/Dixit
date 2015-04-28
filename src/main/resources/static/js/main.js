@@ -74,7 +74,7 @@ function processUpdates(responseObject) {
       }
       break;
     case "tablecards":
-
+      board.tableCardsUpdate(tempUpdateValue);
       break;
     case "player":
       console.log("player update");
@@ -122,12 +122,13 @@ function retreiveGame(responseObject) {
     chat.addMsg(chatLines[i].message, game.getPlayer(chatLines[i].playerId));
   }
 
-  if (responseObject.phase === game.phases['StoryTeller']) {
+  if (responseObject.phase === 'STORYTELLER') {
     console.log("STARTING NEW GAME.");
-    game.doPhase(game.phases['StoryTeller']);
-    board.clientPlayer.refresh(board.canvas);
-    board.draw();
+
   }
+  board.clientPlayer.refresh(board.canvas);
+  game.doPhase(responseObject.phase);
+  game
 
   // var board = new Board(game, "board", sessionStorage.playerId);
   // game.board = board;

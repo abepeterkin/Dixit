@@ -194,7 +194,7 @@ Board.prototype.refresh = function() {
 Board.prototype.addGenericCard = function() {
   this.cards.push(new Card({
     visible : false,
-    canvas : this.canvas
+    inHand : false
   }));
   board.adjustCardsPos();
 }
@@ -207,17 +207,17 @@ Board.prototype.adjustCardsPos = function() {
     if (board.smallBoard) {
       board.cards[0].x = board.canvas.width / 5;
       board.cards[0].y = board.canvas.height / 20;
-      board.cards[0].makeBig();
+      board.cards[0].makeBig(board.canvas);
     } else {
       board.cards[0].x = board.canvas.width / 25;
       board.cards[0].y = board.canvas.height / 1.7;
-      board.cards[0].makeSmall();
+      board.cards[0].makeSmall(board.canvas);
     }
     var width = board.cards[0].width;
     var height = board.cards[0].height
     for (var i = 1; i < board.cards.length; i++) {
       if (board.smallBoard) {
-        board.cards[i].makeBig();
+        board.cards[i].makeBig(board.canvas);
         if (i < 3) {
           board.cards[i].x = board.cards[i - 1].x + width + width / 10;
           board.cards[i].y = board.cards[i - 1].y;
@@ -231,7 +231,7 @@ Board.prototype.adjustCardsPos = function() {
           }
         }
       } else {
-        board.cards[i].makeSmall();
+        board.cards[i].makeSmall(board.canvas);
         board.cards[i].x = board.cards[i - 1].x + width + width / 1.5;
         board.cards[i].y = board.cards[i - 1].y;
       }
@@ -277,7 +277,7 @@ Board.prototype.addListeners = function() {
 Board.prototype.changePhase = function(phase) {
   console.log("changing phase to " + phase);
   switch (phase) {
-  case this.game.phases['StoryTeller']:
+  case this.game.phases['STORYTELLER']:
     console.log("inside storyteller phase");
     if (this.clientPlayer.isStoryTeller) {
       console.log("this is the client");
@@ -291,7 +291,7 @@ Board.prototype.changePhase = function(phase) {
     } else {
       this.sendBtn.prop("disabled", true);
     }
-  case this.game.phases['NonStoryCards']:
+  case this.game.phases['NONSTORYCARDS']:
     if (!this.clientPlayer.isStoryTeller) {
       this.sendBtn.prop("disabled", false);
     }
@@ -299,6 +299,13 @@ Board.prototype.changePhase = function(phase) {
   }
 }
 
+Board.prototype.tableCardsUpdate = function(options) {
+  if (!options.faceUp) {
+    for (var i = 0; i < options.cardAmount; i++) {
+      board.addGenericCard();
+    }
+  }
+}
 function sendBtn(event) {
   if (!sentCard) {
     if (!board.smallBoard) {
@@ -311,6 +318,11 @@ function sendBtn(event) {
       selectedCard.y = 0;
     }
     sentCard = true;
+    addNonStoryCardRequest(selectedCard.id, function(e) {
+      if (e) {
+        console.log("sent non story card");
+      }
+    })
     board.cardModal.modal('hide');
     board.sendBtn.text("Return Card");
   } else {

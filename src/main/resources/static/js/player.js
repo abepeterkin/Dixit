@@ -40,14 +40,9 @@ Player.prototype.setHandFromAjax = function(cardOptionsList) {
   var index = 0;
   while (index < cardOptionsList.length) {
     var tempCardOptions = cardOptionsList[index];
-    this.addCard(new Card({
-      id : tempCardOptions.id,
-      img : "/images/cards/" + tempCardOptions.image,
-      x : -100,
-      y : -100,
-      inHand : true,
-      visible : true
-    }));
+    tempCardOptions.visible = true;
+    tempCardOptions.inHand = true;
+    this.addCard(new Card(tempCardOptions));
     index++;
   }
   // board.adjustCardsPos();
