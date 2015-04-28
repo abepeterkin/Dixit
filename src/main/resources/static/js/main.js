@@ -43,27 +43,29 @@ var board;
 function processUpdates(responseObject) {
   isWaitingForUpdateRequest = false
   for (var i = 0; i < responseObject.length; i++) {
-    if (responseObject[i] === null) {
+    var tempUpdate = responseObject[i];
+    if (tempUpdate === null) {
       return;
     }
-    switch (responseObject[i][0]) {
+    var tempUpdateName = tempUpdate[0];
+    var tempUpdateValue = tempUpdate[1];
+    switch (tempUpdateName) {
     case "chat":
       console.log("chat update");
       console.log(responseObject);
-      chat.addMsg(responseObject[i][1].message, game
-          .getPlayer(responseObject[i][1].playerId));
+      chat.addMsg(tempUpdateValue.message, game
+          .getPlayer(tempUpdateValue.playerId));
       break;
     case "added player":
       console.log('added player');
       console.log(responseObject);
-      var player = responseObject[i][1];
-      game.addPlayer(player);
-      chat.addSysMsg(player.chatName + " has joined the game.", player.color);
+      game.addPlayer(tempUpdateValue);
+      chat.addSysMsg(tempUpdateValue.chatName + " has joined the game.", tempUpdateValue.color);
       break;
     case "game":
       console.log('game changed');
       console.log(responseObject);
-      if (responseObject[i][i].phase === game.phases['StoryTeller']) {
+      if (tempUpdateValue.phase === game.phases['StoryTeller']) {
         board = new Board({
           game : game,
           canvasId : "board",
