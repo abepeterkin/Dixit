@@ -5,9 +5,6 @@ function Card(options) {
   this.x = options.x;
   this.y = options.y;
   this.visible = options.visible;
-  this.canvas = options.canvas;
-  this.height = options.canvas.height / 5.5;
-  this.width = options.canvas.width / 10;
   this.frontImg = new Image();
   if (options.img) {
     this.frontImg.src = options.img;

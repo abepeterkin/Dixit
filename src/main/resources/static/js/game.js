@@ -43,6 +43,7 @@ Game.prototype.addPlayer = function(player) {
 // if we only need to change one player’s score
 Game.prototype.updateScore = function(playerId, newScore) {
   this.score[playerId] = newScore;
+  this.players[playerId].score = newScore;
 }
 // updates all scores, newScores should be a js obj mapping player id to score
 Game.prototype.updateScores = function(newScores) {
