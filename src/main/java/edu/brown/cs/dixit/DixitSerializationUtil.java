@@ -57,6 +57,27 @@ public class DixitSerializationUtil {
     return GSON.toJsonTree(tempBuilder.build());
   }
 
+  public static JsonElement serializeTableCards(
+      Game game) {
+    List<Card> tempCardList = game.getTableCards();
+    if (game.getPhase() == Phase.VOTING) {
+      ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
+      int index = 0;
+      while (index < tempCardList.size()) {
+        Card tempCard = tempCardList.get(index);
+        tempBuilder.add(serializeCard(tempCard));
+        index += 1;
+      }
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("faceUp", true).put("cards", tempBuilder.build()).build();
+      return GSON.toJsonTree(variables);
+    } else {
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("faceUp", false).put("cardAmount", tempCardList.size()).build();
+      return GSON.toJsonTree(variables);
+    }
+  }
+
   /**
    * Shallow conversion of player to JSON. Only includes top level properties.
    *
@@ -174,7 +195,7 @@ public class DixitSerializationUtil {
         .put("story", game.getStory()).put("players", playerJsonList)
         .put("chat", serializeChat(game.getChat()))
         .put("handsize", Integer.toString(game.getHandSize()))
-        .put("tablecards", serializeHand(game.getTableCards())).build();
+        .put("tablecards", serializeTableCards(game)).build();
     return GSON.toJsonTree(variables);
   }
 

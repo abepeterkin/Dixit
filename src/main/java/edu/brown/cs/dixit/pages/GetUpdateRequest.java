@@ -269,8 +269,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     @Override
     public JsonElement getJson(
         Player inputPlayer) {
-      JsonElement tempJson = DixitSerializationUtil.serializeHand(game
-          .getTableCards());
+      JsonElement tempJson = DixitSerializationUtil.serializeTableCards(game);
       return DixitSerializationUtil.serializeUpdate("tablecards", tempJson);
     }
 
