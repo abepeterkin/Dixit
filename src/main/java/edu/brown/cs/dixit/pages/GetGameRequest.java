@@ -17,7 +17,6 @@ import gamestuff.Player;
  */
 public class GetGameRequest implements Route {  @Override
   public Object handle(Request req, Response res) {
-    System.out.println("getting game request");
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
     String playerId = qm.value("playerId");
@@ -25,17 +24,12 @@ public class GetGameRequest implements Route {  @Override
     if (tempGame == null) {
       return "false";
     }
-    System.out.println("getting player");
     Player tempPlayer = tempGame.getPlayerWithId(playerId);
-    System.out.println("got player " + tempPlayer.getChatName() + " "
-        + tempPlayer.getId());
     if (tempPlayer == null) {
       return "false";
     }
-    System.out.println("serializing");
     JsonElement tempJson = DixitSerializationUtil.deepSerializeGame(tempGame,
         tempPlayer);
-    System.out.println(tempJson);
     return tempJson.toString();
   }
 }

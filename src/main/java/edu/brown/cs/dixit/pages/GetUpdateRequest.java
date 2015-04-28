@@ -161,8 +161,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
       return gson.toJsonTree(tempJsonList);
     }
 
-    public void removeUpdates(
-        long id) {
+    public void removeUpdates(long id) {
       int index = dixitUpdates.size() - 1;
       while (index >= 0) {
         DixitUpdate tempUpdate = dixitUpdates.get(index);
@@ -310,12 +309,12 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
    */
   private class ChatUpdate implements DixitUpdate {
 
-    private Game game;
+    //private Game game;
     private long id;
     private ChatLine chatLine;
 
     public ChatUpdate(Game game) {
-      this.game = game;
+      //this.game = game;
       id = getUpdateId();
       List<ChatLine> tempList = game.getChat().getLines();
       chatLine = tempList.get(tempList.size() - 1);

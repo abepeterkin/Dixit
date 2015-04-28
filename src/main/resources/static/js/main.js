@@ -44,9 +44,6 @@ function processUpdates(responseObject) {
   isWaitingForUpdateRequest = false
   for (var i = 0; i < responseObject.length; i++) {
     var tempUpdate = responseObject[i];
-    if (tempUpdate === null) {
-      return;
-    }
     var tempUpdateName = tempUpdate[0];
     var tempUpdateValue = tempUpdate[1];
     switch (tempUpdateName) {
