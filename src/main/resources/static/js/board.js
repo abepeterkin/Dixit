@@ -145,7 +145,7 @@ var drawBigHelper = function() {
 Board.prototype.drawPlayersBig = function() {
   var i = 0;
   for ( var id in board.game.players) {
-    if (board.game.players.hasOwnproperty(id)) {
+    if (board.game.players.hasOwnProperty(id)) {
       board.game.players[id].idle.update();
       board.game.players[id].idle.render(board.ctx, i);
       i++;
@@ -203,36 +203,38 @@ Board.prototype.addCard = function(card) {
   board.adjustCardsPos();
 }
 Board.prototype.adjustCardsPos = function() {
-  if (board.smallBoard) {
-    board.cards[0].x = board.canvas.width / 5;
-    board.cards[0].y = board.canvas.height / 20;
-    board.cards[0].makeBig();
-  } else {
-    board.cards[0].x = board.canvas.width / 25;
-    board.cards[0].y = board.canvas.height / 1.7;
-    board.cards[0].makeSmall();
-  }
-  var width = board.cards[0].width;
-  var height = board.cards[0].height
-  for (var i = 1; i < board.cards.length; i++) {
+  if (board.cards.length >= 1) {
     if (board.smallBoard) {
-      board.cards[i].makeBig();
-      if (i < 3) {
-        board.cards[i].x = board.cards[i - 1].x + width + width / 10;
-        board.cards[i].y = board.cards[i - 1].y;
-      } else {
-        if (i == 3) {
-          board.cards[i].x = board.cards[0].x;
-          board.cards[i].y = board.cards[0].y + height + height / 10;
-        } else {
+      board.cards[0].x = board.canvas.width / 5;
+      board.cards[0].y = board.canvas.height / 20;
+      board.cards[0].makeBig();
+    } else {
+      board.cards[0].x = board.canvas.width / 25;
+      board.cards[0].y = board.canvas.height / 1.7;
+      board.cards[0].makeSmall();
+    }
+    var width = board.cards[0].width;
+    var height = board.cards[0].height
+    for (var i = 1; i < board.cards.length; i++) {
+      if (board.smallBoard) {
+        board.cards[i].makeBig();
+        if (i < 3) {
           board.cards[i].x = board.cards[i - 1].x + width + width / 10;
           board.cards[i].y = board.cards[i - 1].y;
+        } else {
+          if (i == 3) {
+            board.cards[i].x = board.cards[0].x;
+            board.cards[i].y = board.cards[0].y + height + height / 10;
+          } else {
+            board.cards[i].x = board.cards[i - 1].x + width + width / 10;
+            board.cards[i].y = board.cards[i - 1].y;
+          }
         }
+      } else {
+        board.cards[i].makeSmall();
+        board.cards[i].x = board.cards[i - 1].x + width + width / 1.5;
+        board.cards[i].y = board.cards[i - 1].y;
       }
-    } else {
-      board.cards[i].makeSmall();
-      board.cards[i].x = board.cards[i - 1].x + width + width / 1.5;
-      board.cards[i].y = board.cards[i - 1].y;
     }
   }
 }

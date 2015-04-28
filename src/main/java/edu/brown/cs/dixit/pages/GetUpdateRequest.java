@@ -39,9 +39,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   }
 
   @Override
-  synchronized public Object handle(
-      Request req,
-      Response res) {
+  synchronized public Object handle(Request req, Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
     String playerId = qm.value("playerId");
@@ -73,9 +71,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     return tempJson.toString();
   }
 
-  private void addUpdate(
-      Game game,
-      DixitUpdate dixitUpdate) {
+  private void addUpdate(Game game, DixitUpdate dixitUpdate) {
     DixitUpdateList tempList;
     if (!dixitUpdateListMap.containsKey(game)) {
       tempList = new DixitUpdateList();
@@ -87,41 +83,33 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   }
 
   @Override
-  public void handChanged(
-      Game game,
-      Player player) {
+  public void handChanged(Game game, Player player) {
     addUpdate(game, new HandUpdate(player));
   }
 
   @Override
-  public void playerChanged(
-      Game game,
-      Player player) {
+  public void playerChanged(Game game, Player player) {
     addUpdate(game, new PlayerUpdate(player));
   }
 
   @Override
-  public void tableCardsChanged(
-      Game game) {
+  public void tableCardsChanged(Game game) {
     addUpdate(game, new TableCardsUpdate(game));
   }
 
   @Override
-  public void gameChanged(
-      Game game) {
+  public void gameChanged(Game game) {
+    System.out.println("game was changed");
     addUpdate(game, new GameUpdate(game));
   }
 
   @Override
-  public void chatChanged(
-      Game game) {
+  public void chatChanged(Game game) {
     addUpdate(game, new ChatUpdate(game));
   }
 
   @Override
-  public void playerAdded(
-      Game game,
-      Player player) {
+  public void playerAdded(Game game, Player player) {
     addUpdate(game, new AddPlayerUpdate(player));
   }
 
@@ -137,14 +125,11 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
     }
 
-    public void addDixitUpdate(
-        DixitUpdate dixitUpdate) {
+    public void addDixitUpdate(DixitUpdate dixitUpdate) {
       dixitUpdates.add(dixitUpdate);
     }
 
-    public JsonElement getJson(
-        long startId,
-        Player player) {
+    public JsonElement getJson(long startId, Player player) {
       List<JsonElement> tempJsonList = new ArrayList<JsonElement>();
       int index = dixitUpdates.size() - 1;
       while (index >= 0) {
@@ -161,8 +146,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
       return gson.toJsonTree(tempJsonList);
     }
 
-    public void removeUpdates(
-        long id) {
+    public void removeUpdates(long id) {
       int index = dixitUpdates.size() - 1;
       while (index >= 0) {
         DixitUpdate tempUpdate = dixitUpdates.get(index);
@@ -183,8 +167,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     // Returns a JSON representation of the update.
     // If the update should not be seen by the given player,
     // this function returns null.
-    JsonElement getJson(
-        Player player);
+    JsonElement getJson(Player player);
 
     long getId();
 
@@ -204,8 +187,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     @Override
-    public JsonElement getJson(
-        Player inputPlayer) {
+    public JsonElement getJson(Player inputPlayer) {
       if (player == inputPlayer) {
         JsonElement tempJson = DixitSerializationUtil.serializeHand(player
             .getHand());
@@ -236,8 +218,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     @Override
-    public JsonElement getJson(
-        Player inputPlayer) {
+    public JsonElement getJson(Player inputPlayer) {
       JsonElement tempJson = DixitSerializationUtil.serializePlayer(player,
           inputPlayer);
       return DixitSerializationUtil.serializeUpdate("player", tempJson);
@@ -264,8 +245,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     @Override
-    public JsonElement getJson(
-        Player inputPlayer) {
+    public JsonElement getJson(Player inputPlayer) {
       JsonElement tempJson = DixitSerializationUtil.serializeHand(game
           .getTableCards());
       return DixitSerializationUtil.serializeUpdate("tablecards", tempJson);
@@ -292,8 +272,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     @Override
-    public JsonElement getJson(
-        Player player) {
+    public JsonElement getJson(Player player) {
       JsonElement tempJson = DixitSerializationUtil.serializeGame(game, player);
       return DixitSerializationUtil.serializeUpdate("game", tempJson);
     }
@@ -322,8 +301,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     @Override
-    public JsonElement getJson(
-        Player player) {
+    public JsonElement getJson(Player player) {
       JsonElement tempJson = DixitSerializationUtil.serializeChatLine(chatLine);
       return DixitSerializationUtil.serializeUpdate("chat", tempJson);
     }
@@ -346,8 +324,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     @Override
-    public JsonElement getJson(
-        Player inputPlayer) {
+    public JsonElement getJson(Player inputPlayer) {
       JsonElement tempJson = DixitSerializationUtil.serializePlayer(
           this.addedPlayer, inputPlayer);
       return DixitSerializationUtil.serializeUpdate("added player", tempJson);

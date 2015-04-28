@@ -1,6 +1,7 @@
 var isWaitingForUpdateRequest = false;
 var chat;
 var board;
+var _clientPlayer;
 
 (function() {
   // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -57,7 +58,8 @@ function processUpdates(responseObject) {
       console.log('added player');
       console.log(responseObject);
       game.addPlayer(tempUpdateValue);
-      chat.addSysMsg(tempUpdateValue.chatName + " has joined the game.", tempUpdateValue.color);
+      chat.addSysMsg(tempUpdateValue.chatName + " has joined the game.",
+          tempUpdateValue.color);
       break;
     case "game":
       console.log('game changed');
@@ -70,19 +72,26 @@ function processUpdates(responseObject) {
           canvasId : "board",
           playerId : sessionStorage.playerId
         })
+        game.board = board;
         board.addListeners();
-        game.doPhase(game.phases['StoryTeller'])
+        board.draw();
+        game.doPhase(game.phases['StoryTeller']);
       }
-      //TODO
+      // TODO
       break;
     case "tablecards":
-      //TODO
+      // TODO
       break;
     case "player":
-      //TODO
+      // TODO
       break;
     case "hand":
-      //TODO
+      console.log("adding hand");
+      if (_clientPlayer.hand.length === 0) {
+        _clientPlayer.setHandFromAjax(tempUpdateValue);
+        _clientPlayer.refresh(board.canvas);
+      }
+      console.log(game.players[sessionStorage.playerId]);
       break;
     }
   }
@@ -101,6 +110,7 @@ function retreiveGame(responseObject) {
     numCards : responseObject.handsize
   });
   game.addPlayers(responseObject.players);
+  _clientPlayer = game.players[sessionStorage.playerId];
   // start chat
   chat = new Chat();
   var chatLines = responseObject.chat;
@@ -117,9 +127,12 @@ function retreiveGame(responseObject) {
       playerId : sessionStorage.playerId
     })
     board.addListeners();
-    game.doPhase(game.phases['StoryTeller'])
+    game.board = board;
+    game.doPhase(game.phases['StoryTeller']);
+    _clientPlayer.refresh(board.canvas);
+    board.draw();
   }
-  
+
   // var board = new Board(game, "board", sessionStorage.playerId);
   // game.board = board;
 
