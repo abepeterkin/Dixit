@@ -13,7 +13,7 @@ var selectedCard;
 var sentCard = false;
 // should hold to array of game.players to display their score and color
 function Board(options) {
-  this.clientPlayer = game.players[options.playerId]; // the player this
+  this.clientPlayer = game.players[sessionStorage.playerId]; // the player this
   // client
   this.game = options.game;
   this.cards = [];// cards currently at play
@@ -326,11 +326,16 @@ function sendBtn(event) {
 function sendClue(event) {
   board.clue.text = '"' + board.clueInput.val() + '"';
   board.clueModal.modal('hide');
+  // this is the cluecard
   board.clue.card = board.clientPlayer.hand[board.clue.cardIndex];
   board.clue.refresh(board);
   board.clientPlayer.hand.splice(board.clue.cardIndex, 1);
   board.clientPlayer.refresh(board.canvas);
-  board.game.nextPhase();
+  console.log("adding clue");
+  addStoryCardRequest(board.clientPlayer.hand[board.clue.cardIndex].id,
+      board.clueInput.val(), function(e) {
+        console.log(e);
+      });
 }
 
 function mouseClickListener(event) {
