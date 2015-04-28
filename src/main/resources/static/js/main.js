@@ -73,7 +73,17 @@ function processUpdates(responseObject) {
         board.addListeners();
         game.doPhase(game.phases['StoryTeller'])
       }
-
+      //TODO
+      break;
+    case "tablecards":
+      //TODO
+      break;
+    case "player":
+      //TODO
+      break;
+    case "hand":
+      //TODO
+      break;
     }
   }
 }
