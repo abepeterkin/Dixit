@@ -27,7 +27,16 @@ import gamestuff.Player;
 public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
   private Map<Game, DixitUpdateList> dixitUpdateListMap = new HashMap<Game, DixitUpdateList>();
-  private Map<Player, Long> playerTimeMap = new HashMap<Player, Long>();
+  private Map<Player, Long> playerUpdateIdMap = new HashMap<Player, Long>();
+  private long nextUpdateId = 0;
+
+  // Gets a new update id and increments the internal nextUpdateId by one.
+  // Use this method to avoid synchronization problems.
+  synchronized private long getUpdateId() {
+    long output = nextUpdateId;
+    nextUpdateId++;
+    return output;
+  }
 
   @Override
   public Object handle(
@@ -52,14 +61,14 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     if (tempPlayer == null) {
       return "false";
     }
-    long tempTime;
-    if (playerTimeMap.containsKey(tempPlayer)) {
-      tempTime = playerTimeMap.get(tempPlayer);
+    long tempUpdateId;
+    if (playerUpdateIdMap.containsKey(tempPlayer)) {
+      tempUpdateId = playerUpdateIdMap.get(tempPlayer);
     } else {
-      tempTime = System.currentTimeMillis();
+      tempUpdateId = nextUpdateId - 1;
     }
-    JsonElement tempJson = tempUpdateList.getJson(tempTime, tempPlayer);
-    playerTimeMap.put(tempPlayer, System.currentTimeMillis());
+    JsonElement tempJson = tempUpdateList.getJson(tempUpdateId, tempPlayer);
+    playerUpdateIdMap.put(tempPlayer, nextUpdateId - 1);
 
     return tempJson.toString();
   }
@@ -134,13 +143,13 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     public JsonElement getJson(
-        long startTime,
+        long startId,
         Player player) {
       List<JsonElement> tempJsonList = new ArrayList<JsonElement>();
       int index = dixitUpdates.size() - 1;
       while (index >= 0) {
         DixitUpdate tempUpdate = dixitUpdates.get(index);
-        if (tempUpdate.getTime() < startTime) {
+        if (tempUpdate.getId() <= startId) {
           break;
         }
         JsonElement tempJson = tempUpdate.getJson(player);
@@ -153,11 +162,11 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     public void removeUpdates(
-        long time) {
+        long id) {
       int index = dixitUpdates.size() - 1;
       while (index >= 0) {
         DixitUpdate tempUpdate = dixitUpdates.get(index);
-        if (tempUpdate.getTime() < time) {
+        if (tempUpdate.getId() < id) {
           dixitUpdates.remove(index);
         }
         index--;
@@ -177,20 +186,21 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     JsonElement getJson(
         Player player);
 
-    long getTime();
+    long getId();
 
   }
 
   /**
    * Represents a change to a player hand.
    */
-  private static class HandUpdate implements DixitUpdate {
+  private class HandUpdate implements DixitUpdate {
 
     private Player player;
-    private long time = System.currentTimeMillis();
+    private long id;
 
     public HandUpdate(Player player) {
       this.player = player;
+      id = getUpdateId();
     }
 
     @Override
@@ -206,8 +216,8 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     @Override
-    public long getTime() {
-      return time;
+    public long getId() {
+      return id;
     }
 
   }
@@ -215,13 +225,14 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   /**
    * Represents a change to a player.
    */
-  private static class PlayerUpdate implements DixitUpdate {
+  private class PlayerUpdate implements DixitUpdate {
 
     private Player player;
-    private long time = System.currentTimeMillis();
+    private long id;
 
     public PlayerUpdate(Player player) {
       this.player = player;
+      id = getUpdateId();
     }
 
     @Override
@@ -233,8 +244,8 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     @Override
-    public long getTime() {
-      return time;
+    public long getId() {
+      return id;
     }
 
   }
@@ -242,13 +253,14 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   /**
    * Represents a change to cards on the table.
    */
-  private static class TableCardsUpdate implements DixitUpdate {
+  private class TableCardsUpdate implements DixitUpdate {
 
     private Game game;
-    private long time = System.currentTimeMillis();
+    private long id;
 
     public TableCardsUpdate(Game game) {
       this.game = game;
+      id = getUpdateId();
     }
 
     @Override
@@ -260,8 +272,8 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     @Override
-    public long getTime() {
-      return time;
+    public long getId() {
+      return id;
     }
 
   }
@@ -269,13 +281,14 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   /**
    * Represents a change to a game.
    */
-  private static class GameUpdate implements DixitUpdate {
+  private class GameUpdate implements DixitUpdate {
 
     private Game game;
-    private long time = System.currentTimeMillis();
+    private long id;
 
     public GameUpdate(Game game) {
       this.game = game;
+      id = getUpdateId();
     }
 
     @Override
@@ -286,8 +299,8 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     @Override
-    public long getTime() {
-      return time;
+    public long getId() {
+      return id;
     }
 
   }
@@ -295,14 +308,15 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   /**
    * Represents a change to chat.
    */
-  private static class ChatUpdate implements DixitUpdate {
+  private class ChatUpdate implements DixitUpdate {
 
     private Game game;
-    private long time = System.currentTimeMillis();
+    private long id;
     private ChatLine chatLine;
 
     public ChatUpdate(Game game) {
       this.game = game;
+      id = getUpdateId();
       List<ChatLine> tempList = game.getChat().getLines();
       chatLine = tempList.get(tempList.size() - 1);
     }
@@ -315,19 +329,20 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     @Override
-    public long getTime() {
-      return time;
+    public long getId() {
+      return id;
     }
 
   }
 
-  private static class AddPlayerUpdate implements DixitUpdate {
+  private class AddPlayerUpdate implements DixitUpdate {
 
     private Player addedPlayer;
-    private long time = System.currentTimeMillis();
+    private long id;
 
     public AddPlayerUpdate(Player player) {
       this.addedPlayer = player;
+      id = getUpdateId();
     }
 
     @Override
@@ -339,8 +354,8 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
     @Override
-    public long getTime() {
-      return time;
+    public long getId() {
+      return id;
     }
 
   }
