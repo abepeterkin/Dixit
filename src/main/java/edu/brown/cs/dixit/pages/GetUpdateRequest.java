@@ -39,7 +39,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   }
 
   @Override
-  public Object handle(
+  synchronized public Object handle(
       Request req,
       Response res) {
     QueryParamsMap qm = req.queryMap();

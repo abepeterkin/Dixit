@@ -70,7 +70,8 @@ public class Game {
    *          a player id
    * @return the id of the player to return
    */
-  public Player getPlayerWithId(String id) {
+  synchronized public Player getPlayerWithId(
+      String id) {
     return playerIdMap.get(id);
   }
 
@@ -79,21 +80,22 @@ public class Game {
    *          card id
    * @return the card with that id
    */
-  public Card getCardWithId(String id) {
+  public Card getCardWithId(
+      String id) {
     return cardIdMap.get(id);
   }
 
   /**
    * @return the current number of players
    */
-  public int getNumberOfPlayers() {
+  synchronized public int getNumberOfPlayers() {
     return players.size();
   }
 
   /**
    * @return the names of every player
    */
-  public List<String> getPlayerNames() {
+  synchronized public List<String> getPlayerNames() {
     List<String> toReturn = new ArrayList<>();
     for (Player player : players) {
       toReturn.add(player.getChatName());
@@ -104,7 +106,7 @@ public class Game {
   /**
    * @return every color used
    */
-  public List<String> getColorsInUse() {
+  synchronized public List<String> getColorsInUse() {
     List<String> toReturn = new ArrayList<>();
     for (Player player : players) {
       toReturn.add(player.getColor());
@@ -130,7 +132,8 @@ public class Game {
    * @param card
    *          the card to remove
    */
-  public boolean removeVote(Card card) {
+  synchronized public boolean removeVote(
+      Card card) {
     if (this.phase != Phase.VOTING) {
       return false;
     }
@@ -146,7 +149,8 @@ public class Game {
    * @param c
    *          the card to remove
    */
-  public boolean removeNonStoryCard(Card card) {
+  synchronized public boolean removeNonStoryCard(
+      Card card) {
     if (this.phase != Phase.NONSTORYCARDS) {
       return false;
     }
@@ -168,7 +172,9 @@ public class Game {
   /**
    * adds a line to the game's chat log
    */
-  public void addToChat(Player player, String message) {
+  synchronized public void addToChat(
+      Player player,
+      String message) {
     String color = colorMap.get(player.getChatName());
     ChatLine line = new ChatLine(player, message, color);
     chat.addLine(line);
@@ -178,21 +184,21 @@ public class Game {
   /**
    * @return a string representation of the chat
    */
-  public String getChatString() {
+  synchronized public String getChatString() {
     return chat.toString();
   }
 
   /**
    * @return the phase of the game
    */
-  public Phase getPhase() {
+  synchronized public Phase getPhase() {
     return this.phase;
   }
 
   /**
    * @return the game's current story
    */
-  public String getStory() {
+  synchronized public String getStory() {
     return this.story;
   }
 
@@ -204,7 +210,8 @@ public class Game {
    *          the player to add
    * @return whether the player was successfully added
    */
-  public boolean addPlayer(Player p) {
+  synchronized public boolean addPlayer(
+      Player p) {
     if (players.size() < MAX_PLAYERS && playerIdMap.get(p.getId()) == null
         && this.phase == Phase.PREGAME) {
       players.add(p);
@@ -223,7 +230,8 @@ public class Game {
    * @param p
    *          the player to remove
    */
-  public void removePlayer(Player p) {
+  synchronized public void removePlayer(
+      Player p) {
     // TODO: figure out the best way to remove a player from the game
   }
 
@@ -231,7 +239,7 @@ public class Game {
    * sets up game board deck is filled w/ all possible cards trash is empty all
    * players given x cards depending on custom hand size
    */
-  public void startGame() {
+  synchronized public void startGame() {
     Collections.shuffle(this.deck);
     for (Player p : this.players) {
       trashPlayerCards(p);
@@ -257,7 +265,10 @@ public class Game {
    * @param s
    *          Story submitted
    */
-  public void firstStory(Player player, String s, Card c) {
+  synchronized public void firstStory(
+      Player player,
+      String s,
+      Card c) {
     for (Player p : this.players) {
       if (player.equals(p)) {
         p.setIsStoryteller(true);
@@ -276,9 +287,10 @@ public class Game {
    * @param c
    *          the card attributed to the story
    */
-  public boolean submitStory(String s, Card c) {
-  if ((this.phase != Phase.STORYTELLER)
-          || (s.equals(""))) {
+  synchronized public boolean submitStory(
+      String s,
+      Card c) {
+    if ((this.phase != Phase.STORYTELLER) || (s.equals(""))) {
       return false;
     }
     for (Player p : this.players) {
@@ -294,7 +306,7 @@ public class Game {
   /**
    * Updates the phase to the voting phase.
    */
-  public void votingPhase() {
+  synchronized public void votingPhase() {
     updatePhase(Phase.VOTING);
     subscriber.tableCardsChanged(this);
   }
@@ -306,10 +318,11 @@ public class Game {
    * @param v
    *          the vote being cast
    */
-  public boolean castVote(Player p, Card c) {
-    if ((this.phase != Phase.VOTING)
-            || p.isStoryteller()
-            || this.tableCards.get(c).equals(p)) {
+  synchronized public boolean castVote(
+      Player p,
+      Card c) {
+    if ((this.phase != Phase.VOTING) || p.isStoryteller()
+        || this.tableCards.get(c).equals(p)) {
       return false;
     }
     Vote vote = new Vote(p, c);
@@ -320,7 +333,8 @@ public class Game {
     return true;
   }
 
-  private void trashPlayerCards(Player player) {
+  synchronized private void trashPlayerCards(
+      Player player) {
     List<Card> hand = player.getHand();
     for (Card card : hand) {
       trash.push(card);
@@ -337,7 +351,7 @@ public class Game {
    * players who found the correct answer score 3. Players other than the
    * storyteller score 1 point for each vote their own pictures receive.
    */
-  public void scoringPhase() {
+  synchronized public void scoringPhase() {
     updatePhase(Phase.SCORING);
     subscriber.gameChanged(this);
     int storyVotes = 0;
@@ -391,7 +405,7 @@ public class Game {
   /**
    * How will we communicate that the game is over?
    */
-  public void prepareForNextRound() {
+  synchronized public void prepareForNextRound() {
     updatePhase(Phase.CLEANUP);
     // game ends when the deck is empty
     if (deck.isEmpty()) {
@@ -422,7 +436,7 @@ public class Game {
    * Give storyteller status to the next player in line, and revoke the current
    * storyteller's status.
    */
-  private void cycleStoryteller() {
+  synchronized private void cycleStoryteller() {
     for (int i = 0; i < players.size(); i++) {
       Player current = players.get(i);
       if (current.isStoryteller()) {
@@ -443,7 +457,7 @@ public class Game {
   /**
    * Puts all the cards in the table in the trash.
    */
-  public void trashTable() {
+  synchronized public void trashTable() {
     trash.addAll(this.tableCards.keySet());
     this.tableCards.clear();
     subscriber.tableCardsChanged(this);
@@ -456,7 +470,9 @@ public class Game {
    * @param c
    *          the card to be added
    */
-  public boolean addCardToTable(Player p, Card c) {
+  synchronized public boolean addCardToTable(
+      Player p,
+      Card c) {
     if (this.phase != Phase.STORYTELLER && this.phase != Phase.NONSTORYCARDS) {
       return false;
     }
@@ -474,7 +490,7 @@ public class Game {
   /**
    * @return a Card from the deck
    */
-  public Card drawFromDeck() {
+  synchronized public Card drawFromDeck() {
     if (deck.isEmpty()) {
       this.refillDeck();
     }
@@ -484,7 +500,7 @@ public class Game {
   /**
    * Moves every card in the trash to the deck and shuffles them.
    */
-  public void refillDeck() {
+  synchronized public void refillDeck() {
     this.deck.addAll(this.trash);
     Collections.shuffle(this.deck);
     this.trash.clear();
@@ -493,7 +509,8 @@ public class Game {
   /**
    * updates phase in game.
    */
-  public void updatePhase(Phase p) {
+  synchronized public void updatePhase(
+      Phase p) {
     this.phase = p;
     subscriber.gameChanged(this);
   }
@@ -503,7 +520,8 @@ public class Game {
    *          Player in game
    * @return List of cards
    */
-  public List<Card> getPlayerHand(Player p) {
+  synchronized public List<Card> getPlayerHand(
+      Player p) {
     return p.getHand();
   }
 
@@ -512,7 +530,8 @@ public class Game {
    *          string name of player
    * @return Player object
    */
-  public Player getPlayerByName(String name) {
+  synchronized public Player getPlayerByName(
+      String name) {
     for (Player p : players) {
       if (p.getChatName() == name) {
         return p;
@@ -524,7 +543,7 @@ public class Game {
   /**
    * @return list of all players
    */
-  public List<Player> getPlayers() {
+  synchronized public List<Player> getPlayers() {
     return players;
   }
 
@@ -533,7 +552,7 @@ public class Game {
    *
    * @return Table cards.
    */
-  public List<Card> getTableCards() {
+  synchronized public List<Card> getTableCards() {
     return new ArrayList<Card>(tableCards.keySet());
   }
 
