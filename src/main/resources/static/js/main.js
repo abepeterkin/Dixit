@@ -83,7 +83,11 @@ function processUpdates(responseObject) {
       // TODO
       break;
     case "player":
-      // TODO
+      console.log("player update");
+      console.log(tempUpdateValue);
+      if (tempUpdateValue.isStoryTeller) {
+        game.setStoryTeller(game.players[tempUpdateValue.id]);
+      }
       break;
     case "hand":
       console.log("adding hand");

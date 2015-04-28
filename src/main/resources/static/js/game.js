@@ -38,6 +38,9 @@ Game.prototype.addPlayers = function(players) {
 Game.prototype.addPlayer = function(player) {
   this.score[player.id] = 0;
   this.players[player.id] = new Player(player);
+  if (player.isStoryTeller) {
+    this.setStoryTeller(this.players[player.id]);
+  }
 }
 
 // if we only need to change one player’s score
