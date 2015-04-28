@@ -147,10 +147,10 @@ Board.prototype.drawPlayersBig = function() {
   for ( var id in board.game.players) {
     if (board.game.players.hasOwnProperty(id)) {
       board.game.players[id].idle.update();
-      board.game.players[id].idle.render(board.ctx, i, board.game.player[id]);
+      board.game.players[id].idle.render(board.ctx, i, board.game.players[id]);
       i++;
     }
-}
+  }
 }
 
 Board.prototype.drawPlayersSmall = function() {
@@ -275,9 +275,12 @@ Board.prototype.addListeners = function() {
 }
 
 Board.prototype.changePhase = function(phase) {
+  console.log("changing phase to " + phase);
   switch (phase) {
   case this.game.phases['StoryTeller']:
+    console.log("inside storyteller phase");
     if (this.clientPlayer.isStoryTeller) {
+      console.log("this is the client");
       var card;
       for (var i = 0; i < board.clientPlayer.hand.length; i++) {
         card = board.clientPlayer.hand[i];
