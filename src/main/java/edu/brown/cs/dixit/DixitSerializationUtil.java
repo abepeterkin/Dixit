@@ -34,8 +34,7 @@ public class DixitSerializationUtil {
   public static JsonElement serializeCard(
       Card card) {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-        .put("id", card.getId()).put("image", card.getImage())
-        .put("isStoryTeller", card.getStoryteller()).build();
+        .put("id", card.getId()).put("image", card.getImage()).build();
     return GSON.toJsonTree(variables);
   }
 

@@ -99,6 +99,17 @@ function retreiveGame(responseObject) {
     chat.addMsg(chatLines[i].message, game.getPlayer(chatLines[i].playerId));
   }
 
+  if (responseObject.phase === game.phases['StoryTeller']) {
+    console.log("STARTING NEW GAME.");
+    board = new Board({
+      game : game,
+      canvasId : "board",
+      playerId : sessionStorage.playerId
+    })
+    board.addListeners();
+    game.doPhase(game.phases['StoryTeller'])
+  }
+  
   // var board = new Board(game, "board", sessionStorage.playerId);
   // game.board = board;
 

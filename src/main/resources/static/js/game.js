@@ -31,8 +31,7 @@ Game.prototype.setStoryTeller = function(player) {
 
 Game.prototype.addPlayers = function(players) {
   for (var i = 0; i < players.length; i++) {
-    this.score[players[i].id] = 0;
-    this.players[players[i].id] = new Player(players[i]);
+    this.addPlayer(players[i]);
   }
 }
 

@@ -3,7 +3,11 @@ function Player(options) {
   this.name = options.chatName;
   this.color = options.color.toLowerCase();
   this.isStoryTeller = options.isStoryTeller;
-  this.hand = [];
+  if (options.hand !== undefined) {
+    this.setHandFromAjax(options.hand);
+  } else {
+    this.hand = [];
+  }
   this.img = {};
   this.img.idle = new Image();
   this.img.idle.src = "/images/rabbits/" + this.color + "/idle.png";
@@ -31,6 +35,17 @@ Player.prototype.refresh = function(canvas) {
 // makes player the storyteller;
 Player.prototype.makeStoryTeller = function() {
   this.isStoryTeller = true;
+}
+
+Player.prototype.setHandFromAjax = function(cardOptionsList) {
+  var index = 0;
+  while (index < cardOptionsList.length) {
+    var tempCardOptions = cardOptionsList[index];
+    this.addCard(new Card({id: tempCardOptions.id,
+      img: tempCardOptions.image, x: -100, y: -100}));
+    index++;
+  }
+  board.adjustCardsPos();
 }
 
 // hand should be an array of card objects
