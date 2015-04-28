@@ -1,7 +1,6 @@
 var isWaitingForUpdateRequest = false;
 var chat;
 var board;
-var _clientPlayer;
 
 (function() {
   // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -67,14 +66,6 @@ function processUpdates(responseObject) {
       if ((game.currPhase === -1 || game.currPhase === game.phases['Pregame'])
           && tempUpdateValue.phase === game.phases['StoryTeller']) {
         console.log("STARTING NEW GAME.");
-        board = new Board({
-          game : game,
-          canvasId : "board",
-          playerId : sessionStorage.playerId
-        })
-        game.board = board;
-        board.addListeners();
-        board.draw();
         game.doPhase(game.phases['StoryTeller']);
       }
       // TODO
@@ -91,10 +82,9 @@ function processUpdates(responseObject) {
       break;
     case "hand":
       console.log("adding hand");
-      if (_clientPlayer.hand.length === 0) {
-        _clientPlayer.setHandFromAjax(tempUpdateValue);
-        _clientPlayer.refresh(board.canvas);
-      }
+      board.clientPlayer.hand = [];
+      board.clientPlayer.setHandFromAjax(tempUpdateValue);
+      board.clientPlayer.refresh(board.canvas);
       console.log(game.players[sessionStorage.playerId]);
       break;
     }
@@ -114,7 +104,13 @@ function retreiveGame(responseObject) {
     numCards : responseObject.handsize
   });
   game.addPlayers(responseObject.players);
-  _clientPlayer = game.players[sessionStorage.playerId];
+  board = new Board({
+    game : game,
+    canvasId : "board",
+  })
+  board.addListeners();
+  game.board = board;
+  board.draw();
   // start chat
   chat = new Chat();
   var chatLines = responseObject.chat;
@@ -125,15 +121,8 @@ function retreiveGame(responseObject) {
 
   if (responseObject.phase === game.phases['StoryTeller']) {
     console.log("STARTING NEW GAME.");
-    board = new Board({
-      game : game,
-      canvasId : "board",
-      playerId : sessionStorage.playerId
-    })
-    board.addListeners();
-    game.board = board;
     game.doPhase(game.phases['StoryTeller']);
-    _clientPlayer.refresh(board.canvas);
+    board.clientPlayer.refresh(board.canvas);
     board.draw();
   }
 
