@@ -62,7 +62,9 @@ function processUpdates(responseObject) {
     case "game":
       console.log('game changed');
       console.log(responseObject);
-      if (tempUpdateValue.phase === game.phases['StoryTeller']) {
+      if ((game.currPhase === -1 || game.currPhase === game.phases['Pregame'])
+          && tempUpdateValue.phase === game.phases['StoryTeller']) {
+        console.log("STARTING NEW GAME.");
         board = new Board({
           game : game,
           canvasId : "board",
