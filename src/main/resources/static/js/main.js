@@ -43,6 +43,9 @@ var board;
 function processUpdates(responseObject) {
   isWaitingForUpdateRequest = false
   for (var i = 0; i < responseObject.length; i++) {
+    if (responseObject[i] === null) {
+      return;
+    }
     switch (responseObject[i][0]) {
     case "chat":
       console.log("chat update");
