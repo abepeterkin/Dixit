@@ -68,10 +68,13 @@ function processUpdates(responseObject) {
         console.log("STARTING NEW GAME.");
         game.doPhase(game.phases['StoryTeller']);
       }
-      // TODO
+      if (tempUpdateValue.phase === game.phases['NonStoryCards']) {
+        game.currClue = tempUpdateValue.story;
+        game.doPhase(game.phases['NonStoryCards']);
+      }
       break;
     case "tablecards":
-      // TODO
+
       break;
     case "player":
       console.log("player update");

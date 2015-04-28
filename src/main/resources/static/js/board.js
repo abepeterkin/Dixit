@@ -295,6 +295,7 @@ Board.prototype.changePhase = function(phase) {
     if (!this.clientPlayer.isStoryTeller) {
       this.sendBtn.prop("disabled", false);
     }
+    board.clue.text = '"' + game.currClue + '"';
   }
 }
 
@@ -326,10 +327,7 @@ function sendBtn(event) {
 function sendClue(event) {
   board.clue.text = '"' + board.clueInput.val() + '"';
   board.clueModal.modal('hide');
-  // this is the cluecard
-  board.clue.card = board.clientPlayer.hand[board.clue.cardIndex];
   board.clue.refresh(board);
-  board.clientPlayer.hand.splice(board.clue.cardIndex, 1);
   board.clientPlayer.refresh(board.canvas);
   console.log("adding clue");
   addStoryCardRequest(board.clientPlayer.hand[board.clue.cardIndex].id,
