@@ -251,6 +251,10 @@ public class Game {
         subscriber.handChanged(this, p);
       }
     }
+    // Assign an arbitrary storyteller.
+    Player tempPlayer = players.get(0);
+    tempPlayer.setIsStoryteller(true);
+    subscriber.playerChanged(this, tempPlayer);
     updatePhase(Phase.STORYTELLER);
   }
 
@@ -275,6 +279,7 @@ public class Game {
       } else {
         p.setIsStoryteller(false);
       }
+      subscriber.playerChanged(this, p);
     }
     updatePhase(Phase.STORYTELLER);
     submitStory(s, c);
