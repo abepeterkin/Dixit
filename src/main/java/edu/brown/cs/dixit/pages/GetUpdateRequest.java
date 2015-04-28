@@ -65,7 +65,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     if (playerUpdateIdMap.containsKey(tempPlayer)) {
       tempUpdateId = playerUpdateIdMap.get(tempPlayer);
     } else {
-      tempUpdateId = -1;
+      tempUpdateId = nextUpdateId - 1;
     }
     JsonElement tempJson = tempUpdateList.getJson(tempUpdateId, tempPlayer);
     playerUpdateIdMap.put(tempPlayer, nextUpdateId - 1);
