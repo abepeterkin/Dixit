@@ -11,11 +11,13 @@ function Game(name, rules) {
 }
 
 Game.prototype.phases = {
-  'StoryTeller' : 0,
-  'NonStoryCards' : 1,
-  'Voting' : 2,
-  'Scoring' : 3,
-  'CleanUp' : 4,
+  'StoryTeller' : "STORYTELLER",
+  'NonStoryCards' : "NONSTORYCARDS",
+  'Voting' : "VOTING",
+  'Scoring' : "SCORING",
+  'CleanUp' : "CLEANUP",
+  'Pregame' : "PREGAME",
+  'GameOver' : "GAMEOVER"
 }
 // this is just for testing
 phases = [ 'StoryTeller', 'NonStoryCards', 'Voting', 'Scoring', 'CleanUp' ];
