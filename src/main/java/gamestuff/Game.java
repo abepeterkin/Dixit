@@ -135,22 +135,23 @@ public class Game {
   }
 
   /**
-<<<<<<< HEAD
-   * @param playerId the id of the player who cast the vote to remove
-   * @return whether the vote was successfully removed
-=======
+   * <<<<<<< HEAD
+   * 
+   * @param playerId
+   *          the id of the player who cast the vote to remove
+   * @return whether the vote was successfully removed =======
    *
    * @param card
    *          the card to remove the vote for
-   * @return whether the removal was successful
->>>>>>> 7a3995080860e76070a594ae3d4ee5837058664e
+   * @return whether the removal was successful >>>>>>>
+   *         7a3995080860e76070a594ae3d4ee5837058664e
    */
   public synchronized boolean removeVote(
       String playerId) {
     if (this.phase != Phase.VOTING) {
       return false;
     }
-    //announcer needs player name, not id
+    // announcer needs player name, not id
     for (Vote v : votes) {
       if (v.player.getId().equals(playerId)) {
         votes.remove(v);
@@ -652,6 +653,27 @@ public class Game {
    */
   public synchronized List<Card> getTableCards() {
     return new ArrayList<Card>(tableCards.keySet());
+  }
+
+  /**
+   * Retrieves the table card belonging to the player.
+   *
+   * @param player
+   *          The player who put down the card.
+   * @return The card which the player put down.
+   */
+  public synchronized Card getTableCardByPlayer(
+      Player player) {
+    List<Card> tempCardList = getTableCards();
+    int index = 0;
+    while (index < tempCardList.size()) {
+      Card tempCard = tempCardList.get(index);
+      if (tableCards.get(tempCard) == player) {
+        return tempCard;
+      }
+      index++;
+    }
+    return null;
   }
 
   public int getNumberOfVotes() {
