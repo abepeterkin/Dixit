@@ -145,7 +145,7 @@ public class DixitSerializationUtil {
       tempValue = "VOTING";
     } else if (phase == Phase.SCORING) {
       tempValue = "SCORING";
-    } else if (phase == Phase.CLEANUP) {
+    } else if (phase == Phase.WAITING) {
       tempValue = "CLEANUP";
     } else if (phase == Phase.PREGAME) {
       tempValue = "PREGAME";
