@@ -287,12 +287,16 @@ Board.prototype.changePhase = function(phase) {
         card = board.clientPlayer.hand[i];
         clueModalImg = board.clueModal.find('#card' + i)[0];
         clueModalImg.src = card.frontImg.src;
+        $('#card' + i).css('height', $(window).height() * .72);
+        console.log(clueModalImg);
+
       }
-      $('.carousel').css('height', $(window).height()*75);
-      $('.carousel-inner').css('height', $(window).height()*75);
-      $('.carousel-control').css('height', $(window).height()*.75);
-      board.modalContent.css('height', $(window).height()*.95);
-      board.modalContent.css('width', clueModalImg.width*1.10);
+      $('.carousel').css('height', $(window).height() * 75);
+      $('.carousel-inner').css('height', $(window).height() * 75);
+      $('.carousel-control').css('height', $(window).height() * .75);
+      board.modalContent.css('height', $(window).height() * .95);
+      // board.modalContent.css('width', $('#card0').width());
+      console.log(clueModalImg.width);
       board.clueModal.modal('show');
       break;
     } else {
@@ -313,21 +317,22 @@ Board.prototype.tableCardsUpdate = function(options) {
       board.addGenericCard();
     }
   } else {
-  	var card;
-  	for(var i=0; i < options.cards.length;i++){
-  		card = options.cards[i];
-  		card.visible = true;
-  		card.inHand = false;
-  		board.addCard(new Card(card));
-  	}
+    var card;
+    for (var i = 0; i < options.cards.length; i++) {
+      card = options.cards[i];
+      card.visible = true;
+      card.inHand = false;
+      board.addCard(new Card(card));
+    }
   }
 }
 function sendBtn(event) {
   if (!sentCard) {
-  	selectedCard.visible = false;
-  	selectedCard.inHand = false;
+    selectedCard.visible = false;
+    selectedCard.inHand = false;
     sentCard = true;
-    addNonStoryCardRequest(selectedCard.id, function(e) {});
+    addNonStoryCardRequest(selectedCard.id, function(e) {
+    });
     board.cardModal.modal('hide');
     board.sendBtn.text("Return Card");
   } else {
@@ -362,41 +367,47 @@ function mouseClickListener(event) {
     card = board.clientPlayer.hand[i];
     if (card.clicked(mouseX, mouseY)) {
       if (card.visible) {
-        var modalImg =  board.cardModal.find('.modal-body img')[0];
-       modalImg.src = card.frontImg.src;
-       modalImg.height= $(window).height()*0.75;
+        var modalImg = board.cardModal.find('.modal-body img')[0];
+        modalImg.height = $(window).height() * 0.75;
+        modalImg.width = $(window).height() * 0.50;
         if (game.currPhase != game.phases['NonStoryCards']) {
           board.sendBtn.prop('disabled', true);
         }
-        board.modalContent.css('height', $(window).height()*.95);
-        board.modalContent.css('width', modalImg.width*1.0);
+        board.modalContent.css('height', $(window).height() * .95);
+        board.modalContent.css('width', modalImg.width * 1.1);
         board.cardModal.modal('show');
         selectedCard = card;
       }
     }
   }
   if (board.game.currPhase === game.phases['Voting']) {
-  	if(!board.clientPlayer.isStoryTeller){
-    for (var i = 0; i < board.cards.length; i++) {
-      card = board.cards[i];
-      if (card.clicked(mouseX, mouseY)) {
-        if (board.cardVoted == card) {
-          board.cardVoted = null;
-          removeVoteForCardRequest(function(e){if(e)console.log("removed vote");});
-        } else {
-          board.cardVoted = card;
-          voteForCardRequest(card.id, function(e){if(e)console.log("voted");});
+    if (!board.clientPlayer.isStoryTeller) {
+      for (var i = 0; i < board.cards.length; i++) {
+        card = board.cards[i];
+        if (card.clicked(mouseX, mouseY)) {
+          if (board.cardVoted == card) {
+            board.cardVoted = null;
+            removeVoteForCardRequest(function(e) {
+              if (e)
+                console.log("removed vote");
+            });
+          } else {
+            board.cardVoted = card;
+            voteForCardRequest(card.id, function(e) {
+              if (e)
+                console.log("voted");
+            });
+          }
         }
       }
-    }
     }
   }
   if (!board.smallBoard) {
     if (board.clue.card) {
       if (board.clue.card.clicked(mouseX, mouseY)) {
         board.clueCardModal.find('.modal-body img')[0].src = board.clue.card.frontImg.src;
-        board.modalContent.css('height', $(window).height()*.80);
-        //board.modalContent.css('width', modalImg.width*1.10);
+        board.modalContent.css('height', $(window).height() * .80);
+        // board.modalContent.css('width', modalImg.width*1.10);
         board.clueCardModal.modal('show');
       }
     }
