@@ -40,6 +40,7 @@ function Board(options) {
   this.clueModal = $('#sendClueModal');
   this.smallBoard = false;
   $('#clientPlayer').text('Client player: ' + this.clientPlayer.name);
+  this.modalContent = $('.modal-content');
 }
 // draws the entire game board, including client player's hand
 Board.prototype.draw = function() {
@@ -277,21 +278,27 @@ Board.prototype.addListeners = function() {
 Board.prototype.changePhase = function(phase) {
   console.log("changing phase to " + phase);
   switch (phase) {
-  case this.game.phases['STORYTELLER']:
-    console.log("inside storyteller phase");
+  case 'STORYTELLER':
     if (this.clientPlayer.isStoryTeller) {
       console.log("this is the client");
       var card;
+      var clueModalImg;
       for (var i = 0; i < board.clientPlayer.hand.length; i++) {
         card = board.clientPlayer.hand[i];
-        board.clueModal.find('#card' + i)[0].src = card.frontImg.src;
+        clueModalImg = board.clueModal.find('#card' + i)[0];
+        clueModalImg.src = card.frontImg.src;
       }
+      $('.carousel').css('height', $(window).height()*75);
+      $('.carousel-inner').css('height', $(window).height()*75);
+      $('.carousel-control').css('height', $(window).height()*.75);
+      board.modalContent.css('height', $(window).height()*.95);
+      board.modalContent.css('width', clueModalImg.width*1.10);
       board.clueModal.modal('show');
       break;
     } else {
       this.sendBtn.prop("disabled", true);
     }
-  case this.game.phases['NONSTORYCARDS']:
+  case 'NONSTORYCARDS':
     if (!this.clientPlayer.isStoryTeller) {
       this.sendBtn.prop("disabled", false);
     }
@@ -300,29 +307,27 @@ Board.prototype.changePhase = function(phase) {
 }
 
 Board.prototype.tableCardsUpdate = function(options) {
+  board.cards = [];
   if (!options.faceUp) {
     for (var i = 0; i < options.cardAmount; i++) {
       board.addGenericCard();
     }
+  } else {
+  	var card;
+  	for(var i=0; i < options.cards.length;i++){
+  		card = options.cards[i];
+  		card.visible = true;
+  		card.inHand = false;
+  		board.addCard(new Card(card));
+  	}
   }
 }
 function sendBtn(event) {
   if (!sentCard) {
-    if (!board.smallBoard) {
-      selectedCard.x = board.clientPlayer.id * (board.canvas.width / 7)
-          - selectedCard.width + board.clientPlayer.id * selectedCard.width
-          / 10;
-      selectedCard.y = board.canvas.height - (board.canvas.height / 2.5);
-    } else {
-      selectedCard.x = 0;
-      selectedCard.y = 0;
-    }
+  	selectedCard.visible = false;
+  	selectedCard.inHand = false;
     sentCard = true;
-    addNonStoryCardRequest(selectedCard.id, function(e) {
-      if (e) {
-        console.log("sent non story card");
-      }
-    })
+    addNonStoryCardRequest(selectedCard.id, function(e) {});
     board.cardModal.modal('hide');
     board.sendBtn.text("Return Card");
   } else {
@@ -357,32 +362,41 @@ function mouseClickListener(event) {
     card = board.clientPlayer.hand[i];
     if (card.clicked(mouseX, mouseY)) {
       if (card.visible) {
-        board.cardModal.find('.modal-body img')[0].src = card.frontImg.src;
+        var modalImg =  board.cardModal.find('.modal-body img')[0];
+       modalImg.src = card.frontImg.src;
+       modalImg.height= $(window).height()*0.75;
         if (game.currPhase != game.phases['NonStoryCards']) {
           board.sendBtn.prop('disabled', true);
         }
+        board.modalContent.css('height', $(window).height()*.95);
+        board.modalContent.css('width', modalImg.width*1.0);
         board.cardModal.modal('show');
         selectedCard = card;
       }
     }
   }
   if (board.game.currPhase === game.phases['Voting']) {
+  	if(!board.clientPlayer.isStoryTeller){
     for (var i = 0; i < board.cards.length; i++) {
       card = board.cards[i];
       if (card.clicked(mouseX, mouseY)) {
         if (board.cardVoted == card) {
           board.cardVoted = null;
+          removeVoteForCardRequest(function(e){if(e)console.log("removed vote");});
         } else {
           board.cardVoted = card;
+          voteForCardRequest(card.id, function(e){if(e)console.log("voted");});
         }
-        // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
       }
+    }
     }
   }
   if (!board.smallBoard) {
     if (board.clue.card) {
       if (board.clue.card.clicked(mouseX, mouseY)) {
         board.clueCardModal.find('.modal-body img')[0].src = board.clue.card.frontImg.src;
+        board.modalContent.css('height', $(window).height()*.80);
+        //board.modalContent.css('width', modalImg.width*1.10);
         board.clueCardModal.modal('show');
       }
     }

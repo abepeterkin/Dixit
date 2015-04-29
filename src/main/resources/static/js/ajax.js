@@ -1,11 +1,8 @@
 
 function getGameRequest(responseFunction) {
-  console.log("getGameRequest");
   var tempMap = {"gameName": sessionStorage.gameName,
       "playerId": sessionStorage.playerId};
   $.get("/getGame", tempMap, function(responseJson){
-    console.log('returns from /getGame call');
-    console.log(responseJson);
     responseObject = JSON.parse(responseJson);
     responseFunction(responseObject);
   });

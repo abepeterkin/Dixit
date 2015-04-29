@@ -20,10 +20,6 @@
 		</div>
 	</div>
 </div>
-<button class ="btn btn-default" id="advancePhase">advance phase</button>
-<p id="currentPhase"></p>
-<p id="storyTeller"></p>
-<p id="clientPlayer"></p>
 <div class="modal fade" id="cardModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -33,10 +29,10 @@
       </div>
       <div class="modal-body">
         <img id="cardImg" src="">
+        <br>    <br>          
+        <button id="send-card-btn" type="button" class="btn btn-default" disabled>Send Card</button>
       </div>
-      <div class="modal-footer">
-      	<button id="send-card-btn" type="button" class="btn btn-default" disabled>Send Card</button>
-      </div>
+      
     </div>
   </div>
 </div>
@@ -62,6 +58,7 @@
       </div>
       <div class="modal-body">
       	<input type="text" id="clueInput" class="form-control" placeholder="Enter clue here..."/>
+        <button id="send-clue-btn" type="button" class="btn btn-default" disabled>Send Clue</button>
         <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="false">
   <!-- Indicators -->
   <ol class="carousel-indicators">
@@ -111,9 +108,6 @@
     <span class="sr-only">Next</span>
   </a>
 </div>
-      </div>
-      <div class="modal-footer">
-      	<button id="send-clue-btn" type="button" class="btn btn-default" disabled>Send Clue</button>
       </div>
     </div>
   </div>

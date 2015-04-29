@@ -1,4 +1,4 @@
-var isWaitingForUpdateRequest = false;
+ var isWaitingForUpdateRequest = false;
 var chat;
 var board;
 
@@ -67,10 +67,11 @@ function processUpdates(responseObject) {
           && tempUpdateValue.phase === game.phases['StoryTeller']) {
         console.log("STARTING NEW GAME.");
         game.doPhase(game.phases['StoryTeller']);
-      }
-      if (tempUpdateValue.phase === game.phases['NonStoryCards']) {
-        game.currClue = tempUpdateValue.story;
-        game.doPhase(game.phases['NonStoryCards']);
+      } else {
+      	game.currClue = tempUpdateValue.story;
+      	if(game.currPhase != tempUpdateValue.phase){
+      		game.doPhase(tempUpdateValue.phase);
+      	}
       }
       break;
     case "tablecards":
@@ -121,14 +122,18 @@ function retreiveGame(responseObject) {
   for (var i = 0; i < chatLines.length; i++) {
     chat.addMsg(chatLines[i].message, game.getPlayer(chatLines[i].playerId));
   }
-
+  if(responseObject.story){
+  	game.currClue = responseObject.story;
+  }
+  if(responseObject.tablecards){
+  	board.tableCardsUpdate(responseObject.tablecards);
+  }
   if (responseObject.phase === 'STORYTELLER') {
     console.log("STARTING NEW GAME.");
 
   }
   board.clientPlayer.refresh(board.canvas);
   game.doPhase(responseObject.phase);
-  game
 
   // var board = new Board(game, "board", sessionStorage.playerId);
   // game.board = board;
@@ -155,6 +160,7 @@ function retreiveGame(responseObject) {
  * hand; }
  */
 window.onload = function() {
+  console.log(window.location);
   if (typeof (Storage) !== "undefined") {
     var gameName = $("#gameName").val();
     var playerId = $("#playerId").val();
@@ -162,20 +168,20 @@ window.onload = function() {
       sessionStorage.gameName = gameName;
       sessionStorage.playerId = playerId;
     }
-    console.log(sessionStorage.gameName + " " + sessionStorage.playerId);
   } else {
     alert("ERROR: This browser doesn't support HTML5 local storage."
         + "The game cannot be played properly.");
   }
   // alert(sessionStorage.gameName + " " + sessionStorage.playerId);
-  console.log(sessionStorage.gameName);
-  console.log(sessionStorage.playerId);
   if (sessionStorage.gameName === undefined
       || sessionStorage.playerId === undefined) {
     alert("ERROR: you have not joined a game!");
     window.location = '/';
   } else {
     getGameRequest(retreiveGame);
+  }
+    if(window.location.pathname != "/board"){
+  	window.location = '/board';
   }
   // game.setStoryTeller(player2);
   /*
