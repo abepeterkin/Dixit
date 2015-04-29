@@ -98,6 +98,7 @@ function retreiveGame(responseObject) {
   if (!responseObject) {
     window.location = '/';
   }
+  console.log(responseObject);
   game = new Game(responseObject.name, {
     numCards : responseObject.handsize
   });

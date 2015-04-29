@@ -145,10 +145,16 @@ var drawBigHelper = function() {
 }
 Board.prototype.drawPlayersBig = function() {
   var i = 0;
+  var player;
   for ( var id in board.game.players) {
     if (board.game.players.hasOwnProperty(id)) {
-      board.game.players[id].idle.update();
-      board.game.players[id].idle.render(board.ctx, i, board.game.players[id]);
+      player = board.game.players[id];
+      player.idle.update();
+      player.idle.render(board.ctx, i, player);
+      board.ctx.fillStyle = player.color;
+      board.ctx.font = "20px Georgia" //TODO: make this responsive
+      board.ctx.fillText(player.name, 20, i*20+20);
+      
       i++;
     }
   }
@@ -156,9 +162,14 @@ Board.prototype.drawPlayersBig = function() {
 
 Board.prototype.drawPlayersSmall = function() {
   var i = 0;
+  var player;
   for ( var id in this.game.players) {
     if (this.game.players.hasOwnProperty(id)) {
+      player = board.game.players[id];
       this.game.players[id].drawSmall(this, i);
+      board.ctx.fillStyle = player.color;
+      board.ctx.font = "20px Georgia" //TODO: make this responsive
+      board.ctx.fillText(player.name, 20, i*20+20);
       i++;
     }
   }
@@ -303,6 +314,10 @@ Board.prototype.changePhase = function(phase) {
       this.sendBtn.prop("disabled", false);
     }
     board.clue.text = '"' + game.currClue + '"';
+    break;
+  case 'WAITING':
+	  console.log("waiting");
+	  board.smallBoard = true;
   }
 }
 
