@@ -40,6 +40,7 @@ public class Chat {
     if (lines.size() > MAX_LINES) {
       lines.remove(0);
     }
+    System.out.println(chatLine.getMessage());
   }
 
   /**

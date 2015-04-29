@@ -26,6 +26,7 @@ import edu.brown.cs.dixit.DixitServer;
  */
 
 public class Game {
+  private Announcer announcer;
   private String name;
   private final int HAND_SIZE;
   private final int MAX_PLAYERS;
@@ -43,7 +44,6 @@ public class Game {
   private Map<String, Player> playerIdMap = new HashMap<>();
   private Map<String, String> colorMap = new HashMap<>();
   private Map<Player, Boolean> playerReadyMap = new HashMap<>();
-
   private DixitGameSubscriber subscriber = DixitServer.getDixitGameSubscriber();
 
   public Game(String name, int maxPlayers, int handSize, List<Player> players) {
@@ -60,6 +60,8 @@ public class Game {
     for (Card card : deck) {
       cardIdMap.put(card.getId(), card);
     }
+    announcer = new Announcer(chat, this);
+    announcer.gameCreated();
   }
 
   /**
@@ -133,16 +135,22 @@ public class Game {
   }
 
   /**
+<<<<<<< HEAD
+   * @param playerId the id of the player who cast the vote to remove
+   * @return whether the vote was successfully removed
+=======
    *
    * @param card
    *          the card to remove the vote for
    * @return whether the removal was successful
+>>>>>>> 7a3995080860e76070a594ae3d4ee5837058664e
    */
   public synchronized boolean removeVote(
       String playerId) {
     if (this.phase != Phase.VOTING) {
       return false;
     }
+    //announcer needs player name, not id
     for (Vote v : votes) {
       if (v.player.getId().equals(playerId)) {
         votes.remove(v);
@@ -183,7 +191,7 @@ public class Game {
 
   /**
    * adds a line to the game's chat
-   * 
+   *
    * @param player
    *          the player who sent the message
    * @param message
@@ -218,6 +226,19 @@ public class Game {
   public synchronized String getStory() {
     return this.story;
   }
+  
+  /**
+   * @return game's current storyteller
+   */
+  public Player getStoryteller() {
+    Player storyteller = null;
+    for (Player p : getPlayers()) {
+      if (p.isStoryteller()) {
+        storyteller = p;
+      }
+    }
+    return storyteller;
+  }
 
   /**
    * Adds a player to the game. Will fail if the game is at capacity or if a
@@ -234,6 +255,7 @@ public class Game {
       players.add(p);
       playerIdMap.put(p.getId(), p);
       subscriber.playerAdded(this, p);
+      announcer.newPlayer(p);
       if (players.size() == MAX_PLAYERS) {
         startGame();
       }
@@ -273,6 +295,7 @@ public class Game {
     player.setIsStoryteller(true);
     subscriber.playerChanged(this, player);
     updatePhase(Phase.STORYTELLER);
+    announcer.gameStart();
   }
 
   /**
@@ -325,6 +348,7 @@ public class Game {
     }
     this.story = s;
     updatePhase(Phase.NONSTORYCARDS);
+    announcer.nonStoryPhase();
     return true;
   }
 
@@ -335,11 +359,12 @@ public class Game {
     updatePhase(Phase.VOTING);
     subscriber.tableCardsChanged(this);
     updatePhase(Phase.VOTING);
+    announcer.advanceToVotingPhase();
   }
 
   /**
    * Casts a vote for a certain card.
-   * 
+   *
    * @param p
    *          the player who cast the vote
    * @param c
@@ -355,6 +380,7 @@ public class Game {
     }
     Vote vote = new Vote(p, c);
     votes.add(vote);
+    announcer.submitVote(p);
     if (this.votes.size() == this.players.size() - 1) {
       calculateScores();
     }
@@ -392,12 +418,7 @@ public class Game {
         storyVotes++;
       }
     }
-    Player storyTeller = null;
-    for (Player p : getPlayers()) {
-      if (p.isStoryteller()) {
-        storyTeller = p;
-      }
-    }
+    Player storyTeller = getStoryteller();
     boolean allStoryVotes = storyVotes == players.size() - 1;
     boolean noStoryVotes = storyVotes == 0;
 
@@ -472,7 +493,7 @@ public class Game {
     playerReadyMap.put(player, true);
     if (allPlayersReady()) {
       playerReadyMap.clear();
-      updatePhase(Phase.STORYTELLER);
+      beginNewRound();
     }
     return true;
   }
@@ -488,26 +509,19 @@ public class Game {
   /**
    * begins a new round of the game after the previous round has ended
    */
-  public synchronized void beginNewRound() {
+  private synchronized void beginNewRound() {
     if (!this.phase.equals(Phase.WAITING)) {
       return;
     }
     cycleStoryteller();
     updatePhase(Phase.STORYTELLER);
+    announcer.storytellerPhase();
   }
 
   private void gameOver() {
     Collections.sort(this.players);
     updatePhase(Phase.GAMEOVER);
   }
-
-  /*
-   * private List<Player> determineWinners() { int highestScore = 0; for (Player
-   * p : players){ if (p.getScore() > highestScore) { highestScore =
-   * p.getScore(); } } List<Player> winningPlayers = new ArrayList<Player>();
-   * for (Player p : players){ if (p.getScore() == highestScore) {
-   * winningPlayers.add(p); } } return winningPlayers; }
-   */
 
   /**
    * Give storyteller status to the next player in line, and revoke the current
@@ -559,6 +573,9 @@ public class Game {
     p.draw(drawFromDeck());
     subscriber.handChanged(this, p);
     subscriber.tableCardsChanged(this);
+    if (this.phase == Phase.NONSTORYCARDS) {
+      announcer.submitNonStoryCard(p);
+    }
     if (this.tableCards.size() == this.players.size()) {
       votingPhase();
     }
@@ -586,7 +603,7 @@ public class Game {
 
   /**
    * Updates the phase of the game.
-   * 
+   *
    * @param p
    *          the plase the game is being updated to
    */
@@ -635,6 +652,10 @@ public class Game {
    */
   public synchronized List<Card> getTableCards() {
     return new ArrayList<Card>(tableCards.keySet());
+  }
+  
+  public int getNumberOfVotes() {
+    return votes.size();
   }
 
   /**

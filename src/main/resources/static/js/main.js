@@ -53,8 +53,6 @@ function processUpdates(responseObject) {
       break;
     case "added player":
       game.addPlayer(tempUpdateValue);
-      chat.addSysMsg(tempUpdateValue.chatName + " has joined the game.",
-          tempUpdateValue.color);
       break;
     case "game":
       console.log('game changed');
