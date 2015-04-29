@@ -45,10 +45,15 @@ public class SeeCurrentGamesRequest implements Route {
    * Class containing basic data about a game
    */
   private class BasicGameData {
+    @SuppressWarnings("unused")
     private String gameName;
+    @SuppressWarnings("unused")
     private List<String> playerNames;
+    @SuppressWarnings("unused")
     private List<String> colors;
+    @SuppressWarnings("unused")
     private int numberOfPlayers;
+    @SuppressWarnings("unused")
     private int maxPlayers;
 
     public BasicGameData(String gameName, List<String> playerNames,

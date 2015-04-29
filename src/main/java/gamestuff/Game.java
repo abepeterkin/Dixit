@@ -133,9 +133,8 @@ public class Game {
 
 
   /**
-   *
-   * @param card the card to remove the vote for
-   * @return whether the removal was successful
+   * @param playerId the id of the player who cast the vote to remove
+   * @return whether the vote was successfully removed
    */
   public synchronized boolean removeVote(
       String playerId) {
@@ -482,19 +481,11 @@ public class Game {
     cycleStoryteller();
     updatePhase(Phase.STORYTELLER);
   }
-  
+
   private void gameOver() {
     Collections.sort(this.players);
     updatePhase(Phase.GAMEOVER);
   }
-  
-  /*
-   * private List<Player> determineWinners() { int highestScore = 0; for (Player
-   * p : players){ if (p.getScore() > highestScore) { highestScore =
-   * p.getScore(); } } List<Player> winningPlayers = new ArrayList<Player>();
-   * for (Player p : players){ if (p.getScore() == highestScore) {
-   * winningPlayers.add(p); } } return winningPlayers; }
-   */
 
   /**
    * Give storyteller status to the next player in line, and revoke the current
