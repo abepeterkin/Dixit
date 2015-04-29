@@ -74,3 +74,14 @@ function addChatRequest(message, responseFunction) {
     responseFunction(responseObject);
   });
 }
+
+function readyRequest(responseFunction) {
+  var tempMap = {
+      "gameName": sessionStorage.gameName,
+      "playerId": sessionStorage.playerId
+  }
+  $.post("/playerReady", tempMap, function(responseJson){
+    responseObject = JSON.parse(responseJson);
+    responseFunction(responseObject);
+  })
+}
