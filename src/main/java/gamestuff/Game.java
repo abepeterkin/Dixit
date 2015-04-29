@@ -226,7 +226,7 @@ public class Game {
   public synchronized String getStory() {
     return this.story;
   }
-  
+
   /**
    * @return game's current storyteller
    */
@@ -410,7 +410,7 @@ public class Game {
    * storyteller score 1 point for each vote their own pictures receive.
    */
   private synchronized void calculateScores() {
-    updatePhase(Phase.SCORING);
+    this.phase = Phase.SCORING;
     int storyVotes = 0;
     for (Vote v : this.votes) {
       Card voteCard = v.getCard();
@@ -653,7 +653,7 @@ public class Game {
   public synchronized List<Card> getTableCards() {
     return new ArrayList<Card>(tableCards.keySet());
   }
-  
+
   public int getNumberOfVotes() {
     return votes.size();
   }
