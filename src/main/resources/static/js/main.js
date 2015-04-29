@@ -1,4 +1,4 @@
- var isWaitingForUpdateRequest = false;
+var isWaitingForUpdateRequest = false;
 var chat;
 var board;
 
@@ -48,14 +48,10 @@ function processUpdates(responseObject) {
     var tempUpdateValue = tempUpdate[1];
     switch (tempUpdateName) {
     case "chat":
-      console.log("chat update");
-      console.log(responseObject);
       chat.addMsg(tempUpdateValue.message, game
           .getPlayer(tempUpdateValue.playerId));
       break;
     case "added player":
-      console.log('added player');
-      console.log(responseObject);
       game.addPlayer(tempUpdateValue);
       break;
     case "game":
@@ -66,24 +62,22 @@ function processUpdates(responseObject) {
         console.log("STARTING NEW GAME.");
         game.doPhase(game.phases['StoryTeller']);
       } else {
-      	game.currClue = tempUpdateValue.story;
-      	if(game.currPhase != tempUpdateValue.phase){
-      		game.doPhase(tempUpdateValue.phase);
-      	}
+        game.currClue = tempUpdateValue.story;
+        if (game.currPhase != tempUpdateValue.phase) {
+          game.doPhase(tempUpdateValue.phase);
+        }
       }
       break;
     case "tablecards":
       board.tableCardsUpdate(tempUpdateValue);
       break;
     case "player":
-      console.log("player update");
-      console.log(tempUpdateValue);
       if (tempUpdateValue.isStoryTeller) {
         game.setStoryTeller(game.players[tempUpdateValue.id]);
       }
+      game.updateScore(tempUpdateValue.id, tempUpdateValue.score);
       break;
     case "hand":
-      console.log("adding hand");
       board.clientPlayer.hand = [];
       board.clientPlayer.setHandFromAjax(tempUpdateValue);
       board.clientPlayer.refresh(board.canvas);
@@ -101,7 +95,9 @@ function sendUpdateRequestIfReady() {
 }
 
 function retreiveGame(responseObject) {
-  console.log(responseObject);
+  if (!responseObject) {
+    window.location = '/';
+  }
   game = new Game(responseObject.name, {
     numCards : responseObject.handsize
   });
@@ -120,16 +116,13 @@ function retreiveGame(responseObject) {
   for (var i = 0; i < chatLines.length; i++) {
     chat.addMsg(chatLines[i].message, game.getPlayer(chatLines[i].playerId));
   }
-  if(responseObject.story){
-  	game.currClue = responseObject.story;
+  if (responseObject.story) {
+    game.currClue = responseObject.story;
   }
-  if(responseObject.tablecards){
-  	board.tableCardsUpdate(responseObject.tablecards);
+  if (responseObject.tablecards) {
+    board.tableCardsUpdate(responseObject.tablecards);
   }
-  if (responseObject.phase === 'STORYTELLER') {
-    console.log("STARTING NEW GAME.");
 
-  }
   board.clientPlayer.refresh(board.canvas);
   game.doPhase(responseObject.phase);
 
@@ -178,8 +171,8 @@ window.onload = function() {
   } else {
     getGameRequest(retreiveGame);
   }
-    if(window.location.pathname != "/board"){
-  	window.location = '/board';
+  if (window.location.pathname != "/board") {
+    window.location = '/board';
   }
   // game.setStoryTeller(player2);
   /*

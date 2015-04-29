@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import edu.brown.cs.dixit.DixitSerializationUtil;
 import edu.brown.cs.dixit.Main;
 
 public class GameTest {
@@ -137,57 +138,56 @@ public class GameTest {
     assertTrue(h2.size() == 7);
     assertTrue(h3.size() == 7);
   }
-  
-  //TEST: Cannot submit blank story ""
-  
-//  @Test
-//  public void FirstStoryTest() {
-//    List<Player> players = new ArrayList<Player>();
-//    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
-//    Player p2 = new Player(Main.newId(), "Esteban", "RED");
-//    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
-//    players.add(p1);
-//    players.add(p2);
-//    players.add(p3);
-//    Game g = new Game("CoolGame", 3, 7, players);
-//    g.startGame();
-//    Card storyCard = g.getPlayerHand(p2).get(0);
-//    g.firstStory(p2, "Test Story", storyCard);
-//    assertTrue(g.getStory().equals("Test Story"));
-//    assertTrue(g.getPhase() == Phase.NONSTORYCARDS);
-//    assertTrue(g.getTableCards().get(0).equals(storyCard));
-//    assertTrue(g.getTableCards().size() == 1);
-//    assertTrue(p1.isStoryteller() == false);
-//    assertTrue(p2.isStoryteller() == true);
-//    assertTrue(p3.isStoryteller() == false);
-//  }
-  
+
+  // TEST: Cannot submit blank story ""
+
+  // @Test
+  // public void FirstStoryTest() {
+  // List<Player> players = new ArrayList<Player>();
+  // Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+  // Player p2 = new Player(Main.newId(), "Esteban", "RED");
+  // Player p3 = new Player(Main.newId(), "Jack", "GREEN");
+  // players.add(p1);
+  // players.add(p2);
+  // players.add(p3);
+  // Game g = new Game("CoolGame", 3, 7, players);
+  // g.startGame();
+  // Card storyCard = g.getPlayerHand(p2).get(0);
+  // g.firstStory(p2, "Test Story", storyCard);
+  // assertTrue(g.getStory().equals("Test Story"));
+  // assertTrue(g.getPhase() == Phase.NONSTORYCARDS);
+  // assertTrue(g.getTableCards().get(0).equals(storyCard));
+  // assertTrue(g.getTableCards().size() == 1);
+  // assertTrue(p1.isStoryteller() == false);
+  // assertTrue(p2.isStoryteller() == true);
+  // assertTrue(p3.isStoryteller() == false);
+  // }
+
   /**
-   * Poorly named test method: ensures that storyteller
-   * cannot addCardToTable once his/her card is active
+   * Poorly named test method: ensures that storyteller cannot addCardToTable
+   * once his/her card is active
    * 
-   * #FIX: Right now storyteller can play card during NonStoryTeller
-   * phase.
+   * #FIX: Right now storyteller can play card during NonStoryTeller phase.
    */
-//  @Test
-//  public void NonStoryStorytellerBlockTest() {
-//    List<Player> players = new ArrayList<Player>();
-//    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
-//    Player p2 = new Player(Main.newId(), "Esteban", "RED");
-//    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
-//    players.add(p1);
-//    players.add(p2);
-//    players.add(p3);
-//    Game g = new Game("CoolGame", 3, 7, players);
-//    g.newGame();
-//    Card storyCard = g.getPlayerHand(p2).get(0);
-//    Card illegalCard = g.getPlayerHand(p2).get(3);
-//    g.firstStory(p2, "Test Story", storyCard);
-//    boolean isLegal = g.addCardToTable(p2, illegalCard);
-//    assertTrue(!isLegal);
-//    assertTrue(g.getTableCards().size() == 1);
-//  }
-  
+  // @Test
+  // public void NonStoryStorytellerBlockTest() {
+  // List<Player> players = new ArrayList<Player>();
+  // Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+  // Player p2 = new Player(Main.newId(), "Esteban", "RED");
+  // Player p3 = new Player(Main.newId(), "Jack", "GREEN");
+  // players.add(p1);
+  // players.add(p2);
+  // players.add(p3);
+  // Game g = new Game("CoolGame", 3, 7, players);
+  // g.newGame();
+  // Card storyCard = g.getPlayerHand(p2).get(0);
+  // Card illegalCard = g.getPlayerHand(p2).get(3);
+  // g.firstStory(p2, "Test Story", storyCard);
+  // boolean isLegal = g.addCardToTable(p2, illegalCard);
+  // assertTrue(!isLegal);
+  // assertTrue(g.getTableCards().size() == 1);
+  // }
+
   /**
    * Tests adding one card from non story player.
    */
@@ -212,7 +212,7 @@ public class GameTest {
     assertTrue(g.getTableCards().contains(legalCard));
     assertTrue(g.getPhase() == Phase.NONSTORYCARDS);
   }
-  
+
   @Test
   public void AdvanceToVotingTest() {
     List<Player> players = new ArrayList<Player>();
@@ -238,10 +238,9 @@ public class GameTest {
     assertTrue(g.getPhase() == Phase.VOTING);
     assertTrue(g.getStory().equals("Test Story"));
   }
-  
+
   /**
-   * Tests that all addCardToTable calls are blocked
-   * during Voting Phase
+   * Tests that all addCardToTable calls are blocked during Voting Phase
    */
   @Test
   public void VotingBlocksTest() {
@@ -290,7 +289,7 @@ public class GameTest {
     boolean isLegal = g.castVote(p2, storyCard);
     assertTrue(!isLegal);
   }
-  
+
   /**
    * Test that players cannot vote for own cards
    */
@@ -316,11 +315,10 @@ public class GameTest {
     assertTrue(!isLegal1);
     assertTrue(!isLegal2);
   }
-  
+
   /**
-   * If all votes for storycard, then all players
-   * should receive two points and storyteller should
-   * receive 0 points.
+   * If all votes for storycard, then all players should receive two points and
+   * storyteller should receive 0 points.
    * 
    */
   @Test
@@ -346,11 +344,10 @@ public class GameTest {
     assertTrue(p1.getScore() == 2);
     assertTrue(p2.getScore() == 0);
   }
-  
+
   /**
-   * If NO votes for storycard, then all players
-   * should receive two points and storyteller should
-   * receive 0 points. Players should also receive a point
+   * If NO votes for storycard, then all players should receive two points and
+   * storyteller should receive 0 points. Players should also receive a point
    * for each vote on their card.
    * 
    */
@@ -377,10 +374,11 @@ public class GameTest {
     assertTrue(p1.getScore() == 3);
     assertTrue(p2.getScore() == 0);
   }
-  
+
   /**
    * StoryTeller should receive 2 points for first vote and 1 for each extra.
-   * NST should receive 2 points for correct guess and 1 for votes on his/her card.
+   * NST should receive 2 points for correct guess and 1 for votes on his/her
+   * card.
    */
   @Test
   public void OneStoryOneNonVoteTest() {
@@ -405,11 +403,11 @@ public class GameTest {
     assertTrue(p1.getScore() == 3);
     assertTrue(p2.getScore() == 2);
   }
-  
+
   /**
-   * Tests that after all votes are in, game cleans up, removes cards
-   * from table, clears Story  cycles story teller, and begins new round
-   * in StoryTeller phase
+   * Tests that after all votes are in, game cleans up, removes cards from
+   * table, clears Story cycles story teller, and begins new round in
+   * StoryTeller phase
    */
   @Test
   public void AdvanceToNextRound() {
@@ -431,13 +429,18 @@ public class GameTest {
     g.castVote(p3, storyCard);
     g.castVote(p1, storyCard);
     assertTrue(g.getTableCards().size() == 0);
+    System.out.println(DixitSerializationUtil.serializePhase(g.getPhase()));
+    assertTrue(g.getPhase() == Phase.WAITING);
+    assertTrue(g.confirmPlayerReady(p1));
+    assertTrue(g.confirmPlayerReady(p2));
+    assertTrue(g.confirmPlayerReady(p3));
     assertTrue(g.getPhase() == Phase.STORYTELLER);
     assertTrue(g.getStory().equals(""));
     assertTrue(p3.isStoryteller());
     assertTrue(!p1.isStoryteller());
     assertTrue(!p2.isStoryteller());
   }
-  
+
   @Test
   public void ScoreTestFourPlayers() {
     List<Player> players = new ArrayList<Player>();
@@ -468,7 +471,7 @@ public class GameTest {
     assertTrue(p3.getScore() == 0);
     assertTrue(p4.getScore() == 2);
   }
-  
+
   @Test
   public void GameOverTest() {
     List<Player> players = new ArrayList<Player>();
@@ -491,6 +494,5 @@ public class GameTest {
     g.castVote(p1, storyCard);
     assertTrue(g.getPhase() == Phase.GAMEOVER);
   }
-  
 
 }

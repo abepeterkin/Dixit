@@ -39,7 +39,7 @@ public class Game {
   private Stack<Card> trash = new Stack<Card>();
   // private List<Card> tableCards = new ArrayList<Card>();
   private List<Vote> votes = new ArrayList<Vote>();
-  private BiMap<Card, Player> tableCards = HashBiMap.create ();;
+  private BiMap<Card, Player> tableCards = HashBiMap.create();;
   private Map<String, Card> cardIdMap = new HashMap<>();
   private Map<String, Player> playerIdMap = new HashMap<>();
   private Map<String, String> colorMap = new HashMap<>();
@@ -82,7 +82,8 @@ public class Game {
   }
 
   /**
-   * @param id a card id
+   * @param id
+   *          a card id
    * @return the card with that id
    */
   public Card getCardWithId(
@@ -133,10 +134,10 @@ public class Game {
     return HAND_SIZE;
   }
 
-
   /**
    *
-   * @param card the card to remove the vote for
+   * @param card
+   *          the card to remove the vote for
    * @return whether the removal was successful
    */
   public synchronized boolean removeVote(
@@ -154,9 +155,10 @@ public class Game {
   }
 
   /**
-   * @param playerId the id of the player who's card we're removing
+   * @param playerId
+   *          the id of the player who's card we're removing
    * @return whether the removal was successful. removal fails if the phase is
-   * wrong or if the card being removed is the story card.
+   *         wrong or if the card being removed is the story card.
    */
   public synchronized boolean removeNonStoryCard(
       String playerId) {
@@ -184,8 +186,11 @@ public class Game {
 
   /**
    * adds a line to the game's chat
-   * @param player the player who sent the message
-   * @param message the content of the message
+   * 
+   * @param player
+   *          the player who sent the message
+   * @param message
+   *          the content of the message
    */
   public synchronized void addToChat(
       Player player,
@@ -298,7 +303,8 @@ public class Game {
    *          Player who submitted first story
    * @param s
    *          Story submitted
-   * @param c the card that the story is referring to
+   * @param c
+   *          the card that the story is referring to
    */
   public synchronized void firstStory(
       Player player,
@@ -353,11 +359,16 @@ public class Game {
 
   /**
    * Casts a vote for a certain card.
-   * @param p the player who cast the vote
-   * @param c the card that the vote is being cast for
+   * 
+   * @param p
+   *          the player who cast the vote
+   * @param c
+   *          the card that the vote is being cast for
    * @return whether the vote was successfully cast
    */
-  public synchronized boolean castVote(Player p, Card c) {
+  public synchronized boolean castVote(
+      Player p,
+      Card c) {
     if ((this.phase != Phase.VOTING) || p.isStoryteller()
         || this.tableCards.get(c).equals(p)) {
       return false;
@@ -372,7 +383,8 @@ public class Game {
   }
 
   /**
-   * @param player the player who's cards are being trashed
+   * @param player
+   *          the player who's cards are being trashed
    */
   private synchronized void trashPlayerCards(
       Player player) {
@@ -414,7 +426,6 @@ public class Game {
       }
     }
     if (!allStoryVotes) {
-      updatePhase(Phase.SCORING);
       boolean storyHasBeenVoted = false;
       for (Vote v : this.votes) {
         Card voteCard = v.getCard();
@@ -465,10 +476,12 @@ public class Game {
   }
 
   /**
-   * @param player the player to confirm as ready
+   * @param player
+   *          the player to confirm as ready
    * @return whether the confirmation was successful
    */
-  public boolean confirmPlayerReady(Player player) {
+  public synchronized boolean confirmPlayerReady(
+      Player player) {
     if (!this.phase.equals(Phase.WAITING) && !this.phase.equals(Phase.SCORING)) {
       return false;
     }
@@ -499,12 +512,12 @@ public class Game {
     updatePhase(Phase.STORYTELLER);
     announcer.storytellerPhase();
   }
-  
+
   private void gameOver() {
     Collections.sort(this.players);
     updatePhase(Phase.GAMEOVER);
   }
-  
+
   /*
    * private List<Player> determineWinners() { int highestScore = 0; for (Player
    * p : players){ if (p.getScore() > highestScore) { highestScore =
@@ -593,7 +606,9 @@ public class Game {
 
   /**
    * Updates the phase of the game.
-   * @param p the plase the game is being updated to
+   * 
+   * @param p
+   *          the plase the game is being updated to
    */
   public synchronized void updatePhase(
       Phase p) {
