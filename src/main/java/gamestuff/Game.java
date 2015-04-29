@@ -26,6 +26,7 @@ import edu.brown.cs.dixit.DixitServer;
  */
 
 public class Game {
+  private Announcer announcer;
   private String name;
   private final int HAND_SIZE;
   private final int MAX_PLAYERS;
@@ -43,7 +44,6 @@ public class Game {
   private Map<String, Player> playerIdMap = new HashMap<>();
   private Map<String, String> colorMap = new HashMap<>();
   private Map<Player, Boolean> playerReadyMap = new HashMap<>();
-
   private DixitGameSubscriber subscriber = DixitServer.getDixitGameSubscriber();
 
   public Game(String name, int maxPlayers, int handSize, List<Player> players) {
@@ -60,6 +60,8 @@ public class Game {
     for (Card card : deck) {
       cardIdMap.put(card.getId(), card);
     }
+    announcer = new Announcer(chat, this);
+    announcer.gameCreated();
   }
 
   /**
@@ -148,6 +150,7 @@ public class Game {
     if (this.phase != Phase.VOTING) {
       return false;
     }
+    //announcer needs player name, not id
     for (Vote v : votes) {
       if (v.player.getId().equals(playerId)) {
         votes.remove(v);
@@ -223,6 +226,19 @@ public class Game {
   public synchronized String getStory() {
     return this.story;
   }
+  
+  /**
+   * @return game's current storyteller
+   */
+  public Player getStoryteller() {
+    Player storyteller = null;
+    for (Player p : getPlayers()) {
+      if (p.isStoryteller()) {
+        storyteller = p;
+      }
+    }
+    return storyteller;
+  }
 
   /**
    * Adds a player to the game. Will fail if the game is at capacity or if a
@@ -239,6 +255,7 @@ public class Game {
       players.add(p);
       playerIdMap.put(p.getId(), p);
       subscriber.playerAdded(this, p);
+      announcer.newPlayer(p);
       if (players.size() == MAX_PLAYERS) {
         startGame();
       }
@@ -278,6 +295,7 @@ public class Game {
     player.setIsStoryteller(true);
     subscriber.playerChanged(this, player);
     updatePhase(Phase.STORYTELLER);
+    announcer.gameStart();
   }
 
   /**
@@ -330,6 +348,7 @@ public class Game {
     }
     this.story = s;
     updatePhase(Phase.NONSTORYCARDS);
+    announcer.nonStoryPhase();
     return true;
   }
 
@@ -340,6 +359,7 @@ public class Game {
     updatePhase(Phase.VOTING);
     subscriber.tableCardsChanged(this);
     updatePhase(Phase.VOTING);
+    announcer.advanceToVotingPhase();
   }
 
   /**
@@ -360,6 +380,7 @@ public class Game {
     }
     Vote vote = new Vote(p, c);
     votes.add(vote);
+    announcer.submitVote(p);
     if (this.votes.size() == this.players.size() - 1) {
       calculateScores();
     }
@@ -397,12 +418,7 @@ public class Game {
         storyVotes++;
       }
     }
-    Player storyTeller = null;
-    for (Player p : getPlayers()) {
-      if (p.isStoryteller()) {
-        storyTeller = p;
-      }
-    }
+    Player storyTeller = getStoryteller();
     boolean allStoryVotes = storyVotes == players.size() - 1;
     boolean noStoryVotes = storyVotes == 0;
 
@@ -499,6 +515,7 @@ public class Game {
     }
     cycleStoryteller();
     updatePhase(Phase.STORYTELLER);
+    announcer.storytellerPhase();
   }
 
   private void gameOver() {
@@ -556,6 +573,9 @@ public class Game {
     p.draw(drawFromDeck());
     subscriber.handChanged(this, p);
     subscriber.tableCardsChanged(this);
+    if (this.phase == Phase.NONSTORYCARDS) {
+      announcer.submitNonStoryCard(p);
+    }
     if (this.tableCards.size() == this.players.size()) {
       votingPhase();
     }
@@ -632,6 +652,10 @@ public class Game {
    */
   public synchronized List<Card> getTableCards() {
     return new ArrayList<Card>(tableCards.keySet());
+  }
+  
+  public int getNumberOfVotes() {
+    return votes.size();
   }
 
   /**
