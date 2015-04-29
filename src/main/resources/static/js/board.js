@@ -12,11 +12,12 @@ var board;
 var selectedCard;
 var sentCard = false;
 // should hold to array of game.players to display their score and color
-function Board(game, canvasId, playerId) {
-  this.clientPlayer = game.players[playerId - 1]; // the player this client
-  this.game = game;
+function Board(options) {
+  this.clientPlayer = game.players[sessionStorage.playerId]; // the player this
+  // client
+  this.game = options.game;
   this.cards = [];// cards currently at play
-  this.canvas = document.getElementById(canvasId);
+  this.canvas = document.getElementById(options.canvasId);
   this.canvas.width = (window.innerWidth
       || document.documentElement.clientWidth || document.body.clientWidth);
   this.canvas.height = (window.innerHeight
@@ -39,6 +40,7 @@ function Board(game, canvasId, playerId) {
   this.clueModal = $('#sendClueModal');
   this.smallBoard = false;
   $('#clientPlayer').text('Client player: ' + this.clientPlayer.name);
+  this.modalContent = $('.modal-content');
 }
 // draws the entire game board, including client player's hand
 Board.prototype.draw = function() {
@@ -142,15 +144,23 @@ var drawBigHelper = function() {
   board.drawVote();
 }
 Board.prototype.drawPlayersBig = function() {
-  for (var i = 0; i < this.game.players.length; i++) {
-    board.game.players[i].idle.update();
-    board.game.players[i].idle.render(board.ctx, i);
+  var i = 0;
+  for ( var id in board.game.players) {
+    if (board.game.players.hasOwnProperty(id)) {
+      board.game.players[id].idle.update();
+      board.game.players[id].idle.render(board.ctx, i, board.game.players[id]);
+      i++;
+    }
   }
 }
 
 Board.prototype.drawPlayersSmall = function() {
-  for (var i = 0; i < this.game.players.length; i++) {
-    this.game.players[i].drawSmall(this, i);
+  var i = 0;
+  for ( var id in this.game.players) {
+    if (this.game.players.hasOwnProperty(id)) {
+      this.game.players[id].drawSmall(this, i);
+      i++;
+    }
   }
 }
 // draws the cards that are at play in the board
@@ -185,49 +195,47 @@ Board.prototype.refresh = function() {
 Board.prototype.addGenericCard = function() {
   this.cards.push(new Card({
     visible : false,
-    canvas : this.canvas
+    inHand : false
   }));
   board.adjustCardsPos();
 }
 Board.prototype.addCard = function(card) {
-  if (this.cards.length < this.game.players.length) {
-    this.cards.push(card);
-    board.adjustCardsPos();
-  } else {
-    console.log("trying to push more cards on board than there are players!");
-  }
+  this.cards.push(card);
+  board.adjustCardsPos();
 }
 Board.prototype.adjustCardsPos = function() {
-  if (board.smallBoard) {
-    board.cards[0].x = board.canvas.width / 5;
-    board.cards[0].y = board.canvas.height / 20;
-    board.cards[0].makeBig();
-  } else {
-    board.cards[0].x = board.canvas.width / 25;
-    board.cards[0].y = board.canvas.height / 1.7;
-    board.cards[0].makeSmall();
-  }
-  var width = board.cards[0].width;
-  var height = board.cards[0].height
-  for (var i = 1; i < board.cards.length; i++) {
+  if (board.cards.length >= 1) {
     if (board.smallBoard) {
-      board.cards[i].makeBig();
-      if (i < 3) {
-        board.cards[i].x = board.cards[i - 1].x + width + width / 10;
-        board.cards[i].y = board.cards[i - 1].y;
-      } else {
-        if (i == 3) {
-          board.cards[i].x = board.cards[0].x;
-          board.cards[i].y = board.cards[0].y + height + height / 10;
-        } else {
+      board.cards[0].x = board.canvas.width / 5;
+      board.cards[0].y = board.canvas.height / 20;
+      board.cards[0].makeBig(board.canvas);
+    } else {
+      board.cards[0].x = board.canvas.width / 25;
+      board.cards[0].y = board.canvas.height / 1.7;
+      board.cards[0].makeSmall(board.canvas);
+    }
+    var width = board.cards[0].width;
+    var height = board.cards[0].height
+    for (var i = 1; i < board.cards.length; i++) {
+      if (board.smallBoard) {
+        board.cards[i].makeBig(board.canvas);
+        if (i < 3) {
           board.cards[i].x = board.cards[i - 1].x + width + width / 10;
           board.cards[i].y = board.cards[i - 1].y;
+        } else {
+          if (i == 3) {
+            board.cards[i].x = board.cards[0].x;
+            board.cards[i].y = board.cards[0].y + height + height / 10;
+          } else {
+            board.cards[i].x = board.cards[i - 1].x + width + width / 10;
+            board.cards[i].y = board.cards[i - 1].y;
+          }
         }
+      } else {
+        board.cards[i].makeSmall(board.canvas);
+        board.cards[i].x = board.cards[i - 1].x + width + width / 1.5;
+        board.cards[i].y = board.cards[i - 1].y;
       }
-    } else {
-      board.cards[i].makeSmall();
-      board.cards[i].x = board.cards[i - 1].x + width + width / 1.5;
-      board.cards[i].y = board.cards[i - 1].y;
     }
   }
 }
@@ -268,38 +276,63 @@ Board.prototype.addListeners = function() {
 }
 
 Board.prototype.changePhase = function(phase) {
+  console.log("changing phase to " + phase);
   switch (phase) {
-    case this.game.phases['StoryTeller']:
-      if (this.clientPlayer.isStoryTeller) {
-        var card;
-        for (var i = 0; i < board.clientPlayer.hand.length; i++) {
-          card = board.clientPlayer.hand[i];
-          board.clueModal.find('#card' + i)[0].src = card.frontImg.src;
-        }
-        board.clueModal.modal('show');
-        break;
-      } else {
-        this.sendBtn.prop("disabled", true);
+  case 'STORYTELLER':
+    if (this.clientPlayer.isStoryTeller) {
+      console.log("this is the client");
+      var card;
+      var clueModalImg;
+      for (var i = 0; i < board.clientPlayer.hand.length; i++) {
+        card = board.clientPlayer.hand[i];
+        clueModalImg = board.clueModal.find('#card' + i)[0];
+        clueModalImg.src = card.frontImg.src;
+        $('#card' + i).css('height', $(window).height() * .72);
+        console.log(clueModalImg);
+
       }
-    case this.game.phases['NonStoryCards']:
-      if (!this.clientPlayer.isStoryTeller) {
-        this.sendBtn.prop("disabled", false);
-      }
+      $('.carousel').css('height', $(window).height() * 75);
+      $('.carousel-inner').css('height', $(window).height() * 75);
+      $('.carousel-control').css('height', $(window).height() * .75);
+      board.modalContent.css('height', $(window).height() * .95);
+      // board.modalContent.css('width', $('#card0').width());
+      console.log(clueModalImg.width);
+      board.clueModal.modal('show');
+      break;
+    } else {
+      this.sendBtn.prop("disabled", true);
+    }
+  case 'NONSTORYCARDS':
+    if (!this.clientPlayer.isStoryTeller) {
+      this.sendBtn.prop("disabled", false);
+    }
+    board.clue.text = '"' + game.currClue + '"';
   }
 }
 
+Board.prototype.tableCardsUpdate = function(options) {
+  board.cards = [];
+  if (!options.faceUp) {
+    for (var i = 0; i < options.cardAmount; i++) {
+      board.addGenericCard();
+    }
+  } else {
+    var card;
+    for (var i = 0; i < options.cards.length; i++) {
+      card = options.cards[i];
+      card.visible = true;
+      card.inHand = false;
+      board.addCard(new Card(card));
+    }
+  }
+}
 function sendBtn(event) {
   if (!sentCard) {
-    if (!board.smallBoard) {
-      selectedCard.x = board.clientPlayer.id * (board.canvas.width / 7)
-          - selectedCard.width + board.clientPlayer.id * selectedCard.width
-          / 10;
-      selectedCard.y = board.canvas.height - (board.canvas.height / 2.5);
-    } else {
-      selectedCard.x = 0;
-      selectedCard.y = 0;
-    }
+    selectedCard.visible = false;
+    selectedCard.inHand = false;
     sentCard = true;
+    addNonStoryCardRequest(selectedCard.id, function(e) {
+    });
     board.cardModal.modal('hide');
     board.sendBtn.text("Return Card");
   } else {
@@ -316,11 +349,13 @@ function sendBtn(event) {
 function sendClue(event) {
   board.clue.text = '"' + board.clueInput.val() + '"';
   board.clueModal.modal('hide');
-  board.clue.card = board.clientPlayer.hand[board.clue.cardIndex];
   board.clue.refresh(board);
-  board.clientPlayer.hand.splice(board.clue.cardIndex, 1);
   board.clientPlayer.refresh(board.canvas);
-  board.game.nextPhase();
+  console.log("adding clue");
+  addStoryCardRequest(board.clientPlayer.hand[board.clue.cardIndex].id,
+      board.clueInput.val(), function(e) {
+        console.log(e);
+      });
 }
 
 function mouseClickListener(event) {
@@ -332,25 +367,38 @@ function mouseClickListener(event) {
     card = board.clientPlayer.hand[i];
     if (card.clicked(mouseX, mouseY)) {
       if (card.visible) {
-        board.cardModal.find('.modal-body img')[0].src = card.frontImg.src;
+        var modalImg = board.cardModal.find('.modal-body img')[0];
+        modalImg.height = $(window).height() * 0.75;
+        modalImg.width = $(window).height() * 0.50;
         if (game.currPhase != game.phases['NonStoryCards']) {
           board.sendBtn.prop('disabled', true);
         }
+        board.modalContent.css('height', $(window).height() * .95);
+        board.modalContent.css('width', modalImg.width * 1.1);
         board.cardModal.modal('show');
         selectedCard = card;
       }
     }
   }
   if (board.game.currPhase === game.phases['Voting']) {
-    for (var i = 0; i < board.cards.length; i++) {
-      card = board.cards[i];
-      if (card.clicked(mouseX, mouseY)) {
-        if (board.cardVoted == card) {
-          board.cardVoted = null;
-        } else {
-          board.cardVoted = card;
+    if (!board.clientPlayer.isStoryTeller) {
+      for (var i = 0; i < board.cards.length; i++) {
+        card = board.cards[i];
+        if (card.clicked(mouseX, mouseY)) {
+          if (board.cardVoted == card) {
+            board.cardVoted = null;
+            removeVoteForCardRequest(function(e) {
+              if (e)
+                console.log("removed vote");
+            });
+          } else {
+            board.cardVoted = card;
+            voteForCardRequest(card.id, function(e) {
+              if (e)
+                console.log("voted");
+            });
+          }
         }
-        // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
       }
     }
   }
@@ -358,6 +406,8 @@ function mouseClickListener(event) {
     if (board.clue.card) {
       if (board.clue.card.clicked(mouseX, mouseY)) {
         board.clueCardModal.find('.modal-body img')[0].src = board.clue.card.frontImg.src;
+        board.modalContent.css('height', $(window).height() * .80);
+        // board.modalContent.css('width', modalImg.width*1.10);
         board.clueCardModal.modal('show');
       }
     }

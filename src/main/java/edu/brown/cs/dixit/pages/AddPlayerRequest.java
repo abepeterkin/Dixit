@@ -15,7 +15,7 @@ import gamestuff.Game;
 import gamestuff.Player;
 
 /**
- * 
+ *
  * Lets a player join a game.
  */
 public class AddPlayerRequest implements TemplateViewRoute {
@@ -48,6 +48,6 @@ public class AddPlayerRequest implements TemplateViewRoute {
   private ModelAndView failure(String message) {
     Map<String, Object> variables = ImmutableMap.of("success", "false",
         "error", message);
-    return new ModelAndView(variables, "reponse.ftl");
+    return new ModelAndView(variables, "response.ftl");
   }
 }

@@ -13,8 +13,8 @@ public class ChatLine {
    *
    * @param message
    *          the content of the message
-   * @param playerName
-   *          the name of the player who sent the message
+   * @param player
+   *          the player who sent the message
    * @param color
    *          the player's color
    */

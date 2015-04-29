@@ -7,16 +7,6 @@
 			<canvas id="board">No canvas support</canvas>
 		</div>
 		<div id="col2">
-			<div id="music">
-			    <audio controls loop>
-                    <source src="/music/Teller_of_the_Tales.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
-                <audio controls loop>
-                    <source src="/music/Suonatore_di_Liuto.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
-            </div>
 			<div id="chat">
 				<div id="chat-text">
 				</div>
@@ -30,10 +20,6 @@
 		</div>
 	</div>
 </div>
-<button class ="btn btn-default" id="advancePhase">advance phase</button>
-<p id="currentPhase"></p>
-<p id="storyTeller"></p>
-<p id="clientPlayer"></p>
 <div class="modal fade" id="cardModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -43,10 +29,10 @@
       </div>
       <div class="modal-body">
         <img id="cardImg" src="">
+        <br>    <br>          
+        <button id="send-card-btn" type="button" class="btn btn-default" disabled>Send Card</button>
       </div>
-      <div class="modal-footer">
-      	<button id="send-card-btn" type="button" class="btn btn-default" disabled>Send Card</button>
-      </div>
+      
     </div>
   </div>
 </div>
@@ -72,6 +58,7 @@
       </div>
       <div class="modal-body">
       	<input type="text" id="clueInput" class="form-control" placeholder="Enter clue here..."/>
+        <button id="send-clue-btn" type="button" class="btn btn-default" disabled>Send Clue</button>
         <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="false">
   <!-- Indicators -->
   <ol class="carousel-indicators">
@@ -105,7 +92,10 @@
      <div class="item">
       <input id="cardId" value="4"hidden/>
        <img id="card4" src="">
-
+    </div>
+       <div class="item">
+      <input id="cardId" value="5"hidden/>
+       <img id="card5" src="">
     </div>
   </div>
   <!-- Controls -->
@@ -118,9 +108,6 @@
     <span class="sr-only">Next</span>
   </a>
 </div>
-      </div>
-      <div class="modal-footer">
-      	<button id="send-clue-btn" type="button" class="btn btn-default" disabled>Send Clue</button>
       </div>
     </div>
   </div>

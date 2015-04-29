@@ -7,18 +7,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
-
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
-public class Main {
+import com.google.gson.Gson;
+
+/**
+ * The main class. Contains every currently running game of dixit.
+ */
+public final class Main {
 
   public static final Gson GSON = new Gson();
   private static Map<String, Game> gameMap = new HashMap<String, Game>();
   private static int nextId = 0;
 
+  /**
+   * @param args the arguments to run main with
+   */
   public static void main(
       String[] args) {
     OptionParser parser = new OptionParser();
@@ -32,45 +38,74 @@ public class Main {
     }
   }
 
-  /** Returns the next id to be assigned to a player, and increments the value
-   * so that the next player will get a new id.
+  /**
+   * Returns the next id to be assigned to a player, and increments the value so
+   * that the next player will get a new id.
    *
    * @return an id for a new player
    */
-  public static String newId() {
+  public static synchronized String newId() {
     String toReturn = Integer.toString(nextId);
     nextId++;
     return toReturn;
   }
 
-  public static boolean gameExists(
+  /**
+   * @param name the name of a game
+   * @return whether there exists a game with that name
+   */
+  public static synchronized boolean gameExists(
       String name) {
-    //System.out.println(gameMap.keySet());
+    // System.out.println(gameMap.keySet());
     return gameMap.containsKey(name);
   }
 
-  public static void addGame(
+  /** Creates a new game.
+   * @param name the name to give the game
+   * @param game the game to add
+   */
+  public static synchronized void addGame(
       String name,
       Game game) {
     gameMap.put(name, game);
   }
 
-  public static Game getGame(
+  /**
+   * @param name the name of the game to retrieve
+   * @return the game that was found, or null if the game
+   * does not exist
+   */
+  public static synchronized Game getGame(
       String name) {
     return gameMap.get(name);
   }
 
-  public static void removeGame(
+  /**
+   * @param name the name of the game to remove
+   */
+  public static synchronized void removeGame(
       String name) {
     gameMap.remove(name);
   }
 
-  public static List<String> getGameNameList() {
+  /**
+   * @return a list of every name used for a game
+   */
+  public static synchronized List<String> getGameNameList() {
     return new ArrayList<String>(gameMap.keySet());
   }
 
-  public static List<Game> getGameList() {
+  /**
+   * @return a list of every game the server is running
+   */
+  public static synchronized List<Game> getGameList() {
     return new ArrayList<Game>(gameMap.values());
   }
 
+  /**
+   * Private constructor for the style checker.
+   */
+  private Main() {
+    //does nothing
+  }
 }

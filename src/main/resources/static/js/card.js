@@ -2,15 +2,12 @@ var backImg = new Image();
 backImg.src = "/images/back_of_card.jpg";
 function Card(options) {
   this.id = options.id; // / dont take img as constructor so ppl dont CHEAT
-  this.x = options.x;
-  this.y = options.y;
+  this.x = -100;
+  this.y = -100;
   this.visible = options.visible;
-  this.canvas = options.canvas;
-  this.height = options.canvas.height / 5.5;
-  this.width = options.canvas.width / 10;
   this.frontImg = new Image();
-  if (options.img) {
-    this.frontImg.src = options.img;
+  if (options.image) {
+    this.frontImg.src = "/images/cards/" + options.image;
   }
   this.backImg = backImg;
   this.inHand = options.inHand;
@@ -58,14 +55,14 @@ Card.prototype.reveal = function() {
   this.visible = true;
 }
 
-Card.prototype.makeBig = function() {
-  this.height = this.canvas.height / 3;
-  this.width = this.canvas.width / 7;
+Card.prototype.makeBig = function(canvas) {
+  this.height = canvas.height / 3;
+  this.width = canvas.width / 7;
 }
 
-Card.prototype.makeSmall = function() {
-  this.height = this.canvas.height / 5;
-  this.width = this.canvas.width / 10;
+Card.prototype.makeSmall = function(canvas) {
+  this.height = canvas.height / 5;
+  this.width = canvas.width / 10;
 }
 
 Card.prototype.highlight = function(ctx) {

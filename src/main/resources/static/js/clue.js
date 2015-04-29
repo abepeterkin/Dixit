@@ -9,10 +9,12 @@ function Clue(opt) {
 }
 
 Clue.prototype.draw = function(ctx) {
-  ctx.font = this.fontsize + "px " + this.fontface;
-  ctx.fillText(this.text, this.x, this.y);
+  if(this.text != '""'){
+  	ctx.font = this.fontsize + "px " + this.fontface;
+  	ctx.fillText(this.text, this.x, this.y);
   if (this.card) {
     this.card.draw(ctx);
+  }
   }
 }
 

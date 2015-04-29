@@ -16,13 +16,8 @@ import gamestuff.Player;
  * Retrieves a deep serialization of a game.
  */
 public class GetGameRequest implements Route {
-
-  private DixitSerializationUtil serializationUtil = new DixitSerializationUtil();
-
   @Override
-  public Object handle(
-      Request req,
-      Response res) {
+  public Object handle(Request req, Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");
     String playerId = qm.value("playerId");
@@ -34,10 +29,8 @@ public class GetGameRequest implements Route {
     if (tempPlayer == null) {
       return "false";
     }
-    JsonElement tempJson = serializationUtil.deepSerializeGame(tempGame,
+    JsonElement tempJson = DixitSerializationUtil.deepSerializeGame(tempGame,
         tempPlayer);
-
-    System.out.println(tempJson);
     return tempJson.toString();
   }
 }
