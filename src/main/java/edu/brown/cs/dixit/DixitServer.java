@@ -14,6 +14,7 @@ import edu.brown.cs.dixit.pages.DixitMainPage;
 import edu.brown.cs.dixit.pages.DixitNewGamePage;
 import edu.brown.cs.dixit.pages.GetGameRequest;
 import edu.brown.cs.dixit.pages.GetUpdateRequest;
+import edu.brown.cs.dixit.pages.PlayerReadyRequest;
 import edu.brown.cs.dixit.pages.RemoveNonStoryCardRequest;
 import edu.brown.cs.dixit.pages.RemoveVoteForCardRequest;
 import edu.brown.cs.dixit.pages.SeeCurrentGamesRequest;
@@ -49,6 +50,7 @@ public class DixitServer {
     Spark.post("/voteForCard", new VoteForCardRequest());
     Spark.post("/removeVoteForCard", new RemoveVoteForCardRequest());
     Spark.post("/addChat", new AddChatRequest());
+    Spark.post("/playerReady", new PlayerReadyRequest());
     Spark.get("/joinOptions/:gameName", new DixitJoinOptionsPage(),
         new FreeMarkerEngine());
     Spark.get("/", new DixitHomePage(), new FreeMarkerEngine());
