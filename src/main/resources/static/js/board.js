@@ -276,11 +276,9 @@ Board.prototype.addListeners = function() {
 }
 
 Board.prototype.changePhase = function(phase) {
-  console.log("changing phase to " + phase);
   switch (phase) {
   case 'STORYTELLER':
     if (this.clientPlayer.isStoryTeller) {
-      console.log("this is the client");
       var card;
       var clueModalImg;
       for (var i = 0; i < board.clientPlayer.hand.length; i++) {
@@ -288,7 +286,6 @@ Board.prototype.changePhase = function(phase) {
         clueModalImg = board.clueModal.find('#card' + i)[0];
         clueModalImg.src = card.frontImg.src;
         $('#card' + i).css('height', $(window).height() * .72);
-        console.log(clueModalImg);
 
       }
       $('.carousel').css('height', $(window).height() * 75);
@@ -296,7 +293,6 @@ Board.prototype.changePhase = function(phase) {
       $('.carousel-control').css('height', $(window).height() * .75);
       board.modalContent.css('height', $(window).height() * .95);
       // board.modalContent.css('width', $('#card0').width());
-      console.log(clueModalImg.width);
       board.clueModal.modal('show');
       break;
     } else {
@@ -351,10 +347,9 @@ function sendClue(event) {
   board.clueModal.modal('hide');
   board.clue.refresh(board);
   board.clientPlayer.refresh(board.canvas);
-  console.log("adding clue");
+
   addStoryCardRequest(board.clientPlayer.hand[board.clue.cardIndex].id,
       board.clueInput.val(), function(e) {
-        console.log(e);
       });
 }
 
@@ -395,6 +390,7 @@ function mouseClickListener(event) {
           } else {
             board.cardVoted = card;
             voteForCardRequest(card.id, function(e) {
+              console.log(e);
               if (e)
                 console.log("voted");
             });
