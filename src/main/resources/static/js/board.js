@@ -380,7 +380,7 @@ function mouseClickListener(event) {
     if (!board.clientPlayer.isStoryTeller) {
       for (var i = 0; i < board.cards.length; i++) {
         card = board.cards[i];
-        if (card.clicked(mouseX, mouseY)) {
+        if (card.clicked(mouseX, mouseY) && selectedCard.id != card.id) {
           if (board.cardVoted == card) {
             board.cardVoted = null;
             removeVoteForCardRequest(function(e) {
@@ -498,7 +498,7 @@ function mouseMoveListener(evt) {
   if (board.game.currPhase === game.phases['Voting']) {
     for (var i = 0; i < board.cards.length; i++) {
       card = board.cards[i];
-      if (card.clicked(mouseX, mouseY)) {
+      if (card.clicked(mouseX, mouseY) && card.id != selectedCard.id) {
         // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
         hoveringCard = true;
       }
