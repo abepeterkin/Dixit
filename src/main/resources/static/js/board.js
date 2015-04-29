@@ -368,6 +368,7 @@ function mouseClickListener(event) {
     if (card.clicked(mouseX, mouseY)) {
       if (card.visible) {
         var modalImg = board.cardModal.find('.modal-body img')[0];
+        modalImg.src = card.frontImg.src;
         modalImg.height = $(window).height() * 0.75;
         modalImg.width = $(window).height() * 0.50;
         if (game.currPhase != game.phases['NonStoryCards']) {
