@@ -28,7 +28,7 @@ public class DixitServer {
 
   /**
    * Initializes all of the pages.
-   * 
+   *
    * @param port
    *          The port on which to run the server.
    */
@@ -59,7 +59,7 @@ public class DixitServer {
   /**
    * Retrieves the Dixit game subscriber. This object is used to notify clients
    * when a change has occurred in the game.
-   * 
+   *
    * @return The game subscriber.
    */
   public static DixitGameSubscriber getDixitGameSubscriber() {

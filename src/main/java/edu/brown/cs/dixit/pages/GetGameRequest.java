@@ -15,7 +15,8 @@ import gamestuff.Player;
 /**
  * Retrieves a deep serialization of a game.
  */
-public class GetGameRequest implements Route {  @Override
+public class GetGameRequest implements Route {
+  @Override
   public Object handle(Request req, Response res) {
     QueryParamsMap qm = req.queryMap();
     String gameName = qm.value("gameName");

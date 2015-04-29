@@ -76,8 +76,7 @@ public class Game {
   }
 
   /**
-   * @param a
-   *          card id
+   * @param id a card id
    * @return the card with that id
    */
   public Card getCardWithId(
@@ -128,9 +127,11 @@ public class Game {
     return HAND_SIZE;
   }
 
+
   /**
-   * @param card
-   *          the card to remove
+   *
+   * @param card the card to remove the vote for
+   * @return whether the removal was successful
    */
   synchronized public boolean removeVote(
       Card card) {
@@ -146,8 +147,9 @@ public class Game {
   }
 
   /**
-   * @param c
+   * @param card
    *          the card to remove
+   * @return whether the removal was successful
    */
   synchronized public boolean removeNonStoryCard(
       Card card) {
@@ -170,7 +172,9 @@ public class Game {
   }
 
   /**
-   * adds a line to the game's chat log
+   * adds a line to the game's chat
+   * @param player the player who sent the message
+   * @param message the content of the message
    */
   synchronized public void addToChat(
       Player player,
@@ -237,7 +241,7 @@ public class Game {
 
   /**
    * sets up game board deck is filled w/ all possible cards trash is empty all
-   * players given x cards depending on custom hand size
+   * players given x cards depending on custom hand size.
    */
   synchronized public void startGame() {
     Collections.shuffle(this.deck);
@@ -259,8 +263,8 @@ public class Game {
   }
 
   /**
-   * When first player volunteers to share story, Player is set to storyteller
-   * Story is stored
+   * When first player volunteers to share story, Player is set to storyteller.
+   * Story is stored.
    *
    * phase to NONSTORYCARDS and continues as normal
    *
@@ -268,6 +272,7 @@ public class Game {
    *          Player who submitted first story
    * @param s
    *          Story submitted
+   * @param c the card that the story is referring to
    */
   synchronized public void firstStory(
       Player player,
@@ -291,6 +296,7 @@ public class Game {
    *          the story
    * @param c
    *          the card attributed to the story
+   * @return whether the submission was successful
    */
   synchronized public boolean submitStory(
       String s,
@@ -317,11 +323,10 @@ public class Game {
   }
 
   /**
-   * again we need to figure out how we're doing votes, player will submit vote
-   * if votes full, advance to scoring
-   *
-   * @param v
-   *          the vote being cast
+   * Casts a vote for a certain card.
+   * @param p the player who cast the vote
+   * @param c the card that the vote is being cast for
+   * @return whether the vote was successfully cast
    */
   synchronized public boolean castVote(
       Player p,
@@ -338,6 +343,9 @@ public class Game {
     return true;
   }
 
+  /**
+   * @param player the player who's cards are being trashed
+   */
   synchronized private void trashPlayerCards(
       Player player) {
     List<Card> hand = player.getHand();
@@ -474,6 +482,7 @@ public class Game {
    *          the player adding the card
    * @param c
    *          the card to be added
+   * @return whether the addition was successful
    */
   synchronized public boolean addCardToTable(
       Player p,
@@ -512,7 +521,8 @@ public class Game {
   }
 
   /**
-   * updates phase in game.
+   * Updates the phase of the game.
+   * @param p the plase the game is being updated to
    */
   synchronized public void updatePhase(
       Phase p) {
