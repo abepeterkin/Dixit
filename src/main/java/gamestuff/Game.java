@@ -477,7 +477,7 @@ public class Game {
     playerReadyMap.put(player, true);
     if (allPlayersReady()) {
       playerReadyMap.clear();
-      updatePhase(Phase.STORYTELLER);
+      beginNewRound();
     }
     return true;
   }
@@ -493,7 +493,7 @@ public class Game {
   /**
    * begins a new round of the game after the previous round has ended
    */
-  public synchronized void beginNewRound() {
+  private synchronized void beginNewRound() {
     if (!this.phase.equals(Phase.WAITING)) {
       return;
     }
