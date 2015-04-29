@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 import edu.brown.cs.dixit.DixitGameSubscriber;
 import edu.brown.cs.dixit.DixitServer;
 
@@ -35,7 +38,7 @@ public class Game {
   private Stack<Card> trash = new Stack<Card>();
   // private List<Card> tableCards = new ArrayList<Card>();
   private List<Vote> votes = new ArrayList<Vote>();
-  private Map<Card, Player> tableCards = new HashMap<>();
+  private BiMap<Card, Player> tableCards = HashBiMap.create ();;
   private Map<String, Card> cardIdMap = new HashMap<>();
   private Map<String, Player> playerIdMap = new HashMap<>();
   private Map<String, String> colorMap = new HashMap<>();
@@ -133,13 +136,13 @@ public class Game {
    * @param card the card to remove the vote for
    * @return whether the removal was successful
    */
-  synchronized public boolean removeVote(
-      Card card) {
+  public synchronized boolean removeVote(
+      String playerId) {
     if (this.phase != Phase.VOTING) {
       return false;
     }
     for (Vote v : votes) {
-      if (v.card.equals(card)) {
+      if (v.player.getId().equals(playerId)) {
         votes.remove(v);
       }
     }
@@ -147,19 +150,23 @@ public class Game {
   }
 
   /**
-   * @param card
-   *          the card to remove
-   * @return whether the removal was successful
+   * @param playerId the id of the player who's card we're removing
+   * @return whether the removal was successful. removal fails if the phase is
+   * wrong or if the card being removed is the story card.
    */
   synchronized public boolean removeNonStoryCard(
-      Card card) {
+      String playerId) {
     if (this.phase != Phase.NONSTORYCARDS) {
       return false;
     }
-    Player tempPlayer = tableCards.get(card);
+    Player player = playerIdMap.get(playerId);
+    Card card = tableCards.inverse().get(player);
+    if (card.getStoryteller()) {
+      return false;
+    }
     tableCards.remove(card);
-    tempPlayer.draw(card);
-    subscriber.handChanged(this, tempPlayer);
+    player.draw(card);
+    subscriber.handChanged(this, player);
     subscriber.tableCardsChanged(this);
     return true;
   }
@@ -256,9 +263,9 @@ public class Game {
       }
     }
     // Assign an arbitrary storyteller.
-    Player tempPlayer = players.get(0);
-    tempPlayer.setIsStoryteller(true);
-    subscriber.playerChanged(this, tempPlayer);
+    Player player = players.get(0);
+    player.setIsStoryteller(true);
+    subscriber.playerChanged(this, player);
     updatePhase(Phase.STORYTELLER);
   }
 
