@@ -140,27 +140,27 @@ public class GameTest {
   
   //TEST: Cannot submit blank story ""
   
-  @Test
-  public void FirstStoryTest() {
-    List<Player> players = new ArrayList<Player>();
-    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
-    Player p2 = new Player(Main.newId(), "Esteban", "RED");
-    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
-    players.add(p1);
-    players.add(p2);
-    players.add(p3);
-    Game g = new Game("CoolGame", 3, 7, players);
-    g.startGame();
-    Card storyCard = g.getPlayerHand(p2).get(0);
-    g.firstStory(p2, "Test Story", storyCard);
-    assertTrue(g.getStory().equals("Test Story"));
-    assertTrue(g.getPhase() == Phase.NONSTORYCARDS);
-    assertTrue(g.getTableCards().get(0).equals(storyCard));
-    assertTrue(g.getTableCards().size() == 1);
-    assertTrue(p1.isStoryteller() == false);
-    assertTrue(p2.isStoryteller() == true);
-    assertTrue(p3.isStoryteller() == false);
-  }
+//  @Test
+//  public void FirstStoryTest() {
+//    List<Player> players = new ArrayList<Player>();
+//    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+//    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+//    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
+//    players.add(p1);
+//    players.add(p2);
+//    players.add(p3);
+//    Game g = new Game("CoolGame", 3, 7, players);
+//    g.startGame();
+//    Card storyCard = g.getPlayerHand(p2).get(0);
+//    g.firstStory(p2, "Test Story", storyCard);
+//    assertTrue(g.getStory().equals("Test Story"));
+//    assertTrue(g.getPhase() == Phase.NONSTORYCARDS);
+//    assertTrue(g.getTableCards().get(0).equals(storyCard));
+//    assertTrue(g.getTableCards().size() == 1);
+//    assertTrue(p1.isStoryteller() == false);
+//    assertTrue(p2.isStoryteller() == true);
+//    assertTrue(p3.isStoryteller() == false);
+//  }
   
   /**
    * Poorly named test method: ensures that storyteller
@@ -469,6 +469,28 @@ public class GameTest {
     assertTrue(p4.getScore() == 2);
   }
   
+  @Test
+  public void GameOverTest() {
+    List<Player> players = new ArrayList<Player>();
+    Player p1 = new Player(Main.newId(), "Zach", "BLUE");
+    Player p2 = new Player(Main.newId(), "Esteban", "RED");
+    Player p3 = new Player(Main.newId(), "Jack", "GREEN");
+    players.add(p1);
+    players.add(p2);
+    players.add(p3);
+    p1.incrementScore(29);
+    Game g = new Game("CoolGame", 3, 7, players);
+    g.startGame();
+    Card storyCard = g.getPlayerHand(p2).get(0);
+    Card nonStory1 = g.getPlayerHand(p3).get(3);
+    Card nonStory2 = g.getPlayerHand(p1).get(5);
+    g.firstStory(p2, "Test Story", storyCard);
+    g.addCardToTable(p3, nonStory1);
+    g.addCardToTable(p1, nonStory2);
+    g.castVote(p3, nonStory2);
+    g.castVote(p1, storyCard);
+    assertTrue(g.getPhase() == Phase.GAMEOVER);
+  }
   
 
 }

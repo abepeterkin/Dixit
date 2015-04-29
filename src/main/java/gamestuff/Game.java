@@ -295,8 +295,8 @@ public class Game {
    * Updates the phase to the voting phase.
    */
   public void votingPhase() {
-    updatePhase(Phase.VOTING);
     subscriber.tableCardsChanged(this);
+    updatePhase(Phase.VOTING);
   }
 
   /**
@@ -338,7 +338,6 @@ public class Game {
    * storyteller score 1 point for each vote their own pictures receive.
    */
   public void scoringPhase() {
-    updatePhase(Phase.SCORING);
     subscriber.gameChanged(this);
     int storyVotes = 0;
     for (Vote v : this.votes) {
@@ -365,6 +364,7 @@ public class Game {
       }
     } 
     if (!allStoryVotes) {
+      updatePhase(Phase.SCORING);
       boolean storyHasBeenVoted = false;
       for (Vote v : this.votes) {
         Card voteCard = v.getCard();
@@ -385,7 +385,17 @@ public class Game {
         }
       }
     }
-    prepareForNextRound();
+    boolean gameOver = false;
+    for (Player p : players) {
+      if (p.getScore() > 29) {
+        gameOver = true;
+      }
+    }
+    if (gameOver) {
+      gameOver();
+    } else {
+      prepareForNextRound();
+    }
   }
 
   /**
@@ -395,8 +405,7 @@ public class Game {
     updatePhase(Phase.CLEANUP);
     // game ends when the deck is empty
     if (deck.isEmpty()) {
-      Collections.sort(this.players);
-      updatePhase(Phase.GAMEOVER);
+      gameOver();
     } else {
       for (Player p : this.players) {
         p.draw(this.deck.pop());
@@ -409,7 +418,12 @@ public class Game {
       updatePhase(Phase.STORYTELLER);
     }
   }
-
+  
+  private void gameOver() {
+    Collections.sort(this.players);
+    updatePhase(Phase.GAMEOVER);
+  }
+  
   /*
    * private List<Player> determineWinners() { int highestScore = 0; for (Player
    * p : players){ if (p.getScore() > highestScore) { highestScore =
