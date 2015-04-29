@@ -32,8 +32,7 @@ public class RemoveNonStoryCardRequest implements Route {
     if (player.isStoryteller()) {
       return "false";
     }
-    // TODO: Find the card which the player added.
-    if (game.removeNonStoryCard(null)) {
+    if (game.removeNonStoryCard(playerId)) {
       return "true";
     } else {
       return "false";

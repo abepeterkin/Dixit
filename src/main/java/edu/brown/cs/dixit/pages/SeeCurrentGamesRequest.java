@@ -19,7 +19,7 @@ import com.google.gson.Gson;
  */
 public class SeeCurrentGamesRequest implements Route {
 
-  private final static Gson GSON = new Gson();
+  private static final Gson GSON = new Gson();
 
   @Override
   public Object handle(
@@ -41,12 +41,15 @@ public class SeeCurrentGamesRequest implements Route {
     return GSON.toJson(variables);
   }
 
+  /**
+   * Class containing basic data about a game
+   */
   private class BasicGameData {
-    String gameName;
-    List<String> playerNames;
-    List<String> colors;
-    int numberOfPlayers;
-    int maxPlayers;
+    private String gameName;
+    private List<String> playerNames;
+    private List<String> colors;
+    private int numberOfPlayers;
+    private int maxPlayers;
 
     public BasicGameData(String gameName, List<String> playerNames,
         List<String> colors, int numberOfPlayers, int maxPlayers) {

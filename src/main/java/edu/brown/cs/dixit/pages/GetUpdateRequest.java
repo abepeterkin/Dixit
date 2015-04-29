@@ -26,20 +26,22 @@ import gamestuff.Player;
  */
 public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
-  private Map<Game, DixitUpdateList> dixitUpdateListMap = new HashMap<Game, DixitUpdateList>();
+  private Map<Game, DixitUpdateList> dixitUpdateListMap
+    = new HashMap<Game, DixitUpdateList>();
   private Map<Player, Long> playerUpdateIdMap = new HashMap<Player, Long>();
   private long nextUpdateId = 0;
+  private static final int OLD_UPDATES_TO_REMOVE = 1000;
 
   // Gets a new update id and increments the internal nextUpdateId by one.
   // Use this method to avoid synchronization problems.
-  synchronized private long getUpdateId() {
+  private synchronized long getUpdateId() {
     long output = nextUpdateId;
     nextUpdateId++;
     return output;
   }
 
   @Override
-  synchronized public Object handle(
+  public synchronized Object handle(
       Request req,
       Response res) {
     QueryParamsMap qm = req.queryMap();
@@ -71,7 +73,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     playerUpdateIdMap.put(tempPlayer, nextUpdateId - 1);
 
     // Remove old updates so they don't pollute the system.
-    tempUpdateList.removeUpdates(nextUpdateId - 1000);
+    tempUpdateList.removeUpdates(nextUpdateId - OLD_UPDATES_TO_REMOVE);
 
     return tempJson.toString();
   }
@@ -342,6 +344,9 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     private Player addedPlayer;
     private long id;
 
+    /**
+     * @param player the player who was added
+     */
     public AddPlayerUpdate(Player player) {
       this.addedPlayer = player;
       id = getUpdateId();

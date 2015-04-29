@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 import edu.brown.cs.dixit.DixitGameSubscriber;
 import edu.brown.cs.dixit.DixitServer;
 
@@ -35,7 +38,7 @@ public class Game {
   private Stack<Card> trash = new Stack<Card>();
   // private List<Card> tableCards = new ArrayList<Card>();
   private List<Vote> votes = new ArrayList<Vote>();
-  private Map<Card, Player> tableCards = new HashMap<>();
+  private BiMap<Card, Player> tableCards = HashBiMap.create ();;
   private Map<String, Card> cardIdMap = new HashMap<>();
   private Map<String, Player> playerIdMap = new HashMap<>();
   private Map<String, String> colorMap = new HashMap<>();
@@ -76,8 +79,7 @@ public class Game {
   }
 
   /**
-   * @param a
-   *          card id
+   * @param id a card id
    * @return the card with that id
    */
   public Card getCardWithId(
@@ -128,17 +130,19 @@ public class Game {
     return HAND_SIZE;
   }
 
+
   /**
-   * @param card
-   *          the card to remove
+   *
+   * @param card the card to remove the vote for
+   * @return whether the removal was successful
    */
-  synchronized public boolean removeVote(
-      Card card) {
+  public synchronized boolean removeVote(
+      String playerId) {
     if (this.phase != Phase.VOTING) {
       return false;
     }
     for (Vote v : votes) {
-      if (v.card.equals(card)) {
+      if (v.player.getId().equals(playerId)) {
         votes.remove(v);
       }
     }
@@ -146,18 +150,23 @@ public class Game {
   }
 
   /**
-   * @param c
-   *          the card to remove
+   * @param playerId the id of the player who's card we're removing
+   * @return whether the removal was successful. removal fails if the phase is
+   * wrong or if the card being removed is the story card.
    */
   synchronized public boolean removeNonStoryCard(
-      Card card) {
+      String playerId) {
     if (this.phase != Phase.NONSTORYCARDS) {
       return false;
     }
-    Player tempPlayer = tableCards.get(card);
+    Player player = playerIdMap.get(playerId);
+    Card card = tableCards.inverse().get(player);
+    if (card.getStoryteller()) {
+      return false;
+    }
     tableCards.remove(card);
-    tempPlayer.draw(card);
-    subscriber.handChanged(this, tempPlayer);
+    player.draw(card);
+    subscriber.handChanged(this, player);
     subscriber.tableCardsChanged(this);
     return true;
   }
@@ -170,7 +179,9 @@ public class Game {
   }
 
   /**
-   * adds a line to the game's chat log
+   * adds a line to the game's chat
+   * @param player the player who sent the message
+   * @param message the content of the message
    */
   synchronized public void addToChat(
       Player player,
@@ -237,7 +248,7 @@ public class Game {
 
   /**
    * sets up game board deck is filled w/ all possible cards trash is empty all
-   * players given x cards depending on custom hand size
+   * players given x cards depending on custom hand size.
    */
   synchronized public void startGame() {
     Collections.shuffle(this.deck);
@@ -252,15 +263,15 @@ public class Game {
       }
     }
     // Assign an arbitrary storyteller.
-    Player tempPlayer = players.get(0);
-    tempPlayer.setIsStoryteller(true);
-    subscriber.playerChanged(this, tempPlayer);
+    Player player = players.get(0);
+    player.setIsStoryteller(true);
+    subscriber.playerChanged(this, player);
     updatePhase(Phase.STORYTELLER);
   }
 
   /**
-   * When first player volunteers to share story, Player is set to storyteller
-   * Story is stored
+   * When first player volunteers to share story, Player is set to storyteller.
+   * Story is stored.
    *
    * phase to NONSTORYCARDS and continues as normal
    *
@@ -268,6 +279,7 @@ public class Game {
    *          Player who submitted first story
    * @param s
    *          Story submitted
+   * @param c the card that the story is referring to
    */
   synchronized public void firstStory(
       Player player,
@@ -291,6 +303,7 @@ public class Game {
    *          the story
    * @param c
    *          the card attributed to the story
+   * @return whether the submission was successful
    */
   synchronized public boolean submitStory(
       String s,
@@ -317,11 +330,10 @@ public class Game {
   }
 
   /**
-   * again we need to figure out how we're doing votes, player will submit vote
-   * if votes full, advance to scoring
-   *
-   * @param v
-   *          the vote being cast
+   * Casts a vote for a certain card.
+   * @param p the player who cast the vote
+   * @param c the card that the vote is being cast for
+   * @return whether the vote was successfully cast
    */
   synchronized public boolean castVote(
       Player p,
@@ -338,6 +350,9 @@ public class Game {
     return true;
   }
 
+  /**
+   * @param player the player who's cards are being trashed
+   */
   synchronized private void trashPlayerCards(
       Player player) {
     List<Card> hand = player.getHand();
@@ -474,6 +489,7 @@ public class Game {
    *          the player adding the card
    * @param c
    *          the card to be added
+   * @return whether the addition was successful
    */
   synchronized public boolean addCardToTable(
       Player p,
@@ -512,7 +528,8 @@ public class Game {
   }
 
   /**
-   * updates phase in game.
+   * Updates the phase of the game.
+   * @param p the plase the game is being updated to
    */
   synchronized public void updatePhase(
       Phase p) {
