@@ -638,9 +638,11 @@ public class Game {
     subscriber.gameChanged(this);
     // Visibility of votes changes when entering or exiting WAITING phase.
     // Visibility of table card owners also changes.
+    // Votes update should occur after cards update so that
+    // the votes are not removed in the update.
     if (p == Phase.WAITING ^ tempLastPhase == Phase.WAITING) {
-      subscriber.votesChanged(this);
       subscriber.tableCardsChanged(this);
+      subscriber.votesChanged(this);
     }
   }
 
