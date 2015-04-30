@@ -322,6 +322,17 @@ Board.prototype.changePhase = function(phase) {
     board.cardVoted = null;
   }
 }
+Board.prototype.doVotes = function(votes) {
+  var card;
+  for (var i = 0; i < votes.length; i++) {
+    for (var j = 0; j < this.cards.length; j++) {
+      card = this.cards[j];
+      if (card.id === votes[i].cardId) {
+        card.votes.push(board.game.players[votes[i].playerId].color);
+      }
+    }
+  }
+}
 
 Board.prototype.tableCardsUpdate = function(options) {
   board.cards = [];
