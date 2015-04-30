@@ -38,6 +38,10 @@ public class Announcer {
     announce("A new game has begun!");
     storytellerPhase();
   }
+  
+  public void gameOver() {
+    announce("GAME OVER!");
+  }
 
   public void storytellerPhase() {
     String teller = g.getStoryteller().getChatName();

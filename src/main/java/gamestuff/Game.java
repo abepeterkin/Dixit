@@ -543,6 +543,7 @@ public class Game {
 
   private void gameOver() {
     Collections.sort(this.players);
+    announcer.gameOver();
     updatePhase(Phase.GAMEOVER);
   }
 
