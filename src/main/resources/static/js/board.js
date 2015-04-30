@@ -146,6 +146,7 @@ var drawBigHelper = function() {
 Board.prototype.drawPlayersBig = function() {
   var i = 0;
   var player;
+  var nameToDisplay;
   for ( var id in board.game.players) {
     if (board.game.players.hasOwnProperty(id)) {
       player = board.game.players[id];
@@ -153,7 +154,12 @@ Board.prototype.drawPlayersBig = function() {
       player.idle.render(board.ctx, i, player);
       board.ctx.fillStyle = player.color;
       board.ctx.font = "20px Georgia" // TODO: make this responsive
-      board.ctx.fillText(player.name, 20, i * 20 + 20);
+      if(player.isStoryTeller){
+    	  nameToDisplay = player.name + " - Story Teller";
+      } else {
+    	  nameToDisplay = player.name;
+      }
+      board.ctx.fillText(nameToDisplay, 20, i * 20 + 20);
 
       i++;
     }
@@ -163,13 +169,19 @@ Board.prototype.drawPlayersBig = function() {
 Board.prototype.drawPlayersSmall = function() {
   var i = 0;
   var player;
+  var nameToDisplay;
   for ( var id in this.game.players) {
     if (this.game.players.hasOwnProperty(id)) {
       player = board.game.players[id];
       this.game.players[id].drawSmall(this, i);
       board.ctx.fillStyle = player.color;
       board.ctx.font = "20px Georgia" // TODO: make this responsive
-      board.ctx.fillText(player.name, 20, i * 20 + 20);
+    	  if(player.isStoryTeller){
+        	  nameToDisplay = player.name + " - Story Teller";
+          } else {
+        	  nameToDisplay = player.name;
+          }
+          board.ctx.fillText(nameToDisplay, 20, i * 20 + 20);
       i++;
     }
   }
@@ -295,6 +307,8 @@ Board.prototype.addListeners = function() {
 Board.prototype.changePhase = function(phase) {
   switch (phase) {
   case 'STORYTELLER':
+	board.advanceBtn.css('display', 'none');
+	board.advanceBtn.prop('disabled', 'false');
     board.smallBoard = true;
     board.adjustCardsPos();
     if (this.clientPlayer.isStoryTeller) {
