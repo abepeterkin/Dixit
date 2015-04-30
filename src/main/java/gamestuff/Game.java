@@ -614,6 +614,10 @@ public class Game {
    */
   public synchronized void updatePhase(
       Phase p) {
+    // Visibility of votes changes when entering or exiting WAITING phase.
+    if (p == Phase.WAITING ^ this.phase == Phase.WAITING) {
+      subscriber.votesChanged(this);
+    }
     this.phase = p;
     subscriber.gameChanged(this);
   }
