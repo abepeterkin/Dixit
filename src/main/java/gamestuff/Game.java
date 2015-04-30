@@ -615,8 +615,10 @@ public class Game {
     this.phase = p;
     subscriber.gameChanged(this);
     // Visibility of votes changes when entering or exiting WAITING phase.
+    // Visibility of table card owners also changes.
     if (p == Phase.WAITING ^ tempLastPhase == Phase.WAITING) {
       subscriber.votesChanged(this);
+      subscriber.tableCardsChanged(this);
     }
   }
 
@@ -670,16 +672,19 @@ public class Game {
    */
   public synchronized Card getTableCardByPlayer(
       Player player) {
-    List<Card> tempCardList = getTableCards();
-    int index = 0;
-    while (index < tempCardList.size()) {
-      Card tempCard = tempCardList.get(index);
-      if (tableCards.get(tempCard) == player) {
-        return tempCard;
-      }
-      index++;
-    }
-    return null;
+    return tableCards.inverse().get(player);
+  }
+
+  /**
+   * Retrieves the player belonging to the table card.
+   *
+   * @param player
+   *          The card which the player put down.
+   * @return The player who put down the card.
+   */
+  public synchronized Player getPlayerByTableCard(
+      Card card) {
+    return tableCards.get(card);
   }
 
   /**
@@ -689,6 +694,9 @@ public class Game {
     return votes.size();
   }
 
+  /**
+   * @return An immutable copy of the votes.
+   */
   public synchronized List<Vote> getVotes() {
     return ImmutableList.copyOf(votes);
   }
