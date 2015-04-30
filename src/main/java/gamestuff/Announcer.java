@@ -82,16 +82,51 @@ public class Announcer {
   public void removeVote(Player p) {
     String name = p.getChatName();
     int votesLeft = g.getNumberOfPlayers() - g.getNumberOfVotes() - 1;
-    announce (name + " has removed their vote!");
+    announce(name + " has removed their vote!");
     announce("Waiting on " + votesLeft + " more votes...");
+  }
+  
+  public void advanceToScoringPhase() {
+    announce("The game has advanced to voting phase!");
+  }
+  
+  public void incrementScore(Player p, int inc) {
+    String name = p.getChatName();
+    if (inc > 0) {
+      announce(name + " has gained " + inc + " points this round!");
+    } else {
+      announce(name + " didnt gain any points this round :/");
+    }
+  }
+  
+  public void advanceToWaitingPhase() {
+    announce("Once all players are ready to advance, the next round will begin.");
+  }
+  
+  public void submitReady(Player p) {
+    String name = p.getChatName();
+    int left = g.getMaxPlayers() - g.numberOfPlayersReady();
+    announce(name + " is ready for next round.");
+    if (left > 0) {
+      announce("Waiting for " + left + " more players...");
+    }
+  }
+  
+  public void newRound() {
+    announce("All players are ready: advancing to next round...");
+    storytellerPhase();
   }
 
   private void announce(String s) {
     Calendar now = Calendar.getInstance();
     int hour = now.get(Calendar.HOUR_OF_DAY) % 12;
     int minute = now.get(Calendar.MINUTE);
+    String zero = "";
+    if (minute < 10) {
+      zero = "0";
+    }
     String message = "[" + Integer.toString(hour)
-            + ":" + Integer.toString(minute) + "] " + s;
+            + ":" + zero + Integer.toString(minute) + "] " + s;
     ChatLine line = new ChatLine(console, message, color);
     c.addLine(line);
     DixitServer.getDixitGameSubscriber().chatChanged(g);

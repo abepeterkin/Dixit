@@ -24,6 +24,8 @@ import edu.brown.cs.dixit.DixitServer;
  *
  * Zach, when you work on this, could you investigate how to hook all this up to
  * the frontend stuff?
+ * 
+ * Got it.. --@zach
  */
 
 public class Game {
@@ -420,6 +422,11 @@ public class Game {
    */
   private synchronized void calculateScores() {
     this.phase = Phase.SCORING;
+    announcer.advanceToScoringPhase();
+    Map<Player, Integer> prevScores = new HashMap<Player, Integer>();
+    for (Player p: players) {
+      prevScores.put(p, p.getScore());
+    }
     int storyVotes = 0;
     for (Vote v : this.votes) {
       Card voteCard = v.getCard();
@@ -460,6 +467,10 @@ public class Game {
         }
       }
     }
+    for (Player p: players) {
+      int totalIncrement = p.getScore() - prevScores.get(p);
+      announcer.incrementScore(p, totalIncrement);
+    }
     boolean gameOver = false;
     for (Player p : players) {
       if (p.getScore() > 29) {
@@ -483,6 +494,7 @@ public class Game {
         subscriber.playerChanged(this, p);
       }
       updatePhase(Phase.WAITING);
+      announcer.advanceToWaitingPhase();
     }
   }
 
@@ -496,6 +508,7 @@ public class Game {
     if (!this.phase.equals(Phase.WAITING) && !this.phase.equals(Phase.SCORING)) {
       return false;
     }
+    announcer.submitReady(player);
     playerReadyMap.put(player, true);
     if (allPlayersReady() && this.phase.equals(Phase.WAITING)) {
       playerReadyMap.clear();
@@ -511,6 +524,10 @@ public class Game {
     List<Boolean> values = new ArrayList<>(playerReadyMap.values());
     return (values.size() == players.size() && !values.contains(false));
   }
+  
+  public int numberOfPlayersReady() {
+    return playerReadyMap.size();
+  }
 
   /**
    * begins a new round of the game after the previous round has ended
@@ -525,7 +542,7 @@ public class Game {
     subscriber.votesChanged(this);
     cycleStoryteller();
     updatePhase(Phase.STORYTELLER);
-    announcer.storytellerPhase();
+    announcer.newRound();
   }
 
   private void gameOver() {
