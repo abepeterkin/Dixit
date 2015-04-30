@@ -89,7 +89,6 @@ Board.prototype.drawSmall = function() {
   this.drawPlayersSmall();
   this.clientPlayer.drawHand(this.ctx);
   this.drawCards();
-  this.drawVote();
   this.clue.draw(this.ctx);
 
 }
@@ -102,7 +101,8 @@ Board.prototype.drawBig = function() {
     board.img.onload = drawBigHelper;
   }
 }
-
+//TODO: maybe remove this function because it isn't being called,
+//i took away the yellow highlighting.
 Board.prototype.drawVote = function() {
   if (board.cardVoted) {
     board.cardVoted.highlight(board.ctx);
@@ -141,7 +141,6 @@ var drawBigHelper = function() {
   player.drawHand(board.ctx);
   board.drawPlayersBig();
   board.drawCards();
-  board.drawVote();
   board.clue.draw(board.ctx);
 
 }
@@ -357,6 +356,10 @@ Board.prototype.doVotes = function(votes) {
   console.log('doing votes');
   console.log(votes);
   var card;
+  //clear votes
+  for(var i=0;i<this.cards.length;i++){
+	  this.cards[i].votes=[];
+  }
   for (var i = 0; i < votes.length; i++) {
     for (var j = 0; j < this.cards.length; j++) {
       card = this.cards[j];

@@ -119,19 +119,19 @@ Player.prototype.drawSmall = function(board, index) {
   var h = board.canvas.height / 5;
   var x = board.canvas.width - w;
   var y = (index * h / 2.2) - h / 5;
-  var score = board.game.score[this.id];
+  var player = this;
   if (img.complete) {
     board.ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
     board.ctx.font = "30px Georgia"; // make this responsive
     board.ctx.fillStyle = "black";
-    board.ctx.fillText(score, x + w / 1.5, y + h / 1.7);
+    board.ctx.fillText(player.score, x + w / 1.5, y + h / 1.7);
   } else {
     img.onload = function() {
       board.ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
       board.ctx.font = "30px Georgia"; // make this responsive
       board.ctx.fillStyle = "black";
 
-      board.ctx.fillText(score, x + w / 1.5, y + h);
+      board.ctx.fillText(player.score, x + w / 1.5, y + h);
     }
   }
 }
