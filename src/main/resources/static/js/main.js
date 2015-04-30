@@ -83,6 +83,8 @@ function processUpdates(responseObject) {
       board.clientPlayer.refresh(board.canvas);
       console.log(game.players[sessionStorage.playerId]);
       break;
+    case "votes":
+      board.doVotes(tempUpdateValue);
     }
   }
 }
@@ -122,6 +124,9 @@ function retreiveGame(responseObject) {
   }
   if (responseObject.tablecards) {
     board.tableCardsUpdate(responseObject.tablecards);
+  }
+  if (responseObject.votes) {
+    board.doVotes(responseObject.votes);
   }
 
   board.clientPlayer.refresh(board.canvas);
