@@ -45,7 +45,7 @@ body {
 	float:left;
 	width:100%;
 	overflow:hidden;
-	background:#ffa7a7; /* column 2 background colour */
+	background:#000000; /* column 2 background colour */
 }
 #container1 {
 	float:left;
@@ -79,6 +79,7 @@ canvas {
  height:10vh;
 }
 #chat{
+ padding: 2%;
  height:90vh;
 }
 #chat-text{
@@ -92,4 +93,8 @@ textarea{
  margin:0;
  padding:0;
  resize:none;
+}
+
+#advance-btn{
+ display:none;
 }

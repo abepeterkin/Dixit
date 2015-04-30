@@ -74,7 +74,10 @@ function processUpdates(responseObject) {
     case "player":
       if (tempUpdateValue.isStoryTeller) {
         game.setStoryTeller(game.players[tempUpdateValue.id]);
+      } else {
+        game.players[tempUpdateValue.id].isStoryTeller = false;
       }
+
       game.updateScore(tempUpdateValue.id, tempUpdateValue.score);
       break;
     case "hand":
@@ -83,6 +86,8 @@ function processUpdates(responseObject) {
       board.clientPlayer.refresh(board.canvas);
       console.log(game.players[sessionStorage.playerId]);
       break;
+    case "votes":
+      board.doVotes(tempUpdateValue);
     }
   }
 }
@@ -122,6 +127,9 @@ function retreiveGame(responseObject) {
   }
   if (responseObject.tablecards) {
     board.tableCardsUpdate(responseObject.tablecards);
+  }
+  if (responseObject.votes) {
+    board.doVotes(responseObject.votes);
   }
 
   board.clientPlayer.refresh(board.canvas);

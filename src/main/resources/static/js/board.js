@@ -39,8 +39,8 @@ function Board(options) {
   this.clueCardModal = $('#clueCardModal');
   this.clueModal = $('#sendClueModal');
   this.smallBoard = false;
-  $('#clientPlayer').text('Client player: ' + this.clientPlayer.name);
   this.modalContent = $('.modal-content');
+  this.advanceBtn = $('#advance-btn');
 }
 // draws the entire game board, including client player's hand
 Board.prototype.draw = function() {
@@ -284,6 +284,12 @@ Board.prototype.addListeners = function() {
   $('#carousel-example-generic').on('slid.bs.carousel', function(e) {
     board.clue.cardIndex = e.relatedTarget.children.item(0).value;
   })
+  this.advanceBtn.click(function() {
+    board.advanceBtn.prop('disabled', true);
+    readyRequest(function(e) {
+      console.log(e);
+    });
+  })
 }
 
 Board.prototype.changePhase = function(phase) {
@@ -320,6 +326,20 @@ Board.prototype.changePhase = function(phase) {
     board.smallBoard = true;
     board.adjustCardsPos();
     board.cardVoted = null;
+    board.advanceBtn.css('display', 'block');
+  }
+}
+Board.prototype.doVotes = function(votes) {
+  console.log('doing votes');
+  console.log(votes);
+  var card;
+  for (var i = 0; i < votes.length; i++) {
+    for (var j = 0; j < this.cards.length; j++) {
+      card = this.cards[j];
+      if (card.id === votes[i].cardId) {
+        card.votes.push(board.game.players[votes[i].playerId].color);
+      }
+    }
   }
 }
 
@@ -331,11 +351,16 @@ Board.prototype.tableCardsUpdate = function(options) {
     }
   } else {
     var card;
+    var cardObj;
     for (var i = 0; i < options.cards.length; i++) {
       card = options.cards[i];
       card.visible = true;
       card.inHand = false;
-      board.addCard(new Card(card));
+      cardObj = new Card(card);
+      board.addCard(cardObj);
+      if (card.ownerId) {
+        cardObj.outline = board.game.players[card.ownerId].color;
+      }
     }
   }
 }
@@ -517,7 +542,9 @@ function mouseMoveListener(evt) {
       card = board.cards[i];
       if (card.clicked(mouseX, mouseY) && card.id != selectedCard.id) {
         // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
-        hoveringCard = true;
+        if (!board.clientPlayer.isStoryTeller) {
+          hoveringCard = true;
+        }
       }
     }
   }
