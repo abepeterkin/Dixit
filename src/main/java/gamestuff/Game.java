@@ -378,7 +378,15 @@ public class Game {
       return false;
     }
     Vote vote = new Vote(p, c);
-    
+    boolean alreadyVoted = false;
+    for (Vote v: votes) {
+      if (v.getPlayer().equals(p)) {
+        alreadyVoted = true;
+      }
+    }
+    if (alreadyVoted) {
+      removeVote(p.getId());
+    }
     votes.add(vote);
     subscriber.votesChanged(this);
     announcer.submitVote(p);
