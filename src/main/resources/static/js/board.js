@@ -411,7 +411,6 @@ function sendBtn(event) {
     addNonStoryCardRequest(selectedCard.id, function(e) {
     });
     board.cardModal.modal('hide');
-  }
 }
 
 function sendClue(event) {
@@ -419,7 +418,6 @@ function sendClue(event) {
   board.clueModal.modal('hide');
   board.clue.refresh(board);
   board.clientPlayer.refresh(board.canvas);
-
   addStoryCardRequest(board.clientPlayer.hand[board.clue.cardIndex].id,
       board.clueInput.val(), function(e) {
 	  	board.clueInput.val("");
