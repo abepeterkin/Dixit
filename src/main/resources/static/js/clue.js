@@ -9,6 +9,8 @@ function Clue(opt) {
 }
 
 Clue.prototype.draw = function(ctx) {
+	//console.log('inside clue draw');
+	//console.log(this);
   if (this.text != '""') {
     ctx.fillStyle = "black";
     ctx.font = this.fontsize + "px " + this.fontface;

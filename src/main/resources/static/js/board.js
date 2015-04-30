@@ -89,8 +89,9 @@ Board.prototype.drawSmall = function() {
   this.drawPlayersSmall();
   this.clientPlayer.drawHand(this.ctx);
   this.drawCards();
-  this.clue.draw(this.ctx);
   this.drawVote();
+  this.clue.draw(this.ctx);
+
 }
 // draws the scoreboard gets passed other objects to ensure
 // background board always gets drawn first
@@ -139,9 +140,10 @@ var drawBigHelper = function() {
   board.iconsMap['min'] = ind - 1;
   player.drawHand(board.ctx);
   board.drawPlayersBig();
-  board.clue.draw(board.ctx);
   board.drawCards();
   board.drawVote();
+  board.clue.draw(board.ctx);
+
 }
 Board.prototype.drawPlayersBig = function() {
   var i = 0;
@@ -230,7 +232,7 @@ Board.prototype.adjustCardsPos = function() {
   if (board.cards.length >= 1) {
     if (board.smallBoard) {
       board.cards[0].x = board.canvas.width / 5;
-      board.cards[0].y = board.canvas.height / 20;
+      board.cards[0].y = board.canvas.height / 14;
       board.cards[0].makeBig(board.canvas);
     } else {
       board.cards[0].x = board.canvas.width / 25;
@@ -305,12 +307,15 @@ Board.prototype.addListeners = function() {
 }
 
 Board.prototype.changePhase = function(phase) {
+  //make sure the clue is up to date
+	board.clue.text = '"'+board.game.currClue+'"';
   switch (phase) {
   case 'STORYTELLER':
 	board.advanceBtn.css('display', 'none');
 	board.advanceBtn.prop('disabled', 'false');
-    board.smallBoard = true;
-    board.adjustCardsPos();
+    //TODO: should the board start as small or big?
+	//board.smallBoard = true;
+    //board.adjustCardsPos();
     if (this.clientPlayer.isStoryTeller) {
       var card;
       var clueModalImg;
@@ -337,6 +342,9 @@ Board.prototype.changePhase = function(phase) {
     }
     board.clue.text = '"' + game.currClue + '"';
     break;
+  case 'VOTING':
+	board.smallBoard = true;
+	board.adjustCardsPos();
   case 'WAITING':
     console.log("waiting");
     board.smallBoard = true;
