@@ -542,7 +542,9 @@ function mouseMoveListener(evt) {
       card = board.cards[i];
       if (card.clicked(mouseX, mouseY) && card.id != selectedCard.id) {
         // board.ctx.drawImage(board.icons.zoom, card.x, card.y, 25, 25);
-        hoveringCard = true;
+        if (!board.clientPlayer.isStoryTeller) {
+          hoveringCard = true;
+        }
       }
     }
   }
