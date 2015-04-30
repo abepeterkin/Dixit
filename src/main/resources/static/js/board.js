@@ -311,6 +311,8 @@ Board.prototype.changePhase = function(phase) {
 	console.log(phase);
   switch (phase) {
   case 'STORYTELLER':
+	board.smallBoard = false;
+	board.adjustCardsPos();
 	board.advanceBtn.attr("disabled", true);
   	board.advanceBtn.css('display', 'none');
   	board.advanceBtn.prop('disabled', true);
