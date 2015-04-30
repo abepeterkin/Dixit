@@ -11,12 +11,24 @@
     <div class="form-group">
       <label for="color">Color</label>
       <select name="colorName" class="form-control">
-          <option>Blue</option>
-          <option>Red</option>
-          <option>White</option>
-          <option>Pink</option>
-          <option>Yellow</option>
-          <option>Green</option>
+          <#if !usedColors?seq_contains("Blue")>
+          	<option>Blue</option>
+          </#if>
+          <#if !usedColors?seq_contains("Red")>
+          	<option>Red</option>
+          </#if>
+          <#if !usedColors?seq_contains("White")>
+          	<option>White</option>
+          </#if>
+          <#if !usedColors?seq_contains("Pink")>
+          	<option>Pink</option>
+          </#if>
+          <#if !usedColors?seq_contains("Yellow")>
+          	<option>Yellow</option>
+          </#if>
+          <#if !usedColors?seq_contains("Green")>
+          	<option>Green</option>
+          </#if>
       </select>
     </div>
     <button type="submit" class="btn btn btn-primary">Join Game</button>
