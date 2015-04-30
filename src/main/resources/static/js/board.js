@@ -9,7 +9,7 @@ var dragging;
 var dragIndex;
 var draggingCard;
 var board;
-var selectedCard;
+var selectedCard = {};
 var sentCard = false;
 // should hold to array of game.players to display their score and color
 function Board(options) {
