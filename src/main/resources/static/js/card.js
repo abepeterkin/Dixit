@@ -11,6 +11,9 @@ function Card(options) {
   }
   this.backImg = backImg;
   this.inHand = options.inHand;
+  this.outline = null; // if there should be an outline drawn, this sould be
+  // the color
+  this.votes = [] // array of color names to denote votes;
 }
 // returns img obj of card
 Card.prototype.getImg = function() {
@@ -36,15 +39,46 @@ Card.prototype.draw = function(ctx) {
   var y = this.y;
   var w = this.width;
   var h = this.height;
+  var card = this;
   if (img.complete) {
     ctx.drawImage(img, x, y, w, h);
+    this.drawOutline(ctx);
+    this.drawVotes(ctx);
   } else {
     img.onload = function() {
       ctx.drawImage(img, x, y, w, h);
+      card.drawOutline(ctx);
+      card.drawVotes(ctx);
     }
   }
 }
 
+Card.prototype.drawOutline = function(ctx) {
+  if (this.outline) {
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = this.outline;
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
+  }
+}
+Card.prototype.getCenter = function() {
+  var x = this.x + this.width / 2;
+  var y = this.y + this.height / 2;
+  return {
+    x : x,
+    y : y
+  }
+}
+Card.prototype.drawVotes = function(ctx) {
+  var center = this.getCenter();
+  var voteWidth = this.width / 8;
+  for (var i = 0; i < this.votes.length; i++) {
+    ctx.beginPath();
+    ctx.arc(this.x + i * voteWidth, this.y + this.height, voteWidth, 0,
+        2 * Math.PI);
+    ctx.fillStyle = this.votes[i];
+    ctx.fill();
+  }
+}
 // to see if this card was clicked
 Card.prototype.clicked = function(clickX, clickY) {
   return ((clickX > this.x) && (clickX < this.x + this.width)
