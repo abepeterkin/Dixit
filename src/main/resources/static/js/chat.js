@@ -11,10 +11,10 @@ function Chat() {
 }
 Chat.prototype.addMsg = function(msg, player) {
 	if(player == undefined){
-		this.messageBody.append('<p><strong>' + msg + '</strong></p>');
+		this.messageBody.append('<p><strong style="color:#7A7A7A">' + msg + '</strong></p>');
 	}else{
   this.messageBody.append('<p><span style="color:' + player.color + '"' + ">"
-      + player.name + ":</span> " + msg + '</p>');
+      + player.name + ": " + msg + "</span></p>");
 	}
 }
 
