@@ -378,7 +378,7 @@ public class Game {
       return false;
     }
     Vote vote = new Vote(p, c);
-    
+
     votes.add(vote);
     subscriber.votesChanged(this);
     announcer.submitVote(p);
@@ -611,12 +611,13 @@ public class Game {
    */
   public synchronized void updatePhase(
       Phase p) {
-    // Visibility of votes changes when entering or exiting WAITING phase.
-    if (p == Phase.WAITING ^ this.phase == Phase.WAITING) {
-      subscriber.votesChanged(this);
-    }
+    Phase tempLastPhase = this.phase;
     this.phase = p;
     subscriber.gameChanged(this);
+    // Visibility of votes changes when entering or exiting WAITING phase.
+    if (p == Phase.WAITING ^ tempLastPhase == Phase.WAITING) {
+      subscriber.votesChanged(this);
+    }
   }
 
   /**
