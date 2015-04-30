@@ -428,12 +428,12 @@ public class GameTest {
     g.addCardToTable(p1, nonStory2);
     g.castVote(p3, storyCard);
     g.castVote(p1, storyCard);
-    assertTrue(g.getTableCards().size() == 0);
     System.out.println(DixitSerializationUtil.serializePhase(g.getPhase()));
     assertTrue(g.getPhase() == Phase.WAITING);
     assertTrue(g.confirmPlayerReady(p1));
     assertTrue(g.confirmPlayerReady(p2));
     assertTrue(g.confirmPlayerReady(p3));
+    assertTrue(g.getTableCards().size() == 0);
     assertTrue(g.getPhase() == Phase.STORYTELLER);
     assertTrue(g.getStory().equals(""));
     assertTrue(p3.isStoryteller());

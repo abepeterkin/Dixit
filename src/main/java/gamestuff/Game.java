@@ -474,9 +474,6 @@ public class Game {
         p.draw(this.deck.pop());
         subscriber.playerChanged(this, p);
       }
-      trashTable();
-      this.story = "";
-      votes.clear();
       updatePhase(Phase.WAITING);
     }
   }
@@ -492,7 +489,7 @@ public class Game {
       return false;
     }
     playerReadyMap.put(player, true);
-    if (allPlayersReady()) {
+    if (allPlayersReady() && this.phase.equals(Phase.WAITING)) {
       playerReadyMap.clear();
       beginNewRound();
     }
@@ -514,6 +511,9 @@ public class Game {
     if (!this.phase.equals(Phase.WAITING)) {
       return;
     }
+    trashTable();
+    this.story = "";
+    votes.clear();
     cycleStoryteller();
     updatePhase(Phase.STORYTELLER);
     announcer.storytellerPhase();
