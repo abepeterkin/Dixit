@@ -30,7 +30,7 @@
       <div class="modal-body">
         <img id="cardImg" src="">
         <br>    <br>          
-        <button id="send-card-btn" type="button" class="btn btn-default" disabled>Send Card</button>
+        <button id="send-card-btn" type="button" class="btn btn-primary" disabled>Send Card</button>
       </div>
       
     </div>
@@ -58,7 +58,7 @@
       </div>
       <div class="modal-body">
       	<input type="text" id="clueInput" class="form-control" placeholder="Enter clue here..."/>
-        <button id="send-clue-btn" type="button" class="btn btn-default" disabled>Send Clue</button>
+        <button id="send-clue-btn" type="button" class="btn btn-primary" disabled>Send Clue</button>
         <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="false">
   <!-- Indicators -->
   <ol class="carousel-indicators">
