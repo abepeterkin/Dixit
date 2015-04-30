@@ -47,8 +47,7 @@ public class DixitSerializationUtil {
    */
   public static JsonElement serializeHand(
       List<Card> hand) {
-    ImmutableList.Builder<JsonElement> tempBuilder
-      = new ImmutableList.Builder<JsonElement>();
+    ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
     int index = 0;
     while (index < hand.size()) {
       Card tempCard = hand.get(index);
@@ -60,13 +59,18 @@ public class DixitSerializationUtil {
 
   /**
    * Serializes the table cards of a game
-   * @param game a game to serialize
+   * 
+   * @param game
+   *          a game to serialize
    * @return the serialized table cards of the game
    */
   public static JsonElement serializeTableCards(
-      Game game) {
+      Game game,
+      Player currentPlayer) {
     List<Card> tempCardList = game.getTableCards();
-    if (game.getPhase() == Phase.VOTING) {
+    Phase tempPhase = game.getPhase();
+    if (tempPhase == Phase.VOTING || tempPhase == Phase.SCORING
+        || tempPhase == Phase.WAITING) {
       ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
       int index = 0;
       while (index < tempCardList.size()) {
@@ -74,8 +78,10 @@ public class DixitSerializationUtil {
         tempBuilder.add(serializeCard(tempCard));
         index += 1;
       }
+      String tempCardId = game.getTableCardByPlayer(currentPlayer).getId();
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("faceUp", true).put("cards", tempBuilder.build()).build();
+          .put("faceUp", true).put("currentPlayerCardId", tempCardId)
+          .put("cards", tempBuilder.build()).build();
       return GSON.toJsonTree(variables);
     } else {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
@@ -116,8 +122,7 @@ public class DixitSerializationUtil {
   public static JsonElement deepSerializePlayer(
       Player player,
       Player currentPlayer) {
-    ImmutableMap.Builder<String, Object> tempBuilder
-      = new ImmutableMap.Builder<String, Object>()
+    ImmutableMap.Builder<String, Object> tempBuilder = new ImmutableMap.Builder<String, Object>()
         .put("score", player.getScore()).put("chatName", player.getChatName())
         .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
         .put("color", player.getColor());
@@ -188,8 +193,7 @@ public class DixitSerializationUtil {
       Game game,
       Player currentPlayer) {
     List<Player> playerList = game.getPlayers();
-    ImmutableList.Builder<JsonElement> tempBuilder
-      = new ImmutableList.Builder<JsonElement>();
+    ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
     int index = 0;
     while (index < playerList.size()) {
       Player tempPlayer = playerList.get(index);
@@ -203,7 +207,7 @@ public class DixitSerializationUtil {
         .put("story", game.getStory()).put("players", playerJsonList)
         .put("chat", serializeChat(game.getChat()))
         .put("handsize", Integer.toString(game.getHandSize()))
-        .put("tablecards", serializeTableCards(game)).build();
+        .put("tablecards", serializeTableCards(game, currentPlayer)).build();
     return GSON.toJsonTree(variables);
   }
 
@@ -232,8 +236,7 @@ public class DixitSerializationUtil {
   public static JsonElement serializeChat(
       Chat chat) {
     List<ChatLine> chatLineList = chat.getLines();
-    ImmutableList.Builder<JsonElement> tempBuilder
-      = new ImmutableList.Builder<JsonElement>();
+    ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
     int index = 0;
     while (index < chatLineList.size()) {
       ChatLine tempChatLine = chatLineList.get(index);

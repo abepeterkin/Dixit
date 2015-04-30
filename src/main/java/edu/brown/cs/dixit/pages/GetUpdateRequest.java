@@ -26,8 +26,7 @@ import gamestuff.Player;
  */
 public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
-  private Map<Game, DixitUpdateList> dixitUpdateListMap
-    = new HashMap<Game, DixitUpdateList>();
+  private Map<Game, DixitUpdateList> dixitUpdateListMap = new HashMap<Game, DixitUpdateList>();
   private Map<Player, Long> playerUpdateIdMap = new HashMap<Player, Long>();
   private long nextUpdateId = 0;
   private static final int OLD_UPDATES_TO_REMOVE = 1000;
@@ -271,7 +270,8 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     @Override
     public JsonElement getJson(
         Player inputPlayer) {
-      JsonElement tempJson = DixitSerializationUtil.serializeTableCards(game);
+      JsonElement tempJson = DixitSerializationUtil.serializeTableCards(game,
+          inputPlayer);
       return DixitSerializationUtil.serializeUpdate("tablecards", tempJson);
     }
 
@@ -345,7 +345,8 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     private long id;
 
     /**
-     * @param player the player who was added
+     * @param player
+     *          the player who was added
      */
     public AddPlayerUpdate(Player player) {
       this.addedPlayer = player;

@@ -135,17 +135,23 @@ public class Game {
   }
 
   /**
+   * <<<<<<< HEAD
+   * 
+   * @param playerId
+   *          the id of the player who cast the vote to remove
+   * @return whether the vote was successfully removed =======
    *
    * @param card
    *          the card to remove the vote for
-   * @return whether the removal was successful
+   * @return whether the removal was successful >>>>>>>
+   *         7a3995080860e76070a594ae3d4ee5837058664e
    */
   public synchronized boolean removeVote(
       String playerId) {
     if (this.phase != Phase.VOTING) {
       return false;
     }
-    //announcer needs player name, not id
+    // announcer needs player name, not id
     for (Vote v : votes) {
       if (v.player.getId().equals(playerId)) {
         votes.remove(v);
@@ -186,7 +192,7 @@ public class Game {
 
   /**
    * adds a line to the game's chat
-   * 
+   *
    * @param player
    *          the player who sent the message
    * @param message
@@ -221,7 +227,7 @@ public class Game {
   public synchronized String getStory() {
     return this.story;
   }
-  
+
   /**
    * @return game's current storyteller
    */
@@ -359,7 +365,7 @@ public class Game {
 
   /**
    * Casts a vote for a certain card.
-   * 
+   *
    * @param p
    *          the player who cast the vote
    * @param c
@@ -405,7 +411,7 @@ public class Game {
    * storyteller score 1 point for each vote their own pictures receive.
    */
   private synchronized void calculateScores() {
-    updatePhase(Phase.SCORING);
+    this.phase = Phase.SCORING;
     int storyVotes = 0;
     for (Vote v : this.votes) {
       Card voteCard = v.getCard();
@@ -468,9 +474,6 @@ public class Game {
         p.draw(this.deck.pop());
         subscriber.playerChanged(this, p);
       }
-      trashTable();
-      this.story = "";
-      votes.clear();
       updatePhase(Phase.WAITING);
     }
   }
@@ -486,9 +489,9 @@ public class Game {
       return false;
     }
     playerReadyMap.put(player, true);
-    if (allPlayersReady()) {
+    if (allPlayersReady() && this.phase.equals(Phase.WAITING)) {
       playerReadyMap.clear();
-      updatePhase(Phase.STORYTELLER);
+      beginNewRound();
     }
     return true;
   }
@@ -504,10 +507,13 @@ public class Game {
   /**
    * begins a new round of the game after the previous round has ended
    */
-  public synchronized void beginNewRound() {
+  private synchronized void beginNewRound() {
     if (!this.phase.equals(Phase.WAITING)) {
       return;
     }
+    trashTable();
+    this.story = "";
+    votes.clear();
     cycleStoryteller();
     updatePhase(Phase.STORYTELLER);
     announcer.storytellerPhase();
@@ -517,14 +523,6 @@ public class Game {
     Collections.sort(this.players);
     updatePhase(Phase.GAMEOVER);
   }
-
-  /*
-   * private List<Player> determineWinners() { int highestScore = 0; for (Player
-   * p : players){ if (p.getScore() > highestScore) { highestScore =
-   * p.getScore(); } } List<Player> winningPlayers = new ArrayList<Player>();
-   * for (Player p : players){ if (p.getScore() == highestScore) {
-   * winningPlayers.add(p); } } return winningPlayers; }
-   */
 
   /**
    * Give storyteller status to the next player in line, and revoke the current
@@ -606,7 +604,7 @@ public class Game {
 
   /**
    * Updates the phase of the game.
-   * 
+   *
    * @param p
    *          the plase the game is being updated to
    */
@@ -656,7 +654,28 @@ public class Game {
   public synchronized List<Card> getTableCards() {
     return new ArrayList<Card>(tableCards.keySet());
   }
-  
+
+  /**
+   * Retrieves the table card belonging to the player.
+   *
+   * @param player
+   *          The player who put down the card.
+   * @return The card which the player put down.
+   */
+  public synchronized Card getTableCardByPlayer(
+      Player player) {
+    List<Card> tempCardList = getTableCards();
+    int index = 0;
+    while (index < tempCardList.size()) {
+      Card tempCard = tempCardList.get(index);
+      if (tableCards.get(tempCard) == player) {
+        return tempCard;
+      }
+      index++;
+    }
+    return null;
+  }
+
   public int getNumberOfVotes() {
     return votes.size();
   }
