@@ -68,7 +68,9 @@ public class DixitSerializationUtil {
       Game game,
       Player currentPlayer) {
     List<Card> tempCardList = game.getTableCards();
-    if (game.getPhase() == Phase.VOTING) {
+    Phase tempPhase = game.getPhase();
+    if (tempPhase == Phase.VOTING || tempPhase == Phase.SCORING
+        || tempPhase == Phase.WAITING) {
       ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
       int index = 0;
       while (index < tempCardList.size()) {
