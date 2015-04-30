@@ -160,7 +160,6 @@ function retreiveGame(responseObject) {
  * hand; }
  */
 window.onload = function() {
-  console.log(window.location);
   if (typeof (Storage) !== "undefined") {
     var gameName = $("#gameName").val();
     var playerId = $("#playerId").val();
