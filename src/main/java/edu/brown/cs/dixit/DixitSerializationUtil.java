@@ -144,7 +144,7 @@ public class DixitSerializationUtil {
       Vote vote) {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("playerId", vote.getPlayer().getId())
-        .put("cardId", vote.getCard().getImage()).build();
+        .put("cardId", vote.getCard().getId()).build();
     return GSON.toJsonTree(variables);
   }
 
