@@ -6,6 +6,7 @@ import gamestuff.ChatLine;
 import gamestuff.Game;
 import gamestuff.Phase;
 import gamestuff.Player;
+import gamestuff.Vote;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,6 +134,49 @@ public class DixitSerializationUtil {
   }
 
   /**
+   * Serializes a vote for a card.
+   *
+   * @param vote
+   *          The vote to serialize
+   * @return JSON.
+   */
+  public static JsonElement serializeVote(
+      Vote vote) {
+    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+        .put("playerId", vote.getPlayer().getId())
+        .put("cardId", vote.getCard().getImage()).build();
+    return GSON.toJsonTree(variables);
+  }
+
+  /**
+   * Serializes all of the votes in the game. Depending on the phase, some votes
+   * may be hidden from currentPlayer.
+   *
+   * @param game
+   *          The game.
+   * @param currentPlayer
+   *          The player viewing the votes.
+   * @return JSON.
+   */
+  public static JsonElement serializeVotes(
+      Game game,
+      Player currentPlayer) {
+    ImmutableList.Builder<JsonElement> tempBuilder = new ImmutableList.Builder<JsonElement>();
+    List<Vote> tempVoteList = game.getVotes();
+    Phase tempPhase = game.getPhase();
+    int index = 0;
+    while (index < tempVoteList.size()) {
+      Vote tempVote = tempVoteList.get(index);
+      if (tempPhase == Phase.WAITING
+          || currentPlayer.getId().equals(tempVote.getPlayer().getId())) {
+        tempBuilder.add(serializeVote(tempVote));
+      }
+      index += 1;
+    }
+    return GSON.toJsonTree(tempBuilder.build());
+  }
+
+  /**
    * Converts the game phase to JSON.
    *
    * @param phase
@@ -207,7 +251,8 @@ public class DixitSerializationUtil {
         .put("story", game.getStory()).put("players", playerJsonList)
         .put("chat", serializeChat(game.getChat()))
         .put("handsize", Integer.toString(game.getHandSize()))
-        .put("tablecards", serializeTableCards(game, currentPlayer)).build();
+        .put("tablecards", serializeTableCards(game, currentPlayer))
+        .put("votes", serializeVotes(game, currentPlayer)).build();
     return GSON.toJsonTree(variables);
   }
 
