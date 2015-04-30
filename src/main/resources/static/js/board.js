@@ -406,22 +406,11 @@ Board.prototype.tableCardsUpdate = function(options) {
   }
 }
 function sendBtn(event) {
-  if (!sentCard) {
     selectedCard.visible = false;
     selectedCard.inHand = false;
-    sentCard = true;
     addNonStoryCardRequest(selectedCard.id, function(e) {
     });
     board.cardModal.modal('hide');
-    board.sendBtn.text("Return Card");
-  } else {
-    var index = board.clientPlayer.hand.indexOf(selectedCard);
-    selectedCard.x = index * (board.canvas.width / 9)
-        + (board.canvas.width / 4);
-    selectedCard.y = board.canvas.height - (board.canvas.height / 5);
-    board.cardModal.modal('hide');
-    board.sendBtn.text("Send Card");
-    sentCard = false;
   }
 }
 
@@ -433,7 +422,9 @@ function sendClue(event) {
 
   addStoryCardRequest(board.clientPlayer.hand[board.clue.cardIndex].id,
       board.clueInput.val(), function(e) {
+	  	board.clueInput.val("");
       });
+  
 }
 
 function mouseClickListener(event) {
