@@ -11,6 +11,7 @@ import java.util.Stack;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableList;
 
 import edu.brown.cs.dixit.DixitGameSubscriber;
 import edu.brown.cs.dixit.DixitServer;
@@ -153,10 +154,11 @@ public class Game {
     }
     // announcer needs player name, not id
     for (Vote v : votes) {
-      if (v.player.getId().equals(playerId)) {
+      if (v.getPlayer().getId().equals(playerId)) {
         votes.remove(v);
       }
     }
+    subscriber.votesChanged(this);
     return true;
   }
 
@@ -381,6 +383,7 @@ public class Game {
     }
     Vote vote = new Vote(p, c);
     votes.add(vote);
+    subscriber.votesChanged(this);
     announcer.submitVote(p);
     if (this.votes.size() == this.players.size() - 1) {
       calculateScores();
@@ -514,6 +517,7 @@ public class Game {
     trashTable();
     this.story = "";
     votes.clear();
+    subscriber.votesChanged(this);
     cycleStoryteller();
     updatePhase(Phase.STORYTELLER);
     announcer.storytellerPhase();
@@ -676,40 +680,15 @@ public class Game {
     return null;
   }
 
-  public int getNumberOfVotes() {
+  /**
+   * @return Retrieves the number of votes.
+   */
+  public synchronized int getNumberOfVotes() {
     return votes.size();
   }
 
-  /**
-   * Class representing a vote, containing a player and a card
-   */
-  private class Vote {
-    private final Player player;
-    private final Card card;
-
-    /**
-     * @param player
-     *          the player who cast the vote
-     * @param card
-     *          the card the vote was cast for
-     */
-    public Vote(Player player, Card card) {
-      this.player = player;
-      this.card = card;
-    }
-
-    /**
-     * @return the player who cast the vote
-     */
-    public Player getPlayer() {
-      return player;
-    }
-
-    /**
-     * @return the card the vote was cast for
-     */
-    public Card getCard() {
-      return card;
-    }
+  public synchronized List<Vote> getVotes() {
+    return ImmutableList.copyOf(votes);
   }
+
 }
