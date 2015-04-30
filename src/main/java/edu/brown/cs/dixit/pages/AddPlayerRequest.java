@@ -32,9 +32,13 @@ public class AddPlayerRequest implements TemplateViewRoute {
     if (!Main.gameExists(gameName)) {
       return failure("game does not exist");
     } else {
+      Game game = Main.getGame(gameName);
+      if (game.getColorsInUse().contains(colorName)) {
+        return failure("That color is already being used. "
+            + "Please select a different color.");
+      }
       String newId = Main.newId();
       Player player = new Player(newId, playerName, colorName);
-      Game game = Main.getGame(gameName);
       if (game.addPlayer(player)) {
         Map<String, Object> variables = ImmutableMap.of("response",
             "Game join successful.", "gameName", game.getName(), "playerId",
