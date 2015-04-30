@@ -148,7 +148,6 @@ public class Game {
       return false;
     }
     // announcer needs player name, not id
-    announcer.removeVote(playerIdMap.get(playerId));
     Vote toRemove = null;
     for (Vote v : votes) {
       if (v.getPlayer().getId().equals(playerId)) {
@@ -156,6 +155,7 @@ public class Game {
       }
     }
     votes.remove(toRemove);
+    announcer.removeVote(playerIdMap.get(playerId));
     subscriber.votesChanged(this);
     return true;
   }
@@ -543,6 +543,7 @@ public class Game {
 
   private void gameOver() {
     Collections.sort(this.players);
+    announcer.gameOver();
     updatePhase(Phase.GAMEOVER);
   }
 
@@ -637,9 +638,11 @@ public class Game {
     subscriber.gameChanged(this);
     // Visibility of votes changes when entering or exiting WAITING phase.
     // Visibility of table card owners also changes.
+    // Votes update should occur after cards update so that
+    // the votes are not removed in the update.
     if (p == Phase.WAITING ^ tempLastPhase == Phase.WAITING) {
-      subscriber.votesChanged(this);
       subscriber.tableCardsChanged(this);
+      subscriber.votesChanged(this);
     }
   }
 

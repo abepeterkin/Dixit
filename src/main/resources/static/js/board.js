@@ -308,12 +308,14 @@ Board.prototype.addListeners = function() {
 Board.prototype.changePhase = function(phase) {
   //make sure the clue is up to date
 	board.clue.text = '"'+board.game.currClue+'"';
+	console.log(phase);
   switch (phase) {
   case 'STORYTELLER':
-	board.advanceBtn.css('display', 'none');
 	board.advanceBtn.attr("disabled", true);
+  	board.advanceBtn.css('display', 'none');
+  	board.advanceBtn.prop('disabled', true);
     //TODO: should the board start as small or big?
-	//board.smallBoard = true;
+  	//board.smallBoard = true;
     //board.adjustCardsPos();
     if (this.clientPlayer.isStoryTeller) {
       var card;
@@ -331,10 +333,10 @@ Board.prototype.changePhase = function(phase) {
       board.modalContent.css('height', $(window).height() * .95);
       // board.modalContent.css('width', $('#card0').width());
       board.clueModal.modal('show');
-      break;
     } else {
       this.sendBtn.prop("disabled", true);
     }
+    break;
   case 'NONSTORYCARDS':
 		board.advanceBtn.css('display', 'none');
 
@@ -348,12 +350,17 @@ Board.prototype.changePhase = function(phase) {
 	board.advanceBtn.attr("disabled", true);
 	board.smallBoard = true;
 	board.adjustCardsPos();
+  	board.smallBoard = true;
+  	board.adjustCardsPos();
+  	break;
   case 'WAITING':
     board.smallBoard = true;
     board.adjustCardsPos();
     board.cardVoted = null;
     board.advanceBtn.css('display', 'block');
     board.advanceBtn.removeAttr("disabled");
+    board.advanceBtn.prop('disabled', false);
+    break;
   }
 }
 Board.prototype.doVotes = function(votes) {

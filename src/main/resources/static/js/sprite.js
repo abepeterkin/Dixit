@@ -230,19 +230,19 @@ Sprite.prototype.update = function() {
 Sprite.prototype.rotate = function(dir) {
   var tx, ty, angle;
   switch (dir) {
-  case "left":// left
-    tx = 0;
-    ty = this.height;
-    angle = 270;
-    break;
-  case "up":
-    tx = 0;
-    ty = 0;
-    angle = 0;
-  case "right":
-    angle = 90;
-    tx = 0;
-    ty = 0;
+    case "left":
+      tx = 0;
+      ty = this.height;
+      angle = 270;
+      break;
+    case "up": // currently just left again
+	  tx = 0;
+	  ty = this.height;
+	  angle = 270;
+    case "right": // same
+	  tx = 0;
+	  ty = this.height;
+	  angle = 270;
   }
   return {
     tx : tx,
