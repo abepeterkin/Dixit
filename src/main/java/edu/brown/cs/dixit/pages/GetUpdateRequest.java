@@ -91,47 +91,47 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   }
 
   @Override
-  public void handChanged(
+  public synchronized void handChanged(
       Game game,
       Player player) {
     addUpdate(game, new HandUpdate(player));
   }
 
   @Override
-  public void playerChanged(
+  public synchronized void playerChanged(
       Game game,
       Player player) {
     addUpdate(game, new PlayerUpdate(player));
   }
 
   @Override
-  public void tableCardsChanged(
+  public synchronized void tableCardsChanged(
       Game game) {
     addUpdate(game, new TableCardsUpdate(game));
   }
 
   @Override
-  public void gameChanged(
+  public synchronized void gameChanged(
       Game game) {
     System.out.println("game was changed");
     addUpdate(game, new GameUpdate(game));
   }
 
   @Override
-  public void chatChanged(
+  public synchronized void chatChanged(
       Game game) {
     addUpdate(game, new ChatUpdate(game));
   }
 
   @Override
-  public void playerAdded(
+  public synchronized void playerAdded(
       Game game,
       Player player) {
     addUpdate(game, new AddPlayerUpdate(player));
   }
 
   @Override
-  public void votesChanged(
+  public synchronized void votesChanged(
       Game game) {
     addUpdate(game, new VotesChangedUpdate(game));
   }
@@ -148,12 +148,12 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
 
     }
 
-    public void addDixitUpdate(
+    public synchronized void addDixitUpdate(
         DixitUpdate dixitUpdate) {
       dixitUpdates.add(dixitUpdate);
     }
 
-    public JsonElement getJson(
+    public synchronized JsonElement getJson(
         long startId,
         Player player) {
       List<JsonElement> tempJsonList = new ArrayList<JsonElement>();
@@ -171,7 +171,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
       return gson.toJsonTree(tempJsonList);
     }
 
-    public void removeUpdates(
+    public synchronized void removeUpdates(
         long id) {
       int index = dixitUpdates.size() - 1;
       while (index >= 0) {

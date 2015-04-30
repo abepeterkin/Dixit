@@ -34,7 +34,7 @@ public class Chat {
    * @param chatLine
    *          the line to be added
    */
-  synchronized public void addLine(
+  public synchronized void addLine(
       ChatLine chatLine) {
     lines.add(chatLine);
     if (lines.size() > MAX_LINES) {
@@ -46,12 +46,12 @@ public class Chat {
   /**
    * @return every line in the chat
    */
-  synchronized public List<ChatLine> getLines() {
+  public synchronized List<ChatLine> getLines() {
     return ImmutableList.copyOf(lines);
   }
 
   @Override
-  synchronized public String toString() {
+  public synchronized String toString() {
     StringBuilder builder = new StringBuilder();
     for (ChatLine line : lines) {
       builder.append(line.getPlayerName() + ": " + line.getMessage() + "\n");

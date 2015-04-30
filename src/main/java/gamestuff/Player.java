@@ -26,7 +26,7 @@ public class Player implements Comparable<Player> {
   /**
    * @return the player's score
    */
-  public int getScore() {
+  public synchronized int getScore() {
     return score;
   }
 
@@ -40,7 +40,7 @@ public class Player implements Comparable<Player> {
   /**
    * @return the number of cards in the players hand
    */
-  public int cardsInHand() {
+  public synchronized int cardsInHand() {
     return hand.size();
   }
 
@@ -48,7 +48,7 @@ public class Player implements Comparable<Player> {
    * @param increment
    *          the amount to increment the score by
    */
-  synchronized public void incrementScore(
+  public synchronized void incrementScore(
       int increment) {
     this.score += increment;
   }
@@ -70,7 +70,7 @@ public class Player implements Comparable<Player> {
   /**
    * @return whether or not the player is a storyteller
    */
-  synchronized public boolean isStoryteller() {
+  public synchronized boolean isStoryteller() {
     return isStoryteller;
   }
 
@@ -80,7 +80,7 @@ public class Player implements Comparable<Player> {
    * @param isStoryteller
    *          whether or not the player is the storyteller
    */
-  synchronized public void setIsStoryteller(
+  public synchronized void setIsStoryteller(
       boolean isStoryteller) {
     for (Card c : this.hand) {
       c.setStoryteller(isStoryteller);
@@ -94,7 +94,7 @@ public class Player implements Comparable<Player> {
    * @param c
    *          the card to add to the player's hand.
    */
-  synchronized public void draw(
+  public synchronized void draw(
       Card c) {
     hand.add(c);
   }
@@ -103,7 +103,7 @@ public class Player implements Comparable<Player> {
    * @param c
    *          the card to remove from the player's hand
    */
-  synchronized public void removeFromHand(
+  public synchronized void removeFromHand(
       Card c) {
     hand.remove(c);
   }
@@ -111,12 +111,12 @@ public class Player implements Comparable<Player> {
   /**
    * @return List of cards in hand
    */
-  synchronized public List<Card> getHand() {
+  public synchronized List<Card> getHand() {
     return ImmutableList.copyOf(hand);
   }
 
   @Override
-  synchronized public int compareTo(
+  public synchronized int compareTo(
       Player other) {
     return Integer.compare(this.score, other.getScore());
   }

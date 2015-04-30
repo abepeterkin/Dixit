@@ -231,7 +231,7 @@ public class Game {
   /**
    * @return game's current storyteller
    */
-  public Player getStoryteller() {
+  public synchronized Player getStoryteller() {
     Player storyteller = null;
     for (Player p : getPlayers()) {
       if (p.isStoryteller()) {
@@ -381,7 +381,7 @@ public class Game {
     }
     Vote vote = new Vote(p, c);
     boolean alreadyVoted = false;
-    for (Vote v: votes) {
+    for (Vote v : votes) {
       if (v.getPlayer().equals(p)) {
         alreadyVoted = true;
       }
@@ -424,7 +424,7 @@ public class Game {
     this.phase = Phase.SCORING;
     announcer.advanceToScoringPhase();
     Map<Player, Integer> prevScores = new HashMap<Player, Integer>();
-    for (Player p: players) {
+    for (Player p : players) {
       prevScores.put(p, p.getScore());
     }
     int storyVotes = 0;
@@ -467,7 +467,7 @@ public class Game {
         }
       }
     }
-    for (Player p: players) {
+    for (Player p : players) {
       int totalIncrement = p.getScore() - prevScores.get(p);
       announcer.incrementScore(p, totalIncrement);
     }
@@ -520,8 +520,8 @@ public class Game {
     List<Boolean> values = new ArrayList<>(playerReadyMap.values());
     return (values.size() == players.size() && !values.contains(false));
   }
-  
-  public int numberOfPlayersReady() {
+
+  public synchronized int numberOfPlayersReady() {
     return playerReadyMap.size();
   }
 
