@@ -26,7 +26,7 @@ public class Announcer {
   public void newPlayer(Player p) {
     String name = p.getChatName();
     int playersLeft = g.getMaxPlayers() - g.getNumberOfPlayers();
-    announce("Alas! " + name + " has joined the game!");
+    announce(name + " has joined the game!");
     if (playersLeft > 0) {
       announce("Waiting on " + Integer.toString(playersLeft) + " more player(s)...");
     }

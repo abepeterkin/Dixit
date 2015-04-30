@@ -19,7 +19,7 @@
           <option>Green</option>
       </select>
     </div>
-    <button type="submit" class="btn btn-default">Join Game</button>
+    <button type="submit" class="btn btn btn-primary">Join Game</button>
   </form>
 </#assign>
 <#assign js>
