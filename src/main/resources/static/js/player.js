@@ -1,7 +1,7 @@
 function Player(options) {
   this.id = options.id;
   this.name = options.chatName;
-  this.color = options.color.toLowerCase();
+  this.color = Player.getColor(options.color);
   this.isStoryTeller = options.isStoryTeller;
   this.hand = [];
   if (options.hand !== undefined) {
@@ -9,7 +9,7 @@ function Player(options) {
   }
   this.img = {};
   this.img.idle = new Image();
-  this.img.idle.src = "/images/rabbits/" + this.color + "/idle.png";
+  this.img.idle.src = "/images/rabbits/" + options.color.toLowerCase() + "/idle.png";
   this.idle = new Sprite({
     width : 1024,
     height : 128,
@@ -20,6 +20,23 @@ function Player(options) {
   })
   this.score = options.score;
   // TODO: add a vote so that a player is linked to its vote card
+}
+
+Player.getColor = function(color){
+	switch(color){
+	case 'Blue':
+		return "#4967E2";
+	case 'Pink':
+		return "#DA8AE7";
+	case 'Red':
+		return "#CB726D";
+	case 'White':
+		return "#D7D7D7";
+	case 'Yellow':
+		return "#DAD650";
+	case 'Green':
+		return "#83C653";
+	}
 }
 
 Player.prototype.refresh = function(canvas) {
