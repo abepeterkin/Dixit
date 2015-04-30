@@ -158,6 +158,7 @@ public class Game {
         votes.remove(v);
       }
     }
+    subscriber.votesChanged(this);
     return true;
   }
 
@@ -382,6 +383,7 @@ public class Game {
     }
     Vote vote = new Vote(p, c);
     votes.add(vote);
+    subscriber.votesChanged(this);
     announcer.submitVote(p);
     if (this.votes.size() == this.players.size() - 1) {
       calculateScores();
@@ -515,6 +517,7 @@ public class Game {
     trashTable();
     this.story = "";
     votes.clear();
+    subscriber.votesChanged(this);
     cycleStoryteller();
     updatePhase(Phase.STORYTELLER);
     announcer.storytellerPhase();
