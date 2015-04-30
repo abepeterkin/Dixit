@@ -34,6 +34,7 @@ public class Announcer {
   
   public void gameStart() {
     announce("A new game has begun!");
+    storytellerPhase();
   }
   
   public void storytellerPhase() {
@@ -45,7 +46,7 @@ public class Announcer {
     String teller = g.getStoryteller().getChatName();
     String story = g.getStory();
     int cardsLeft = g.getNumberOfPlayers() - g.getTableCards().size();
-    announce(teller + " has submitted their story! " + story);
+    announce(teller + " has submitted their story! " + "\"" + story + "\"");
     announce("The game has advanced to card selection phase!");
     announce("Waiting on " + cardsLeft + " more cards...");
   }
@@ -53,8 +54,9 @@ public class Announcer {
   public void submitNonStoryCard(Player p) {
     String name = p.getChatName();
     int cardsLeft = g.getNumberOfPlayers() - g.getTableCards().size();
+    System.out.println(cardsLeft);
     announce (name + " has submitted a card!");
-    if (cardsLeft < 0) {
+    if (cardsLeft > 0) {
       announce("Waiting on " + cardsLeft + " more cards...");
     }
   }
