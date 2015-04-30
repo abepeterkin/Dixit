@@ -30,13 +30,19 @@ public class DixitSerializationUtil {
    *
    * @param card
    *          The card to convert.
+   * @param ownerPlayer
+   *          The player who owns the card. May be null.
    * @return JSON.
    */
   public static JsonElement serializeCard(
-      Card card) {
-    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-        .put("id", card.getId()).put("image", card.getImage()).build();
-    return GSON.toJsonTree(variables);
+      Card card,
+      Player ownerPlayer) {
+    ImmutableMap.Builder<String, Object> tempBuilder = new ImmutableMap.Builder<String, Object>()
+        .put("id", card.getId()).put("image", card.getImage());
+    if (ownerPlayer != null) {
+      tempBuilder.put("ownerId", ownerPlayer.getId());
+    }
+    return GSON.toJsonTree(tempBuilder.build());
   }
 
   /**
@@ -52,7 +58,7 @@ public class DixitSerializationUtil {
     int index = 0;
     while (index < hand.size()) {
       Card tempCard = hand.get(index);
-      tempBuilder.add(serializeCard(tempCard));
+      tempBuilder.add(serializeCard(tempCard, null));
       index += 1;
     }
     return GSON.toJsonTree(tempBuilder.build());
@@ -76,7 +82,12 @@ public class DixitSerializationUtil {
       int index = 0;
       while (index < tempCardList.size()) {
         Card tempCard = tempCardList.get(index);
-        tempBuilder.add(serializeCard(tempCard));
+        if (tempPhase == Phase.WAITING) {
+          Player tempPlayer = game.getPlayerByTableCard(tempCard);
+          tempBuilder.add(serializeCard(tempCard, tempPlayer));
+        } else {
+          tempBuilder.add(serializeCard(tempCard, null));
+        }
         index += 1;
       }
       String tempCardId = game.getTableCardByPlayer(currentPlayer).getId();
