@@ -6,6 +6,15 @@ body {
 	background:#fff689;
 }
 
+.btn {
+      background-image: linear-gradient(to bottom,#6A69B5 0,#3B3A64 100%);
+}
+
+.btn:hover {
+      background-image: linear-gradient(to bottom,#6A69B5 0,#3B3A64 100%);
+      background-color: #3B3A64;
+}
+
 #header h1,
 #header h2,
 #header p {
