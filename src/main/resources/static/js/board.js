@@ -152,9 +152,9 @@ Board.prototype.drawPlayersBig = function() {
       player.idle.update();
       player.idle.render(board.ctx, i, player);
       board.ctx.fillStyle = player.color;
-      board.ctx.font = "20px Georgia" //TODO: make this responsive
-      board.ctx.fillText(player.name, 20, i*20+20);
-      
+      board.ctx.font = "20px Georgia" // TODO: make this responsive
+      board.ctx.fillText(player.name, 20, i * 20 + 20);
+
       i++;
     }
   }
@@ -168,8 +168,8 @@ Board.prototype.drawPlayersSmall = function() {
       player = board.game.players[id];
       this.game.players[id].drawSmall(this, i);
       board.ctx.fillStyle = player.color;
-      board.ctx.font = "20px Georgia" //TODO: make this responsive
-      board.ctx.fillText(player.name, 20, i*20+20);
+      board.ctx.font = "20px Georgia" // TODO: make this responsive
+      board.ctx.fillText(player.name, 20, i * 20 + 20);
       i++;
     }
   }
@@ -316,8 +316,10 @@ Board.prototype.changePhase = function(phase) {
     board.clue.text = '"' + game.currClue + '"';
     break;
   case 'WAITING':
-	  console.log("waiting");
-	  board.smallBoard = true;
+    console.log("waiting");
+    board.smallBoard = true;
+    board.adjustCardsPos();
+    board.cardVoted = null;
   }
 }
 
