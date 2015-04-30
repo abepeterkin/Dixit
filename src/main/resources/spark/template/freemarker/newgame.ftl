@@ -51,7 +51,7 @@
     <option value="5">5</option>
     <option value="6" selected="selected">6</option>
   </select> <br>
-  <button type="submit" class="btn btn-default">Create Game</button>
+  <button type="submit" class="btn btn-primary">Create Game</button>
 </form>
   </div>
 </#assign>

@@ -130,6 +130,12 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     addUpdate(game, new AddPlayerUpdate(player));
   }
 
+  @Override
+  public void votesChanged(
+      Game game) {
+    addUpdate(game, new VotesChangedUpdate(game));
+  }
+
   /**
    * Contains convenience methods for managing many dixit updates.
    */
@@ -367,4 +373,33 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     }
 
   }
+
+  /**
+   * Represents a change to cards on the table.
+   */
+  private class VotesChangedUpdate implements DixitUpdate {
+
+    private Game game;
+    private long id;
+
+    public VotesChangedUpdate(Game game) {
+      this.game = game;
+      id = getUpdateId();
+    }
+
+    @Override
+    public JsonElement getJson(
+        Player inputPlayer) {
+      JsonElement tempJson = DixitSerializationUtil.serializeVotes(game,
+          inputPlayer);
+      return DixitSerializationUtil.serializeUpdate("votes", tempJson);
+    }
+
+    @Override
+    public long getId() {
+      return id;
+    }
+
+  }
+
 }

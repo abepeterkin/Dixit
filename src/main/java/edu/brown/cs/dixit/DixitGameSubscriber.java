@@ -61,9 +61,23 @@ public interface DixitGameSubscriber {
 
   /**
    * Should be called if a player gets added.
-   * @param game the game the player is added to
-   * @param player the player who is added
+   * 
+   * @param game
+   *          the game the player is added to
+   * @param player
+   *          the player who is added
    */
-  void playerAdded(Game game, Player player);
+  void playerAdded(
+      Game game,
+      Player player);
+
+  /**
+   * Should be called if the votes change.
+   *
+   * @param game
+   *          The game whose votes have changed.
+   */
+  void votesChanged(
+      Game game);
 
 }
