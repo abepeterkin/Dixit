@@ -74,7 +74,7 @@ public class Announcer {
     String name = p.getChatName();
     int votesLeft = g.getNumberOfPlayers() - g.getNumberOfVotes() - 1;
     announce (name + " has cast their vote!");
-    if (votesLeft < 0) {
+    if (votesLeft > 0) {
       announce("Waiting on " + votesLeft + " more votes...");
     }
   }
@@ -93,7 +93,7 @@ public class Announcer {
   public void incrementScore(Player p, int inc) {
     String name = p.getChatName();
     if (inc > 0) {
-      announce(name + " has gained " + inc + " points this round!");
+      announce(name + " gained " + inc + " points this round!");
     } else {
       announce(name + " didnt gain any points this round :/");
     }

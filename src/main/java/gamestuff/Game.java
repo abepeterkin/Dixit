@@ -148,7 +148,6 @@ public class Game {
       return false;
     }
     // announcer needs player name, not id
-    announcer.removeVote(playerIdMap.get(playerId));
     Vote toRemove = null;
     for (Vote v : votes) {
       if (v.getPlayer().getId().equals(playerId)) {
@@ -156,6 +155,7 @@ public class Game {
       }
     }
     votes.remove(toRemove);
+    announcer.removeVote(playerIdMap.get(playerId));
     subscriber.votesChanged(this);
     return true;
   }
