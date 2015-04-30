@@ -369,6 +369,9 @@ Board.prototype.doVotes = function(votes) {
 
 Board.prototype.tableCardsUpdate = function(options) {
   board.cards = [];
+  if(options.currentPlayerCardId){
+	  selectedCard.id = options.currentPlayerCardId;
+  }
   if (!options.faceUp) {
     for (var i = 0; i < options.cardAmount; i++) {
       board.addGenericCard();
