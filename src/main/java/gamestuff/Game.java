@@ -136,16 +136,9 @@ public class Game {
   }
 
   /**
-   * <<<<<<< HEAD
-   * 
    * @param playerId
    *          the id of the player who cast the vote to remove
-   * @return whether the vote was successfully removed =======
-   *
-   * @param card
-   *          the card to remove the vote for
-   * @return whether the removal was successful >>>>>>>
-   *         7a3995080860e76070a594ae3d4ee5837058664e
+   * @return whether the vote was successfully removed
    */
   public synchronized boolean removeVote(
       String playerId) {
@@ -153,11 +146,14 @@ public class Game {
       return false;
     }
     // announcer needs player name, not id
+    announcer.removeVote(playerIdMap.get(playerId));
+    Vote toRemove = null;
     for (Vote v : votes) {
       if (v.getPlayer().getId().equals(playerId)) {
-        votes.remove(v);
+        toRemove = v;
       }
     }
+    votes.remove(toRemove);
     subscriber.votesChanged(this);
     return true;
   }
@@ -382,6 +378,7 @@ public class Game {
       return false;
     }
     Vote vote = new Vote(p, c);
+    
     votes.add(vote);
     subscriber.votesChanged(this);
     announcer.submitVote(p);

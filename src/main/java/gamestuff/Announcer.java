@@ -1,5 +1,7 @@
 package gamestuff;
 
+import java.util.Calendar;
+
 import edu.brown.cs.dixit.DixitServer;
 
 public class Announcer {
@@ -34,6 +36,7 @@ public class Announcer {
 
   public void gameStart() {
     announce("A new game has begun!");
+    storytellerPhase();
   }
 
   public void storytellerPhase() {
@@ -45,7 +48,7 @@ public class Announcer {
     String teller = g.getStoryteller().getChatName();
     String story = g.getStory();
     int cardsLeft = g.getNumberOfPlayers() - g.getTableCards().size();
-    announce(teller + " has submitted their story! " + story);
+    announce(teller + " has submitted their story! " + "\"" + story + "\"");
     announce("The game has advanced to card selection phase!");
     announce("Waiting on " + cardsLeft + " more cards...");
   }
@@ -53,8 +56,9 @@ public class Announcer {
   public void submitNonStoryCard(Player p) {
     String name = p.getChatName();
     int cardsLeft = g.getNumberOfPlayers() - g.getTableCards().size();
+    System.out.println(cardsLeft);
     announce (name + " has submitted a card!");
-    if (cardsLeft < 0) {
+    if (cardsLeft > 0) {
       announce("Waiting on " + cardsLeft + " more cards...");
     }
   }
@@ -83,7 +87,12 @@ public class Announcer {
   }
 
   private void announce(String s) {
-    ChatLine line = new ChatLine(console, s, color);
+    Calendar now = Calendar.getInstance();
+    int hour = now.get(Calendar.HOUR_OF_DAY) % 12;
+    int minute = now.get(Calendar.MINUTE);
+    String message = "[" + Integer.toString(hour)
+            + ":" + Integer.toString(minute) + "] " + s;
+    ChatLine line = new ChatLine(console, message, color);
     c.addLine(line);
     DixitServer.getDixitGameSubscriber().chatChanged(g);
   }
