@@ -470,10 +470,6 @@ public class Game {
     if (deck.isEmpty()) {
       gameOver();
     } else {
-      for (Player p : this.players) {
-        p.draw(this.deck.pop());
-        subscriber.playerChanged(this, p);
-      }
       updatePhase(Phase.WAITING);
     }
   }
