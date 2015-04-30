@@ -37,79 +37,18 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="clueCardModal" tabindex="-1" role="dialog" aria-labelledby="clueCardModalLabel" aria-hidden="true">
+<div class="modal fade" id="sendClueModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="clueTitle"></h4>
-      </div>
-      <div class="modal-body">
-      	<p id="clueText"></p>
-        <img id="cardImg" src="">
-      </div>
-    </div>
-  </div>
-</div>
-<div class="modal fade" id="sendClueModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true"data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
         <h4 class="modal-title" id="exampleModalLabel">Send Clue </h4>
       </div>
       <div class="modal-body">
       	<input type="text" id="clueInput" class="form-control" placeholder="Enter clue here..."/>
-        <button id="send-clue-btn" type="button" class="btn btn-primary" disabled>Send Clue</button>
-        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="false">
-  <!-- Indicators -->
-  <ol class="carousel-indicators">
-    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="3"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="4"></li>
-    
-    
-  </ol>
-
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner" role="listbox">
-    <div class="item active" id="item0">
-      <input id="cardId" value="0"hidden/>
-      <img id="card0" src="">
-    </div>
-    <div class="item" id="item1">
-     <input id="cardId" value="1"hidden/>
-       <img id="card1" src="">
-    </div>
-     <div class="item" id="item2">
-      <input id="cardId" value="2"hidden/>
-       <img id="card2" src="">
-    </div>
-     <div class="item" id="item3">
-      <input id="cardId" value="3"hidden/>
-       <img id="card3" src="">
-    </div>
-     <div class="item" id="item4">
-      <input id="cardId" value="4"hidden/>
-       <img id="card4" src="">
-    </div>
-       <div class="item" id="item5">
-      <input id="cardId" value="5"hidden/>
-       <img id="card5" src="">
-    </div>
-  </div>
-  <!-- Controls -->
-  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
-      </div>
+         <button id="send-clue-btn" type="button" class="btn btn-primary" disabled>Send Clue</button>
+        <img id="cardImg" src="">
+       </div>
     </div>
   </div>
 </div>
