@@ -335,15 +335,16 @@ Board.prototype.changePhase = function(phase) {
       board.modalContent.css('height', $(window).height() * .95);
       // board.modalContent.css('width', $('#card0').width());
       board.clueModal.modal('show');
-    } else {
-      this.sendBtn.prop("disabled", true);
     }
+    this.sendBtn.prop("disabled", true);
     break;
   case 'NONSTORYCARDS':
 		board.advanceBtn.css('display', 'none');
 
     if (!this.clientPlayer.isStoryTeller) {
       this.sendBtn.prop("disabled", false);
+    } else {
+      this.sendBtn.prop("disabled", true);
     }
     board.clue.text = '"' + game.currClue + '"';
     break;
