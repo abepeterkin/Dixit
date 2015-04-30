@@ -10,16 +10,20 @@ function Chat() {
   });
 }
 Chat.prototype.addMsg = function(msg, player) {
+  var html;
 	if(player == undefined){
-		this.messageBody.append('<p><strong style="color:#7A7A7A">' + msg + '</strong></p>');
+		html = '<p><strong style="color:#7A7A7A">' + msg + '</strong></p>';
 	}else{
-  this.messageBody.append('<p><span style="color:' + player.color + '"' + ">"
-      + player.name + ": " + msg + "</span></p>");
+	  html = '<p><span style="color:' + player.color + '"' + ">"
+      + player.name + ": " + msg + "</span></p>";
 	}
+	this.messageBody.append(html);
+	$("#chat-text").scrollTop($("#chat-text")[0].scrollHeight);
 }
 
 Chat.prototype.addSysMsg = function(msg, color) {
   console.log("system says", msg);
-  this.messageBody
-      .append(('<p style="color:' + color + '"' + ">" + msg + '</p>'));
+  var html = '<p style="color:' + color + '"' + ">" + msg + '</p>';
+  this.messageBody.append((html));
+  $("#chat-text").scrollTop($("#chat-text")[0].scrollHeight);
 }
