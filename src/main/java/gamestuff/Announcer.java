@@ -1,5 +1,7 @@
 package gamestuff;
 
+import java.util.Calendar;
+
 import edu.brown.cs.dixit.DixitServer;
 
 public class Announcer {
@@ -85,7 +87,12 @@ public class Announcer {
   }
 
   private void announce(String s) {
-    ChatLine line = new ChatLine(console, s, color);
+    Calendar now = Calendar.getInstance();
+    int hour = now.get(Calendar.HOUR_OF_DAY) % 12;
+    int minute = now.get(Calendar.MINUTE);
+    String message = "[" + Integer.toString(hour)
+            + ":" + Integer.toString(minute) + "] " + s;
+    ChatLine line = new ChatLine(console, message, color);
     c.addLine(line);
     DixitServer.getDixitGameSubscriber().chatChanged(g);
   }
