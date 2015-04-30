@@ -114,7 +114,6 @@ function retreiveGame(responseObject) {
   })
   board.addListeners();
   game.board = board;
-  board.draw();
   // start chat
   chat = new Chat();
   var chatLines = responseObject.chat;
@@ -134,6 +133,7 @@ function retreiveGame(responseObject) {
 
   board.clientPlayer.refresh(board.canvas);
   game.doPhase(responseObject.phase);
+  board.draw();
 
   // var board = new Board(game, "board", sessionStorage.playerId);
   // game.board = board;

@@ -80,14 +80,14 @@ canvas {
 }
 #chat{
  padding: 2%;
- height:90vh;
+ height:100vh;
 }
 #chat-text{
   height:70vh;
   overflow:auto;
 }
 #chat-input{
-  height:20vh;
+  height:30vh;
 }
 textarea{
  margin:0;

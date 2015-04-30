@@ -311,7 +311,7 @@ Board.prototype.changePhase = function(phase) {
   switch (phase) {
   case 'STORYTELLER':
 	board.advanceBtn.css('display', 'none');
-	board.advanceBtn.prop('disabled', 'false');
+	board.advanceBtn.attr("disabled", true);
     //TODO: should the board start as small or big?
 	//board.smallBoard = true;
     //board.adjustCardsPos();
@@ -336,20 +336,24 @@ Board.prototype.changePhase = function(phase) {
       this.sendBtn.prop("disabled", true);
     }
   case 'NONSTORYCARDS':
+		board.advanceBtn.css('display', 'none');
+
     if (!this.clientPlayer.isStoryTeller) {
       this.sendBtn.prop("disabled", false);
     }
     board.clue.text = '"' + game.currClue + '"';
     break;
   case 'VOTING':
+	board.advanceBtn.css('display', 'none');
+	board.advanceBtn.attr("disabled", true);
 	board.smallBoard = true;
 	board.adjustCardsPos();
   case 'WAITING':
-    console.log("waiting");
     board.smallBoard = true;
     board.adjustCardsPos();
     board.cardVoted = null;
     board.advanceBtn.css('display', 'block');
+    board.advanceBtn.removeAttr("disabled");
   }
 }
 Board.prototype.doVotes = function(votes) {
