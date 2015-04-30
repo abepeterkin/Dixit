@@ -73,8 +73,8 @@ Card.prototype.drawVotes = function(ctx) {
   var voteWidth = this.width / 8;
   for (var i = 0; i < this.votes.length; i++) {
     ctx.beginPath();
-    ctx.arc(this.x + i * voteWidth, this.y + this.height, voteWidth, 0,
-        2 * Math.PI);
+    ctx.arc(voteWidth + this.x + i * voteWidth, this.y + this.height,
+        voteWidth, 0, 2 * Math.PI);
     ctx.fillStyle = this.votes[i];
     ctx.fill();
   }

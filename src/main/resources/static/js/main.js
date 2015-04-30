@@ -74,7 +74,10 @@ function processUpdates(responseObject) {
     case "player":
       if (tempUpdateValue.isStoryTeller) {
         game.setStoryTeller(game.players[tempUpdateValue.id]);
+      } else {
+        game.players[tempUpdateValue.id].isStoryTeller = false;
       }
+
       game.updateScore(tempUpdateValue.id, tempUpdateValue.score);
       break;
     case "hand":

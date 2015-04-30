@@ -330,6 +330,8 @@ Board.prototype.changePhase = function(phase) {
   }
 }
 Board.prototype.doVotes = function(votes) {
+  console.log('doing votes');
+  console.log(votes);
   var card;
   for (var i = 0; i < votes.length; i++) {
     for (var j = 0; j < this.cards.length; j++) {
@@ -349,11 +351,16 @@ Board.prototype.tableCardsUpdate = function(options) {
     }
   } else {
     var card;
+    var cardObj;
     for (var i = 0; i < options.cards.length; i++) {
       card = options.cards[i];
       card.visible = true;
       card.inHand = false;
-      board.addCard(new Card(card));
+      cardObj = new Card(card);
+      board.addCard(cardObj);
+      if (card.ownerId) {
+        cardObj.outline = board.game.players[card.ownerId].color;
+      }
     }
   }
 }
