@@ -93,3 +93,7 @@ textarea{
  padding:0;
  resize:none;
 }
+
+#advance-btn{
+ display:none;
+}

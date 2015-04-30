@@ -15,8 +15,12 @@
 						<textarea id="msg-txt" class="form-control" rows="3"></textarea>
 						<button id="send-msg-btn" class="form-control btn btn-primary">Send</button>
 					</div>
+					<br>
+					<button id="advance-btn" class="form-control btn btn-primary">Next Round!</button>
 				</div>
-			</div>
+			
+					
+					
 		</div>
 	</div>
 </div>

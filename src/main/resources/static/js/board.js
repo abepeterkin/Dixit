@@ -39,8 +39,8 @@ function Board(options) {
   this.clueCardModal = $('#clueCardModal');
   this.clueModal = $('#sendClueModal');
   this.smallBoard = false;
-  $('#clientPlayer').text('Client player: ' + this.clientPlayer.name);
   this.modalContent = $('.modal-content');
+  this.advanceBtn = $('#advance-btn');
 }
 // draws the entire game board, including client player's hand
 Board.prototype.draw = function() {
@@ -284,6 +284,12 @@ Board.prototype.addListeners = function() {
   $('#carousel-example-generic').on('slid.bs.carousel', function(e) {
     board.clue.cardIndex = e.relatedTarget.children.item(0).value;
   })
+  this.advanceBtn.click(function() {
+    board.advanceBtn.prop('disabled', true);
+    readyRequest(function(e) {
+      console.log(e);
+    });
+  })
 }
 
 Board.prototype.changePhase = function(phase) {
@@ -320,6 +326,7 @@ Board.prototype.changePhase = function(phase) {
     board.smallBoard = true;
     board.adjustCardsPos();
     board.cardVoted = null;
+    board.advanceBtn.css('display', 'block');
   }
 }
 Board.prototype.doVotes = function(votes) {
