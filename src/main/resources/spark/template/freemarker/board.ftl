@@ -17,10 +17,7 @@
 					</div>
 					<br>
 					<button id="advance-btn" class="form-control btn btn-primary">Next Round!</button>
-				</div>
-			
-					
-					
+				</div>			
 		</div>
 	</div>
 </div>
@@ -77,27 +74,27 @@
 
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">
-    <div class="item active">
+    <div class="item active" id="item0">
       <input id="cardId" value="0"hidden/>
       <img id="card0" src="">
     </div>
-    <div class="item">
+    <div class="item" id="item1">
      <input id="cardId" value="1"hidden/>
        <img id="card1" src="">
     </div>
-     <div class="item">
+     <div class="item" id="item2">
       <input id="cardId" value="2"hidden/>
        <img id="card2" src="">
     </div>
-     <div class="item">
+     <div class="item" id="item3">
       <input id="cardId" value="3"hidden/>
        <img id="card3" src="">
     </div>
-     <div class="item">
+     <div class="item" id="item4">
       <input id="cardId" value="4"hidden/>
        <img id="card4" src="">
     </div>
-       <div class="item">
+       <div class="item" id="item5">
       <input id="cardId" value="5"hidden/>
        <img id="card5" src="">
     </div>

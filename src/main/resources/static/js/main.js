@@ -107,6 +107,11 @@ function retreiveGame(responseObject) {
   game = new Game(responseObject.name, {
     numCards : responseObject.handsize
   });
+  //fix clue modal's empty cards if cards are less
+  //than 6.
+  for(var i =0;i<(6 - game.rules.numCards); i++){
+	  $('#item' + (5-i)).remove();
+  }
   game.addPlayers(responseObject.players);
   board = new Board({
     game : game,
