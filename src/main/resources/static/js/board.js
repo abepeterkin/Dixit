@@ -295,6 +295,8 @@ Board.prototype.addListeners = function() {
 Board.prototype.changePhase = function(phase) {
   switch (phase) {
   case 'STORYTELLER':
+    board.smallBoard = true;
+    board.adjustCardsPos();
     if (this.clientPlayer.isStoryTeller) {
       var card;
       var clueModalImg;
