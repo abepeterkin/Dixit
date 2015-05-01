@@ -36,7 +36,6 @@ function Board(options) {
   this.clue.makeBig(this.canvas);
   this.clueInput = $('#clueInput');
   this.cardModal = $('#cardModal');
-  this.clueCardModal = $('#clueCardModal');
   this.clueModal = $('#sendClueModal');
   this.smallBoard = false;
   this.modalContent = $('.modal-content');
@@ -319,22 +318,8 @@ Board.prototype.changePhase = function(phase) {
     //TODO: should the board start as small or big?
   	//board.smallBoard = true;
     //board.adjustCardsPos();
-    if (this.clientPlayer.isStoryTeller) {
-      var card;
-      var clueModalImg;
-      for (var i = 0; i < board.clientPlayer.hand.length; i++) {
-        card = board.clientPlayer.hand[i];
-        clueModalImg = board.clueModal.find('#card' + i)[0];
-        clueModalImg.src = card.frontImg.src;
-        $('#card' + i).css('height', $(window).height() * .72);
-
-      }
-      $('.carousel').css('height', $(window).height() * 75);
-      $('.carousel-inner').css('height', $(window).height() * 75);
-      $('.carousel-control').css('height', $(window).height() * .75);
-      board.modalContent.css('height', $(window).height() * .95);
-      // board.modalContent.css('width', $('#card0').width());
-      board.clueModal.modal('show');
+    if (!this.clientPlayer.isStoryTeller) {
+      this.sendBtn.prop("disabled", true);
     }
     this.sendBtn.prop("disabled", true);
     break;
@@ -437,17 +422,29 @@ function mouseClickListener(event) {
     card = board.clientPlayer.hand[i];
     if (card.clicked(mouseX, mouseY)) {
       if (card.visible) {
+        if(!board.clientPlayer.isStoryTeller || board.game.currPhase != 'STORYTELLER'){
+        if (game.currPhase != game.phases['NonStoryCards'] && !board.clientPlayer.isStoryTeller) {
+          board.sendBtn.prop('disabled', true);
+        }
         var modalImg = board.cardModal.find('.modal-body img')[0];
         modalImg.src = card.frontImg.src;
         modalImg.height = $(window).height() * 0.75;
         modalImg.width = $(window).height() * 0.50;
-        if (game.currPhase != game.phases['NonStoryCards']) {
-          board.sendBtn.prop('disabled', true);
-        }
         board.modalContent.css('height', $(window).height() * .95);
         board.modalContent.css('width', modalImg.width * 1.1);
         board.cardModal.modal('show');
         selectedCard = card;
+      } else {
+        var modalImg = board.clueModal.find('.modal-body img')[0];
+        modalImg.src = card.frontImg.src;
+        modalImg.height = $(window).height() * 0.75;
+        modalImg.width = $(window).height() * 0.50;
+        board.modalContent.css('height', $(window).height() * .95);
+        board.modalContent.css('width', modalImg.width * 1.1);
+        board.clue.cardIndex = i;
+        console.log(board.clue.cardIndex);
+        board.clueModal.modal('show');
+      }
       }
     }
   }
@@ -471,16 +468,6 @@ function mouseClickListener(event) {
             });
           }
         }
-      }
-    }
-  }
-  if (!board.smallBoard) {
-    if (board.clue.card) {
-      if (board.clue.card.clicked(mouseX, mouseY)) {
-        board.clueCardModal.find('.modal-body img')[0].src = board.clue.card.frontImg.src;
-        board.modalContent.css('height', $(window).height() * .80);
-        // board.modalContent.css('width', modalImg.width*1.10);
-        board.clueCardModal.modal('show');
       }
     }
   }
