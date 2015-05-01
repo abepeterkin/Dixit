@@ -311,10 +311,11 @@ Board.prototype.changePhase = function(phase) {
   switch (phase) {
   case 'STORYTELLER':
 	board.smallBoard = false;
+	board.sendClueBtn.prop("disabled", true);
 	board.adjustCardsPos();
 	board.advanceBtn.attr("disabled", true);
-  	board.advanceBtn.css('display', 'none');
-  	board.advanceBtn.prop('disabled', true);
+  board.advanceBtn.css('display', 'none');
+  board.advanceBtn.prop('disabled', true);
     //TODO: should the board start as small or big?
   	//board.smallBoard = true;
     //board.adjustCardsPos();
