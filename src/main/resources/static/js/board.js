@@ -410,7 +410,9 @@ Board.prototype.tableCardsUpdate = function(options) {
       cardObj = new Card(card);
       board.addCard(cardObj);
       if (card.ownerId) {
-        cardObj.outline = board.game.players[card.ownerId].color;
+        var tempPlayer = board.game.players[card.ownerId];
+        cardObj.outline = tempPlayer.color;
+        cardObj.isStoryTeller = tempPlayer.isStoryTeller;
       }
     }
   }
