@@ -49,6 +49,7 @@ public class Game {
   private Map<String, String> colorMap = new HashMap<>();
   private Map<Player, Boolean> playerReadyMap = new HashMap<>();
   private DixitGameSubscriber subscriber = DixitServer.getDixitGameSubscriber();
+  private long lastUpdateTime;
 
   public Game(String name, int maxPlayers, int handSize, List<Player> players) {
     this.name = name;
@@ -66,6 +67,7 @@ public class Game {
     }
     announcer = new Announcer(chat, this);
     announcer.gameCreated();
+    lastUpdateTime = System.currentTimeMillis();
   }
 
   /**
@@ -664,6 +666,7 @@ public class Game {
       subscriber.tableCardsChanged(this);
       subscriber.votesChanged(this);
     }
+    lastUpdateTime = System.currentTimeMillis();
   }
 
   /**
@@ -756,6 +759,10 @@ public class Game {
       index += 1;
     }
     return false;
+  }
+
+  public synchronized long getLastUpdateTime() {
+    return lastUpdateTime;
   }
 
 }
