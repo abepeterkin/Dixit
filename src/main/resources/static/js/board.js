@@ -54,6 +54,27 @@ Board.prototype.draw = function() {
     board.drawSmall();
   }
 }
+
+// Draws important messages such as "Pick a story card"
+// or "Press advance to next round".
+Board.prototype.drawAlertMessage = function() {
+  this.ctx.font = "30px Georgia";
+  this.ctx.fillStyle = "#000000";
+  if (this.game.currPhase == this.game.phases["StoryTeller"]
+    && this.clientPlayer.isStoryTeller) {
+    this.ctx.fillText("Pick a story card!", this.canvas.width / 2.1,
+        this.canvas.height / 1.5);
+  }
+  if (this.game.currPhase == this.game.phases["Waiting"]
+    && !this.advanceBtn.prop("disabled")) {
+    this.ctx.fillText("Click next", this.canvas.width / 1.4,
+        this.canvas.height / 1.5);
+    this.ctx.fillText("round button!", this.canvas.width / 1.4,
+        this.canvas.height / 1.5 + 35);
+  }
+  
+}
+
 /*
  * Board.prototype.draws = function() { if (!this.smallBoard) {
  * window.requestAnimationFrame(Board.prototype.draws); var player; // \for (var
@@ -89,7 +110,7 @@ Board.prototype.drawSmall = function() {
   this.clientPlayer.drawHand(this.ctx);
   this.drawCards();
   this.clue.draw(this.ctx);
-
+  this.drawAlertMessage();
 }
 // draws the scoreboard gets passed other objects to ensure
 // background board always gets drawn first
@@ -141,7 +162,7 @@ var drawBigHelper = function() {
   board.drawPlayersBig();
   board.drawCards();
   board.clue.draw(board.ctx);
-
+  board.drawAlertMessage();
 }
 Board.prototype.drawPlayersBig = function() {
   var i = 0;

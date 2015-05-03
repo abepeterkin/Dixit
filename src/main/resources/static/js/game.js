@@ -15,6 +15,7 @@ Game.prototype.phases = {
   'NonStoryCards' : "NONSTORYCARDS",
   'Voting' : "VOTING",
   'Scoring' : "SCORING",
+  'Waiting' : "WAITING",
   'CleanUp' : "CLEANUP",
   'Pregame' : "PREGAME",
   'GameOver' : "GAMEOVER"
