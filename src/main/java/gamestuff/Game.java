@@ -745,4 +745,17 @@ public class Game {
     return ImmutableList.copyOf(votes);
   }
 
+  public synchronized boolean playerHasVoted(
+      Player player) {
+    int index = 0;
+    while (index < votes.size()) {
+      Vote tempVote = votes.get(index);
+      if (tempVote.getPlayer() == player) {
+        return true;
+      }
+      index += 1;
+    }
+    return false;
+  }
+
 }

@@ -101,7 +101,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   public synchronized void playerChanged(
       Game game,
       Player player) {
-    addUpdate(game, new PlayerUpdate(player));
+    addUpdate(game, new PlayerUpdate(player, game));
   }
 
   @Override
@@ -127,7 +127,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   public synchronized void playerAdded(
       Game game,
       Player player) {
-    addUpdate(game, new AddPlayerUpdate(player));
+    addUpdate(game, new AddPlayerUpdate(player, game));
   }
 
   @Override
@@ -238,10 +238,12 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   private class PlayerUpdate implements DixitUpdate {
 
     private Player player;
+    private Game game;
     private long id;
 
-    public PlayerUpdate(Player player) {
+    public PlayerUpdate(Player player, Game game) {
       this.player = player;
+      this.game = game;
       id = getUpdateId();
     }
 
@@ -249,7 +251,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     public JsonElement getJson(
         Player inputPlayer) {
       JsonElement tempJson = DixitSerializationUtil.serializePlayer(player,
-          inputPlayer);
+          game, inputPlayer);
       return DixitSerializationUtil.serializeUpdate("player", tempJson);
     }
 
@@ -348,14 +350,16 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
   private class AddPlayerUpdate implements DixitUpdate {
 
     private Player addedPlayer;
+    private Game game;
     private long id;
 
     /**
      * @param player
      *          the player who was added
      */
-    public AddPlayerUpdate(Player player) {
+    public AddPlayerUpdate(Player player, Game game) {
       this.addedPlayer = player;
+      this.game = game;
       id = getUpdateId();
     }
 
@@ -363,7 +367,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
     public JsonElement getJson(
         Player inputPlayer) {
       JsonElement tempJson = DixitSerializationUtil.serializePlayer(
-          this.addedPlayer, inputPlayer);
+          this.addedPlayer, game, inputPlayer);
       return DixitSerializationUtil.serializeUpdate("added player", tempJson);
     }
 

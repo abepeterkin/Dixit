@@ -19,6 +19,7 @@ function Player(options) {
     numberOfCols : 8
   })
   this.score = options.score;
+  this.hasVoted = options.hasVoted;
   // TODO: add a vote so that a player is linked to its vote card
 }
 
