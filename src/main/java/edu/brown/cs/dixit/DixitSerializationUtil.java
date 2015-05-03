@@ -113,11 +113,13 @@ public class DixitSerializationUtil {
    */
   public static JsonElement serializePlayer(
       Player player,
+      Game game,
       Player currentPlayer) {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("score", player.getScore()).put("chatName", player.getChatName())
         .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
-        .put("color", player.getColor()).build();
+        .put("color", player.getColor())
+        .put("hasVoted", game.playerHasVoted(player)).build();
     return GSON.toJsonTree(variables);
   }
 
@@ -133,11 +135,13 @@ public class DixitSerializationUtil {
    */
   public static JsonElement deepSerializePlayer(
       Player player,
+      Game game,
       Player currentPlayer) {
     ImmutableMap.Builder<String, Object> tempBuilder = new ImmutableMap.Builder<String, Object>()
         .put("score", player.getScore()).put("chatName", player.getChatName())
         .put("isStoryTeller", player.isStoryteller()).put("id", player.getId())
-        .put("color", player.getColor());
+        .put("color", player.getColor())
+        .put("hasVoted", game.playerHasVoted(player));
     if (currentPlayer == player) {
       tempBuilder.put("hand", serializeHand(player.getHand()));
     }
@@ -252,7 +256,7 @@ public class DixitSerializationUtil {
     int index = 0;
     while (index < playerList.size()) {
       Player tempPlayer = playerList.get(index);
-      tempBuilder.add(deepSerializePlayer(tempPlayer, currentPlayer));
+      tempBuilder.add(deepSerializePlayer(tempPlayer, game, currentPlayer));
       index += 1;
     }
     JsonElement playerJsonList = GSON.toJsonTree(tempBuilder.build());
