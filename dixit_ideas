@@ -6,5 +6,6 @@ DONE: Show alert message when you are the storyteller
 > Spruce up error pages
 > Don't make text selectable
 
-
+To add to your score, type this into the console:
+addScoreRequest(<Number of points>, function() {});
 

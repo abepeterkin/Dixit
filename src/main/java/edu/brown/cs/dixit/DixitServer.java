@@ -5,6 +5,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 import edu.brown.cs.dixit.pages.AddChatRequest;
 import edu.brown.cs.dixit.pages.AddNonStoryCardRequest;
 import edu.brown.cs.dixit.pages.AddPlayerRequest;
+import edu.brown.cs.dixit.pages.AddScoreRequest;
 import edu.brown.cs.dixit.pages.AddStoryCardRequest;
 import edu.brown.cs.dixit.pages.CreateGameRequest;
 import edu.brown.cs.dixit.pages.DixitHomePage;
@@ -51,6 +52,7 @@ public class DixitServer {
     Spark.post("/removeVoteForCard", new RemoveVoteForCardRequest());
     Spark.post("/addChat", new AddChatRequest());
     Spark.post("/playerReady", new PlayerReadyRequest());
+    Spark.post("/addScore", new AddScoreRequest());
     Spark.get("/joinOptions/:gameName", new DixitJoinOptionsPage(),
         new FreeMarkerEngine());
     Spark.get("/", new DixitHomePage(), new FreeMarkerEngine());

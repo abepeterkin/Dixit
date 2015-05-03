@@ -33,6 +33,7 @@ public class Game {
   private String name;
   private final int HAND_SIZE;
   private final int MAX_PLAYERS;
+  private final int MAX_SCORE = 30;
   // we should have min players too, which is always 3
   private List<Player> players;
   private String story = "";
@@ -413,6 +414,27 @@ public class Game {
   }
 
   /**
+   * @param player
+   *          Player which should receive points.
+   * @param score
+   *          Number of points to add.
+   * @return Whether the action was successful.
+   */
+  public synchronized boolean addScore(
+      Player player,
+      int score) {
+    if (player.getScore() + score > MAX_SCORE) {
+      score = MAX_SCORE - player.getScore();
+    }
+    player.incrementScore(score);
+    subscriber.playerChanged(this, player);
+    if (player.getScore() >= MAX_SCORE) {
+      gameOver();
+    }
+    return true;
+  }
+
+  /**
    * Tallies up the votes and increases the scores of the players accordingly.
    *
    * If nobody or everybody finds the correct picture, the storyteller scores 0,
@@ -441,8 +463,7 @@ public class Game {
     if (allStoryVotes || noStoryVotes) {
       for (Player p : players) {
         if (!p.isStoryteller()) {
-          p.incrementScore(2);
-          subscriber.playerChanged(this, p);
+          addScore(p, 2);
         }
       }
     }
@@ -451,19 +472,16 @@ public class Game {
       for (Vote v : this.votes) {
         Card voteCard = v.getCard();
         if (voteCard.getStoryteller()) {
-          v.getPlayer().incrementScore(2);
+          addScore(v.getPlayer(), 2);
           if (!storyHasBeenVoted) {
-            storyTeller.incrementScore(2);
+            addScore(storyTeller, 2);
             storyHasBeenVoted = true;
           } else {
-            storyTeller.incrementScore(1);
+            addScore(storyTeller, 1);
           }
-          subscriber.playerChanged(this, v.getPlayer());
-          subscriber.playerChanged(this, storyTeller);
         } else {
           Player votedFor = tableCards.get(voteCard);
-          votedFor.incrementScore(1);
-          subscriber.playerChanged(this, votedFor);
+          addScore(votedFor, 1);
         }
       }
     }
@@ -473,7 +491,7 @@ public class Game {
     }
     boolean gameOver = false;
     for (Player p : players) {
-      if (p.getScore() > 29) {
+      if (p.getScore() >= MAX_SCORE) {
         gameOver = true;
       }
     }
@@ -542,9 +560,11 @@ public class Game {
   }
 
   private void gameOver() {
-    Collections.sort(this.players);
-    announcer.gameOver();
-    updatePhase(Phase.GAMEOVER);
+    if (phase != Phase.GAMEOVER) {
+      Collections.sort(this.players);
+      announcer.gameOver();
+      updatePhase(Phase.GAMEOVER);
+    }
   }
 
   /**
