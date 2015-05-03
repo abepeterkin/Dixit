@@ -28,7 +28,7 @@ public class ChatTest {
     Player tempPlayer1 = new Player("1", "Nobody", "blue");
     Player tempPlayer2 = new Player("2", "Somebody", "red");
 
-    Chat chat = new Chat(20);
+    Chat chat = new Chat();
     assertTrue(chat.getLines().size() == 0);
     for (int i = 0; i < 30; i++) {
       chat.addLine(new ChatLine(tempPlayer1, "" + i, "blue"));
