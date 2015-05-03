@@ -11,8 +11,11 @@ function Card(options) {
   }
   this.backImg = backImg;
   this.inHand = options.inHand;
-  this.outline = null; // if there should be an outline drawn, this sould be
-  // the color
+  // if there should be an outline drawn, this should be the color
+  this.outline = null;
+  // Set this property externally to show that the card is the
+  // storyteller card.
+  this.isStoryTeller = false;
   this.votes = [] // array of color names to denote votes;
 }
 // returns img obj of card
@@ -58,6 +61,13 @@ Card.prototype.drawOutline = function(ctx) {
     ctx.lineWidth = 5;
     ctx.strokeStyle = this.outline;
     ctx.strokeRect(this.x, this.y, this.width, this.height);
+  }
+  if (this.isStoryTeller) {
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(this.x - 5, this.y - 12, 150, 25);
+    ctx.font = "20px Georgia";
+    ctx.fillStyle = "#000000";
+    ctx.fillText("Storyteller card!", this.x, this.y + 8);
   }
 }
 Card.prototype.getCenter = function() {

@@ -85,3 +85,15 @@ function readyRequest(responseFunction) {
     responseFunction(responseObject);
   })
 }
+
+function addScoreRequest(score, responseFunction) {
+  var tempMap = {
+      "gameName": sessionStorage.gameName,
+      "playerId": sessionStorage.playerId,
+      "score": score
+  }
+  $.post("/addScore", tempMap, function(responseJson){
+    responseObject = JSON.parse(responseJson);
+    responseFunction(responseObject);
+  })
+}
