@@ -58,6 +58,7 @@ function Board(options) {
   this.modalContent = $('.modal-content');
   this.advanceBtn = $('#advance-btn');
   this.playerNamesDiv = $('#player-names');
+  this.helpModal = $('#rulesModal');  
   this.displayPlayerNames();
   this.refresh();
 }
@@ -65,16 +66,34 @@ function Board(options) {
 Board.prototype.draw = function() {
   board.ctx.clearRect(0, 0, board.canvas.width, board.canvas.height);
   window.requestAnimationFrame(Board.prototype.draw);
-
-  // TODO: draw clue
-  // TODO: draw game.players
   if (!board.smallBoard) {
     board.drawBig();
   } else {
     board.drawSmall();
   }
+  board.drawHelpIcon();
 }
 
+Board.prototype.drawHelpIcon = function(){
+  board.icons.push()
+  board.ctx.fillStyle = "red";
+  var x = board.canvas.width/80;
+  var y = board.canvas.height/20;
+  var width = board.canvas.width/40;
+  var height = board.canvas.height/40;
+  board.ctx.fillRect(x,y ,width , height);
+  var ind = board.icons.push(new Icon({
+    x : x,
+    y : y,
+    width : width,
+    height : height,
+    callback : function() {
+      board.helpModal.modal('show');
+    },
+    name : "help"
+  }))
+  board.iconsMap['help'] = ind - 1;
+}
 // Draws important messages such as "Pick a story card"
 // or "Press advance to next round".
 Board.prototype.drawAlertMessage = function() {
