@@ -55,6 +55,9 @@ Game.prototype.updateScores = function(newScores) {
 }
 
 Game.prototype.doPhase = function(phase) {
+  //if (phase == this.phases['GameOver']) {
+  //  window.location = encodeURI("/finalScores/" + this.name);
+  //}
   this.currPhase = phase;
   // TODO: add checks so that it cannot go pass the cleanup phase,aka game over
   $('#currentPhase').text('Current phase: ' + phase);
@@ -65,4 +68,14 @@ Game.prototype.doPhase = function(phase) {
 Game.prototype.getPlayer = function(id) {
   return this.players[id];
 
+}
+
+Game.prototype.playerHasWon = function() {
+  for (id in this.players) {
+    var tempPlayer = this.players[id];
+    if (tempPlayer.score >= 30) {
+      return true;
+    }
+  }
+  return false;
 }
