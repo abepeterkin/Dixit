@@ -2,10 +2,14 @@ package edu.brown.cs.dixit;
 
 import gamestuff.Game;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.Timer;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -21,9 +25,11 @@ public final class Main {
   public static final Gson GSON = new Gson();
   private static Map<String, Game> gameMap = new HashMap<String, Game>();
   private static int nextId = 0;
+  private static final long DELETE_GAME_DELAY = 12 * 60 * 60 * 1000;
 
   /**
-   * @param args the arguments to run main with
+   * @param args
+   *          the arguments to run main with
    */
   public static void main(
       String[] args) {
@@ -35,6 +41,30 @@ public final class Main {
       DixitServer.runSparkSever(port.value(options));
     } catch (RuntimeException e) {
       System.err.println("ERROR: " + e.getMessage());
+    }
+    int delay = 2000; // milliseconds
+    ActionListener taskPerformer = new DixitTimerEvent();
+    new Timer(delay, taskPerformer).start();
+  }
+
+  /**
+   * Called every couple of seconds.
+   */
+  private static class DixitTimerEvent implements ActionListener {
+    public void actionPerformed(
+        ActionEvent evt) {
+      List<String> tempNameList = Main.getGameNameList();
+      int index = 0;
+      while (index < tempNameList.size()) {
+        String tempName = tempNameList.get(index);
+        Game tempGame = Main.getGame(tempName);
+        long tempDelay = System.currentTimeMillis()
+            - tempGame.getLastUpdateTime();
+        if (tempDelay > Main.DELETE_GAME_DELAY) {
+          Main.removeGame(tempName);
+        }
+        index++;
+      }
     }
   }
 
@@ -51,7 +81,8 @@ public final class Main {
   }
 
   /**
-   * @param name the name of a game
+   * @param name
+   *          the name of a game
    * @return whether there exists a game with that name
    */
   public static synchronized boolean gameExists(
@@ -60,9 +91,13 @@ public final class Main {
     return gameMap.containsKey(name);
   }
 
-  /** Creates a new game.
-   * @param name the name to give the game
-   * @param game the game to add
+  /**
+   * Creates a new game.
+   * 
+   * @param name
+   *          the name to give the game
+   * @param game
+   *          the game to add
    */
   public static synchronized void addGame(
       String name,
@@ -71,9 +106,9 @@ public final class Main {
   }
 
   /**
-   * @param name the name of the game to retrieve
-   * @return the game that was found, or null if the game
-   * does not exist
+   * @param name
+   *          the name of the game to retrieve
+   * @return the game that was found, or null if the game does not exist
    */
   public static synchronized Game getGame(
       String name) {
@@ -81,7 +116,8 @@ public final class Main {
   }
 
   /**
-   * @param name the name of the game to remove
+   * @param name
+   *          the name of the game to remove
    */
   public static synchronized void removeGame(
       String name) {
@@ -106,6 +142,6 @@ public final class Main {
    * Private constructor for the style checker.
    */
   private Main() {
-    //does nothing
+    // does nothing
   }
 }

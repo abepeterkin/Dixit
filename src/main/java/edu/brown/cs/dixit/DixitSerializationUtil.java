@@ -66,7 +66,7 @@ public class DixitSerializationUtil {
 
   /**
    * Serializes the table cards of a game
-   * 
+   *
    * @param game
    *          a game to serialize
    * @return the serialized table cards of the game
@@ -267,7 +267,8 @@ public class DixitSerializationUtil {
         .put("chat", serializeChat(game.getChat()))
         .put("handsize", Integer.toString(game.getHandSize()))
         .put("tablecards", serializeTableCards(game, currentPlayer))
-        .put("votes", serializeVotes(game, currentPlayer)).build();
+        .put("votes", serializeVotes(game, currentPlayer))
+        .put("maxplayers", game.getMaxPlayers()).build();
     return GSON.toJsonTree(variables);
   }
 

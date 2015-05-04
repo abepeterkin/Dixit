@@ -9,6 +9,9 @@
 				<th></th>
 			</tr>
 		</table>
+		<p>
+			<strong>Note:</strong> Games will be automatically deleted after a long period of inactivity.
+		</p>
 	</div>
 </#assign>
 <#assign js>

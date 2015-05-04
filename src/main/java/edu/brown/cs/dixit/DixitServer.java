@@ -8,6 +8,7 @@ import edu.brown.cs.dixit.pages.AddPlayerRequest;
 import edu.brown.cs.dixit.pages.AddScoreRequest;
 import edu.brown.cs.dixit.pages.AddStoryCardRequest;
 import edu.brown.cs.dixit.pages.CreateGameRequest;
+import edu.brown.cs.dixit.pages.DixitFinalScoresPage;
 import edu.brown.cs.dixit.pages.DixitHomePage;
 import edu.brown.cs.dixit.pages.DixitJoinGamePage;
 import edu.brown.cs.dixit.pages.DixitJoinOptionsPage;
@@ -54,6 +55,8 @@ public class DixitServer {
     Spark.post("/playerReady", new PlayerReadyRequest());
     Spark.post("/addScore", new AddScoreRequest());
     Spark.get("/joinOptions/:gameName", new DixitJoinOptionsPage(),
+        new FreeMarkerEngine());
+    Spark.get("/finalScores/:gameName", new DixitFinalScoresPage(),
         new FreeMarkerEngine());
     Spark.get("/", new DixitHomePage(), new FreeMarkerEngine());
     Spark.get("/newGamePage", new DixitNewGamePage(), new FreeMarkerEngine());

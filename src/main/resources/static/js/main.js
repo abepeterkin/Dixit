@@ -107,7 +107,8 @@ function retreiveGame(responseObject) {
   }
   console.log(responseObject);
   game = new Game(responseObject.name, {
-    numCards : responseObject.handsize
+    numCards : responseObject.handsize,
+    maxPlayers: responseObject.maxplayers
   });
   //fix clue modal's empty cards if cards are less
   //than 6.

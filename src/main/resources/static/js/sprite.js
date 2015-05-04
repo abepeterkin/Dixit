@@ -187,17 +187,17 @@ Sprite.prototype.render = function(ctx, index, player) {
     x = xCenter + board.canvas.height / 40;
     y = yCenter;
   } else if (index === 1) {
-    x = xCenter + board.canvas.height / 40;
+    x = xCenter;
     y = yCenter + board.canvas.width / 40;
   } else if (index === 2) {
     x = xCenter;
-    y = yCenter + board.canvas.width / 40;
+    y = yCenter;
   } else if (index === 3) {
     x = xCenter - board.canvas.height / 40;
     y = yCenter + board.canvas.width / 40;
   } else if (index === 4) {
-    x = xCenter;
-    y = yCenter;
+    x = xCenter + board.canvas.height / 40;
+    y = yCenter + board.canvas.width / 40;
   } else {
     x = xCenter - board.canvas.height / 40;
     y = yCenter;

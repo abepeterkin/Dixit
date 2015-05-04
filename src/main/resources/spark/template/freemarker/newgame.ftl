@@ -11,7 +11,8 @@
   </div>
     <div class="form-group">
     <label for="color">Color</label>
-    <select name="colorName" class="form-control">
+    <select name="colorName" class="form-control" required>
+        <option value="">Pick a color</option>
     	<option>Blue</option>
     	<option>Red</option>
     	<option>White</option>
