@@ -21,17 +21,17 @@ public class Announcer {
   public void gameCreated() {
     String name = g.getPlayerNames().get(0);
     announce(name + " has created a game!");
-    int playersLeft = g.getMaxPlayers() - 1;
-    announce("Waiting on " + playersLeft + " more players...");
+//    int playersLeft = g.getMaxPlayers() - 1;
+//    announce("Waiting on " + playersLeft + " more players...");
   }
 
   public void newPlayer(Player p) {
     String name = p.getChatName();
-    int playersLeft = g.getMaxPlayers() - g.getNumberOfPlayers();
+//    int playersLeft = g.getMaxPlayers() - g.getNumberOfPlayers();
     announce(name + " has joined the game!");
-    if (playersLeft > 0) {
-      announce("Waiting on " + Integer.toString(playersLeft) + " more player(s)...");
-    }
+//    if (playersLeft > 0) {
+//      announce("Waiting on " + Integer.toString(playersLeft) + " more player(s)...");
+//    }
   }
 
   public void gameStart() {
@@ -51,20 +51,20 @@ public class Announcer {
   public void nonStoryPhase() {
     String teller = g.getStoryteller().getChatName();
     String story = g.getStory();
-    int cardsLeft = g.getNumberOfPlayers() - g.getTableCards().size();
+//    int cardsLeft = g.getNumberOfPlayers() - g.getTableCards().size();
     announce(teller + " has submitted their story! " + "\"" + story + "\"");
     announce("The game has advanced to card selection phase!");
-    announce("Waiting on " + cardsLeft + " more cards...");
+//    announce("Waiting on " + cardsLeft + " more cards...");
   }
 
   public void submitNonStoryCard(Player p) {
     String name = p.getChatName();
-    int cardsLeft = g.getNumberOfPlayers() - g.getTableCards().size();
-    System.out.println(cardsLeft);
+//    int cardsLeft = g.getNumberOfPlayers() - g.getTableCards().size();
+//    System.out.println(cardsLeft);
     announce (name + " has submitted a card!");
-    if (cardsLeft > 0) {
-      announce("Waiting on " + cardsLeft + " more cards...");
-    }
+//    if (cardsLeft > 0) {
+//      announce("Waiting on " + cardsLeft + " more cards...");
+//    }
   }
 
   public void advanceToVotingPhase() {

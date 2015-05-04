@@ -144,6 +144,5 @@
     <script src="/js/board.js"></script>
     <script src="/js/chat.js"></script>
     <script src="/js/ajax.js"></script>
-    <script src="/js/music.js"></script>
 </#assign>
 <#include "main.ftl">
