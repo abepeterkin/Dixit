@@ -42,6 +42,9 @@ Game.prototype.addPlayer = function(player) {
   if (player.isStoryTeller) {
     this.setStoryTeller(this.players[player.id]);
   }
+  if (board) {
+    board.displayPlayerNames();
+  }
 }
 
 // if we only need to change one player’s score

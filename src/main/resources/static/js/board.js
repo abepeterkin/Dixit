@@ -55,6 +55,9 @@ function Board(options) {
   this.smallBoard = false;
   this.modalContent = $('.modal-content');
   this.advanceBtn = $('#advance-btn');
+  this.playerNamesDiv = $('#player-names');
+  this.displayPlayerNames();
+  this.refresh();
 }
 // draws the entire game board, including client player's hand
 Board.prototype.draw = function() {
@@ -188,6 +191,29 @@ var drawBigHelper = function() {
   board.clue.draw(board.ctx);
   board.drawAlertMessage();
 }
+
+Board.prototype.displayPlayerNames = function() {
+  var tempHtml = "<span style=\"color: white;"
+  tempHtml += " font-weight: bold;\">";
+  tempHtml += "Players:";
+  tempHtml += "</span>";
+  tempHtml += "<br />";
+  for (var id in board.game.players) {
+      var player = board.game.players[id];
+      if(player.isStoryTeller){
+        nameToDisplay = player.name + " - Story Teller";
+      } else {
+        nameToDisplay = player.name;
+      }
+      tempHtml += "<span style=\"color: " + player.color + ";"
+      tempHtml += " font-weight: bold;\">";
+      tempHtml += nameToDisplay;
+      tempHtml += "</span>";
+      tempHtml += "<br />";
+  }
+  this.playerNamesDiv.html(tempHtml);
+}
+
 Board.prototype.drawPlayersBig = function() {
   var i = 0;
   var player;
@@ -197,14 +223,14 @@ Board.prototype.drawPlayersBig = function() {
       player = board.game.players[id];
       player.idle.update();
       player.idle.render(board.ctx, i, player);
-      board.ctx.fillStyle = player.color;
-      board.ctx.font = "20px Georgia" // TODO: make this responsive
-      if(player.isStoryTeller){
-    	  nameToDisplay = player.name + " - Story Teller";
-      } else {
-    	  nameToDisplay = player.name;
-      }
-      board.ctx.fillText(nameToDisplay, 20, i * 20 + 20);
+      //board.ctx.fillStyle = player.color;
+      //board.ctx.font = "20px Georgia" // TODO: make this responsive
+      //if(player.isStoryTeller){
+    	//  nameToDisplay = player.name + " - Story Teller";
+      //} else {
+    	//  nameToDisplay = player.name;
+      //}
+      //board.ctx.fillText(nameToDisplay, 20, i * 20 + 20);
 
       i++;
     }
@@ -219,14 +245,14 @@ Board.prototype.drawPlayersSmall = function() {
     if (this.game.players.hasOwnProperty(id)) {
       player = board.game.players[id];
       this.game.players[id].drawSmall(this, i);
-      board.ctx.fillStyle = player.color;
-      board.ctx.font = "20px Georgia" // TODO: make this responsive
-    	  if(player.isStoryTeller){
-        	  nameToDisplay = player.name + " - Story Teller";
-          } else {
-        	  nameToDisplay = player.name;
-          }
-          board.ctx.fillText(nameToDisplay, 20, i * 20 + 20);
+      //board.ctx.fillStyle = player.color;
+      //board.ctx.font = "20px Georgia" // TODO: make this responsive
+    	//  if(player.isStoryTeller){
+      //  	  nameToDisplay = player.name + " - Story Teller";
+      //    } else {
+      //  	  nameToDisplay = player.name;
+      //    }
+      //    board.ctx.fillText(nameToDisplay, 20, i * 20 + 20);
       i++;
     }
   }
@@ -258,6 +284,7 @@ Board.prototype.refresh = function() {
   this.clientPlayer.refresh(this.canvas);
   this.clue.refresh(this);
   this.adjustCardsPos();
+  chat.messageBody.css("height", window.innerHeight - (165 + 165));
 }
 
 Board.prototype.addGenericCard = function() {
