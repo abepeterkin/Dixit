@@ -76,7 +76,7 @@ Board.prototype.draw = function() {
   } else {
     board.drawSmall();
   }
-  //board.drawHelpIcon();
+  board.drawHelpIcon();
 }
 
 Board.prototype.drawHelpIcon = function(){
