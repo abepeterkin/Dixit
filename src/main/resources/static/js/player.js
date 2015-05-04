@@ -138,6 +138,16 @@ Player.prototype.drawSmall = function(board, index) {
   var x = board.canvas.width - w;
   var y = (index * h / 2.2) - h / 5;
   var player = this;
+  if (board.game.currPhase == board.game.phases["Voting"]) {
+	  var tokenX = x + w / 4;
+	  var tokenY = y + h / 1.9;		
+	  if (player.hasVoted) {  
+		  this.drawVoteToken(board, tokenX, tokenY);
+	  }
+	  if (player.isStoryTeller) {	  
+		  this.drawStoryToken(board, tokenX, tokenY);
+	  }
+  }
   if (img.complete) {
     board.ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
     board.ctx.font = "30px Georgia"; // make this responsive
@@ -148,8 +158,26 @@ Player.prototype.drawSmall = function(board, index) {
       board.ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
       board.ctx.font = "30px Georgia"; // make this responsive
       board.ctx.fillStyle = "black";
-
       board.ctx.fillText(player.score, x + w / 1.5, y + h);
     }
   }
 }
+
+Player.prototype.drawStoryToken = function(board, x, y) {
+  	var voteWidth = board.ctx.canvas.width / 80;
+  	board.ctx.beginPath();
+  	board.ctx.arc(x, y,
+        voteWidth, 0, 2 * Math.PI);
+  	board.ctx.fillStyle = "white";
+  	board.ctx.fill();
+  	//golden S in center?
+}
+
+Player.prototype.drawVoteToken = function(board, x, y) {
+	  	var voteWidth = board.ctx.canvas.width / 80;
+	  	board.ctx.beginPath();
+	  	board.ctx.arc(x, y,
+	        voteWidth, 0, 2 * Math.PI);
+	  	board.ctx.fillStyle = this.color;
+	  	board.ctx.fill();
+	}

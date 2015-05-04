@@ -204,10 +204,12 @@ public class Game {
   public synchronized void addToChat(
       Player player,
       String message) {
-    String color = colorMap.get(player.getChatName());
-    ChatLine line = new ChatLine(player, message, color);
-    chat.addLine(line);
-    subscriber.chatChanged(this);
+    if (!message.equals("")){
+      String color = colorMap.get(player.getChatName());
+      ChatLine line = new ChatLine(player, message, color);
+      chat.addLine(line);
+      subscriber.chatChanged(this);
+    }
   }
 
   /**

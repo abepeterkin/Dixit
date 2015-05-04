@@ -1,7 +1,9 @@
 function Clue(opt) {
   this.text = opt.text || "";
   this.fontface = opt.fontface || "Georgia";
-  this.fontsize = opt.fontface || 30;
+  this.fontsizeBig = opt.fontface || 30;
+  this.fontsizeMed = 20;
+  this.fontsizeSmall = 18;
   this.x = opt.x || 200;
   this.y = opt.y || 30;
   this.card = opt.card;
@@ -12,9 +14,20 @@ Clue.prototype.draw = function(ctx) {
 	//console.log('inside clue draw');
 	//console.log(this);
   if (this.text != '""') {
+    ctx.textAlign = "center";
     ctx.fillStyle = "black";
-    ctx.font = this.fontsize + "px " + this.fontface;
+    var length = this.text.length;
+    var fontsize;
+    if (length < 70) {
+    	fontsize = this.fontsizeBig;
+    } else if (length < 120) {
+    	fontsize = this.fontsizeMedium;
+    } else {
+    	fontsize = this.fontsizeSmall;
+    }
+    ctx.font = fontsize + "px " + this.fontface;
     ctx.fillText(this.text, this.x, this.y);
+    ctx.textAlign = "left";
     if (this.card) {
       this.card.draw(ctx);
     }
