@@ -38,7 +38,7 @@ public class Announcer {
     announce("A new game has begun!");
     storytellerPhase();
   }
-  
+
   public void gameOver() {
     announce("GAME OVER!");
   }
@@ -68,7 +68,7 @@ public class Announcer {
   }
 
   public void advanceToVotingPhase() {
-    announce("The game as advanced to voting phase!");
+    announce("The game has advanced to voting phase!");
     int votesLeft = g.getNumberOfPlayers() - g.getNumberOfVotes() - 1;
     announce("Waiting on " + votesLeft + " votes...");
 
@@ -89,11 +89,11 @@ public class Announcer {
     announce(name + " has removed their vote!");
     announce("Waiting on " + votesLeft + " more votes...");
   }
-  
+
   public void advanceToScoringPhase() {
     announce("The game has advanced to voting phase!");
   }
-  
+
   public void incrementScore(Player p, int inc) {
     String name = p.getChatName();
     if (inc > 0) {
@@ -102,11 +102,11 @@ public class Announcer {
       announce(name + " didnt gain any points this round :/");
     }
   }
-  
+
   public void advanceToWaitingPhase() {
     announce("Once all players are ready to advance, the next round will begin.");
   }
-  
+
   public void submitReady(Player p) {
     String name = p.getChatName();
     int left = g.getMaxPlayers() - g.numberOfPlayersReady();
@@ -115,7 +115,7 @@ public class Announcer {
       announce("Waiting for " + left + " more players...");
     }
   }
-  
+
   public void newRound() {
     announce("All players are ready: advancing to next round...");
     storytellerPhase();

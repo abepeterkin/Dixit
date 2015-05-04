@@ -81,6 +81,7 @@ function processUpdates(responseObject) {
 
       game.updateScore(tempUpdateValue.id, tempUpdateValue.score);
       tempPlayer.hasVoted = tempUpdateValue.hasVoted;
+      board.displayPlayerNames();
       break;
     case "hand":
       board.clientPlayer.hand = [];
@@ -116,19 +117,19 @@ function retreiveGame(responseObject) {
 	  $('#item' + (5-i)).remove();
   }
   game.addPlayers(responseObject.players);
-  board = new Board({
-    game : game,
-    canvasId : "board",
-  })
-  board.addListeners();
-  game.board = board;
-  // start chat
+//start chat
   chat = new Chat();
   var chatLines = responseObject.chat;
   // add all the existing chat lines
   for (var i = 0; i < chatLines.length; i++) {
     chat.addMsg(chatLines[i].message, game.getPlayer(chatLines[i].playerId));
   }
+  board = new Board({
+    game : game,
+    canvasId : "board",
+  });
+  game.board = board;
+  board.addListeners();
   if (responseObject.story) {
     game.currClue = responseObject.story;
   }
@@ -142,6 +143,7 @@ function retreiveGame(responseObject) {
   board.clientPlayer.refresh(board.canvas);
   game.doPhase(responseObject.phase);
   board.draw();
+  board.displayPlayerNames();
 
   // var board = new Board(game, "board", sessionStorage.playerId);
   // game.board = board;

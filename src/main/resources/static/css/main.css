@@ -94,11 +94,15 @@ canvas {
  height:100vh;
 }
 #chat-text{
-  height:70vh;
   overflow:auto;
 }
 #chat-input{
-  height:30vh;
+  height:165px;
+}
+#player-names{
+  height:165px;
+  overflow:auto;
+  color: white;
 }
 textarea{
  margin:0;

@@ -168,7 +168,17 @@ Player.prototype.drawStoryToken = function(board, x, y) {
   	board.ctx.beginPath();
   	board.ctx.arc(x, y,
         voteWidth, 0, 2 * Math.PI);
+  	board.ctx.fillStyle = "gold";
+  	board.ctx.fill();
+  	board.ctx.beginPath();
+  	board.ctx.arc(x, y,
+        voteWidth/1.2, 0, 2 * Math.PI);
   	board.ctx.fillStyle = "white";
+  	board.ctx.fill();
+  	board.ctx.beginPath();
+  	board.ctx.arc(x, y,
+        voteWidth/1.4, 0, 2 * Math.PI);
+  	board.ctx.fillStyle = "gold";
   	board.ctx.fill();
   	//golden S in center?
 }
@@ -178,6 +188,16 @@ Player.prototype.drawVoteToken = function(board, x, y) {
 	  	board.ctx.beginPath();
 	  	board.ctx.arc(x, y,
 	        voteWidth, 0, 2 * Math.PI);
+	  	board.ctx.fillStyle = this.color;
+	  	board.ctx.fill();
+	  	board.ctx.beginPath();
+	  	board.ctx.arc(x, y,
+	        voteWidth/1.2, 0, 2 * Math.PI);
+	  	board.ctx.fillStyle = "white";
+	  	board.ctx.fill();
+	  	board.ctx.beginPath();
+	  	board.ctx.arc(x, y,
+	        voteWidth/1.4, 0, 2 * Math.PI);
 	  	board.ctx.fillStyle = this.color;
 	  	board.ctx.fill();
 	}
