@@ -239,7 +239,7 @@ Board.prototype.displayPlayerNames = function() {
 	+ "/" + this.numPlayers + "):";
   var tempHtml = "<span style=\"color: white;"
   tempHtml += " font-weight: bold;\">";
-  tempHtml += "Players" + fractionPlayers;
+  tempHtml += "Players " + fractionPlayers;
   tempHtml += "</span>";
   tempHtml += "<br />";
   for (var id in board.game.players) {
