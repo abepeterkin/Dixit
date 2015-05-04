@@ -58,7 +58,6 @@
     </div>
   </div>
 </div>
-
 <div class="modal fade" id="rulesModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
