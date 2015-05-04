@@ -4,7 +4,11 @@
 <div id="container2">
 	<div id="container1">
 		<div id="col1">
-			<canvas id="board">No canvas support</canvas>
+		  <audio controls autoplay loop style="position: absolute">
+            <source src="http://www.googledrive.com/host/0B0SSL1NefHURd3dJRXozZ3h6anc" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+		  <canvas id="board">No canvas support</canvas>
 		</div>
 		<div id="col2">
 			<div id="chat">
