@@ -160,6 +160,7 @@ public class Game {
     votes.remove(toRemove);
     announcer.removeVote(playerIdMap.get(playerId));
     subscriber.votesChanged(this);
+    subscriber.playerChanged(this, playerIdMap.get(playerId));
     return true;
   }
 
@@ -396,6 +397,7 @@ public class Game {
     }
     votes.add(vote);
     subscriber.votesChanged(this);
+    subscriber.playerChanged(this, p);
     announcer.submitVote(p);
     if (this.votes.size() == this.players.size() - 1) {
       calculateScores();
