@@ -205,7 +205,7 @@ public class Game {
   public synchronized void addToChat(
       Player player,
       String message) {
-    if (!message.equals("")){
+    if (!message.equals("")) {
       String color = colorMap.get(player.getChatName());
       ChatLine line = new ChatLine(player, message, color);
       chat.addLine(line);
@@ -560,6 +560,9 @@ public class Game {
     this.story = "";
     votes.clear();
     subscriber.votesChanged(this);
+    for (Player player : players) {
+      subscriber.playerChanged(this, player);
+    }
     cycleStoryteller();
     updatePhase(Phase.STORYTELLER);
     announcer.newRound();
