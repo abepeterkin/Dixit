@@ -153,25 +153,7 @@ function retreiveGame(responseObject) {
 
   setInterval(sendUpdateRequestIfReady, 500);
 }
-/*
- * var player1 = new Player("1", "Esteban", "blue", false, game); var player2 =
- * new Player("2", "Zach", "blue", false, game); var player3 = new Player("3",
- * "Abe", "blue", false, game); var player4 = new Player("4", "Jack", "blue",
- * false, game); var player5 = new Player("4", "Jack", "blue", false, game); var
- * player6 = new Player("4", "Jack", "blue", false, game);
- * 
- * var players = [ player1, player2, player3, player4, player5, player6 ];
- * game.addPlayers(players); function makeTestHand() { var hand = [
- * "/images/cards/dixit_card_01_001.jpg", "/images/cards/dixit_card_01_002.jpg",
- * "/images/cards/dixit_card_01_003.jpg", "/images/cards/dixit_card_01_004.jpg",
- * "/images/cards/dixit_card_01_005.jpg" ]; return makeHandArray(hand); }
- * 
- * function makeHandArray(handUrls) { var hand = []; for (var i = 0; i <
- * handUrls.length; i++) { hand.push(new Card({ id : i, img : handUrls[i], x : i *
- * (board.canvas.width / 9) + (board.canvas.width / 4), y : board.canvas.height -
- * (board.canvas.height / 5), canvas : board.canvas, inHand : true })); } return
- * hand; }
- */
+
 window.onload = function() {
   if (typeof (Storage) !== "undefined") {
     var gameName = $("#gameName").val();
@@ -195,25 +177,17 @@ window.onload = function() {
   if (window.location.pathname != "/board") {
     window.location = '/board';
   }
-  // game.setStoryTeller(player2);
-  /*
-   * player1.addHand(makeTestHand());
-   * 
-   * board.addListeners();
-   * 
-   * board.addCard(new Card({ img : "/images/cards/dixit_card_01_012.jpg",
-   * canvas : board.canvas, inHand : false })) board.addCard(new Card({ img :
-   * "/images/cards/dixit_card_01_013.jpg", canvas : board.canvas, inHand :
-   * false })) board.addCard(new Card({ img :
-   * "/images/cards/dixit_card_01_014.jpg", canvas : board.canvas, inHand :
-   * false })) board.addCard(new Card({ img :
-   * "/images/cards/dixit_card_01_015.jpg", canvas : board.canvas, inHand :
-   * false })) board.addCard(new Card({ img :
-   * "/images/cards/dixit_card_01_016.jpg", canvas : board.canvas, inHand :
-   * false })) board.addCard(new Card({ img :
-   * "/images/cards/dixit_card_01_017.jpg", canvas : board.canvas, inHand :
-   * false }))
-   * 
-   * game.nextPhase(); board.draw(); var chat = new Chat(player1);
-   */
+  
+  var music = $('#music');
+  var ctrl = $('#music-button');
+
+  ctrl.click(function() {
+    if (music.prop('muted')) {
+      ctrl.attr('src', '/images/volume-on.png');
+      music.prop('muted', false);
+    } else {
+      ctrl.attr('src', '/images/volume-off.png');
+      music.prop('muted', true);
+    }
+  });
 }

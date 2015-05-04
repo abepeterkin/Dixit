@@ -11,6 +11,7 @@ var draggingCard;
 var board;
 var selectedCard = {};
 var sentCard = false;
+var numPlayers;
 // should hold to array of game.players to display their score and color
 function Board(options) {
   this.clientPlayer = game.players[sessionStorage.playerId]; // the player this
@@ -24,9 +25,9 @@ function Board(options) {
       || document.documentElement.clientHeight || document.body.clientHeight);
   this.ctx = this.canvas.getContext("2d");
   this.img = new Image();
-  var numPlayers = game.rules.maxPlayers;
+  this.numPlayers = game.rules.maxPlayers;
 //  this.img.src = "/images/board.jpg";
-  switch (numPlayers) {
+  switch (this.numPlayers) {
   case 3:
 	  this.img.src = "/images/board3Player.jpg";
 	  break;
@@ -55,7 +56,7 @@ function Board(options) {
   this.finalScoresModal = $("#finalScoresModal");
   this.finalScoresDiv = $("#finalScores");
   this.smallBoard = false;
-  this.modalContent = $('.modal-content');
+  this.modalContent = $('#cardModal .modal-content').add('#sendClueModal .modal-content');
   this.advanceBtn = $('#advance-btn');
   this.playerNamesDiv = $('#player-names');
   this.helpModal = $('#rulesModal');  
@@ -88,6 +89,23 @@ Board.prototype.drawHelpIcon = function(){
     width : width,
     height : height,
     callback : function() {
+      switch(board.game.currPhase){
+      case 'PREGAME':
+        $('#initTab a').tab('show');
+        break;
+      case 'STORYTELLER':
+        $('#storyTellerTab a').tab('show');
+        break;
+      case 'NONSTORYCARDS':
+        $('#nonStoryTellerTab a').tab('show');
+        break;
+      case 'VOTING':
+        $('#votingTab a').tab('show');
+        break;
+      case 'WAITING':
+        $('#scoringTab a').tab('show');
+        break;
+      }
       board.helpModal.modal('show');
     },
     name : "help"
@@ -214,9 +232,11 @@ var drawBigHelper = function() {
 }
 
 Board.prototype.displayPlayerNames = function() {
+	var fractionPlayers = "(" + Object.keys(board.game.players).length
+	+ "/" + this.numPlayers + "):";
   var tempHtml = "<span style=\"color: white;"
   tempHtml += " font-weight: bold;\">";
-  tempHtml += "Players:";
+  tempHtml += "Players" + fractionPlayers;
   tempHtml += "</span>";
   tempHtml += "<br />";
   for (var id in board.game.players) {
@@ -225,15 +245,23 @@ Board.prototype.displayPlayerNames = function() {
       if(player.isReady) {
     	  nameToDisplay = "(READY) ";
       }
-      if(player.isStoryTeller){
-        nameToDisplay = nameToDisplay + player.name + " - Story Teller";
-      } else {
-        nameToDisplay = nameToDisplay + player.name;
-      }
-      tempHtml += "<span style=\"color: " + player.color + ";"
+      nameToDisplay = nameToDisplay + player.name;
+      tempHtml += "<span style=\"color: " + player.color + ";";
       tempHtml += " font-weight: bold;\">";
+      if (player == this.clientPlayer) {
+    	  tempHtml += "<u>";
+      }
       tempHtml += nameToDisplay;
+      if (player == this.clientPlayer) {
+    	  tempHtml += "</u>";
+      }
       tempHtml += "</span>";
+      if (player.isStoryTeller) {
+          tempHtml += "<span style=\"color: gold;\">";
+          tempHtml += " - Storyteller";
+          tempHtml += "</span>";
+      }
+      
       tempHtml += "<br />";
   }
   this.playerNamesDiv.html(tempHtml);
@@ -431,7 +459,7 @@ Board.prototype.addListeners = function() {
   $('#carousel-example-generic').on('slid.bs.carousel', function(e) {
     board.clue.cardIndex = e.relatedTarget.children.item(0).value;
   })
-  
+
   this.updateAdvanceBtn();
 }
 
@@ -454,7 +482,6 @@ Board.prototype.updateAdvanceBtn = function() {
 Board.prototype.changePhase = function(phase) {
   //make sure the clue is up to date
 	board.clue.text = '"'+board.game.currClue+'"';
-	console.log(phase);
 	this.updateAdvanceBtn();
   switch (phase) {
   case 'STORYTELLER':
@@ -474,7 +501,6 @@ Board.prototype.changePhase = function(phase) {
     break;
   case 'NONSTORYCARDS':
 		board.advanceBtn.css('display', 'none');
-
     if (!this.clientPlayer.isStoryTeller) {
       this.sendBtn.prop("disabled", false);
     } else {
