@@ -17,8 +17,10 @@
 					</div>
 					<br>
 					<button id="advance-btn" class="form-control btn btn-primary">Next Round!</button>
-				</div>			
-		</div>
+				</div>
+				<div id="player-names">
+				</div>		
+			</div>
 	</div>
 </div>
 <div class="modal fade" id="cardModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true">
