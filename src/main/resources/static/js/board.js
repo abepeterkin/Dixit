@@ -55,7 +55,7 @@ function Board(options) {
   this.finalScoresModal = $("#finalScoresModal");
   this.finalScoresDiv = $("#finalScores");
   this.smallBoard = false;
-  this.modalContent = $('.modal-content');
+  this.modalContent = $('#cardModal .modal-content').add('#sendClueModal .modal-content');
   this.advanceBtn = $('#advance-btn');
   this.playerNamesDiv = $('#player-names');
   this.helpModal = $('#rulesModal');  
