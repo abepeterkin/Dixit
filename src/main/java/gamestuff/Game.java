@@ -493,17 +493,7 @@ public class Game {
       int totalIncrement = p.getScore() - prevScores.get(p);
       announcer.incrementScore(p, totalIncrement);
     }
-    boolean gameOver = false;
-    for (Player p : players) {
-      if (p.getScore() >= MAX_SCORE) {
-        gameOver = true;
-      }
-    }
-    if (gameOver) {
-      gameOver();
-    } else {
-      prepareForNextRound();
-    }
+    prepareForNextRound();
   }
 
   private synchronized void prepareForNextRound() {
@@ -530,7 +520,17 @@ public class Game {
     announcer.submitReady(player);
     if (allPlayersReady() && this.phase.equals(Phase.WAITING)) {
       playerReadyMap.clear();
-      beginNewRound();
+      boolean gameOver = false;
+      for (Player p : players) {
+        if (p.getScore() >= MAX_SCORE) {
+          gameOver = true;
+        }
+      }
+      if (gameOver) {
+        gameOver();
+      } else {
+        beginNewRound();
+      }
     }
     return true;
   }

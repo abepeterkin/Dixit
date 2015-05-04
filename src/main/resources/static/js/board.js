@@ -82,9 +82,18 @@ Board.prototype.drawAlertMessage = function() {
   }
   if (this.game.currPhase == this.game.phases["Waiting"]
     && !this.advanceBtn.prop("disabled")) {
-    this.ctx.fillText("Click next", this.canvas.width / 1.4,
+    var tempText1;
+    var tempText2;
+    if (this.game.playerHasWon()) {
+      tempText1 = "Click view";
+      tempText2 = "results button!";
+    } else {
+      tempText1 = "Click next";
+      tempText2 = "round button!";
+    }
+    this.ctx.fillText(tempText1, this.canvas.width / 1.4,
         this.canvas.height / 1.5);
-    this.ctx.fillText("round button!", this.canvas.width / 1.4,
+    this.ctx.fillText(tempText2, this.canvas.width / 1.4,
         this.canvas.height / 1.5 + 35);
   }
   
@@ -298,6 +307,12 @@ Board.prototype.adjustCardsPos = function() {
     }
   }
 }
+
+Board.prototype.displayFinalScores = function() {
+  // TODO: display the final scores.
+  alert("SCORES GO HERE!");
+}
+
 Board.prototype.addListeners = function() {
   // this.canvas.addEventListener("mousedown", mouseDownListener, false);
   this.canvas.addEventListener("click", mouseClickListener, false);
@@ -332,18 +347,31 @@ Board.prototype.addListeners = function() {
   $('#carousel-example-generic').on('slid.bs.carousel', function(e) {
     board.clue.cardIndex = e.relatedTarget.children.item(0).value;
   })
-  this.advanceBtn.click(function() {
-    board.advanceBtn.prop('disabled', true);
-    readyRequest(function(e) {
-      console.log(e);
+  
+  this.updateAdvanceBtn();
+}
+
+Board.prototype.updateAdvanceBtn = function() {
+  this.advanceBtn.unbind("click");
+  if (this.game.playerHasWon()) {
+    board.advanceBtn.html("View Results!");
+    this.advanceBtn.click(this.displayFinalScores);
+  } else {
+    this.advanceBtn.html("Next Round!");
+    this.advanceBtn.click(function() {
+      board.advanceBtn.prop('disabled', true);
+      readyRequest(function(e) {
+        console.log(e);
+      });
     });
-  })
+  }
 }
 
 Board.prototype.changePhase = function(phase) {
   //make sure the clue is up to date
 	board.clue.text = '"'+board.game.currClue+'"';
 	console.log(phase);
+	this.updateAdvanceBtn();
   switch (phase) {
   case 'STORYTELLER':
 	board.smallBoard = false;

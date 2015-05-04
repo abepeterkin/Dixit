@@ -492,6 +492,9 @@ public class GameTest {
     g.addCardToTable(p1, nonStory2);
     g.castVote(p3, nonStory2);
     g.castVote(p1, storyCard);
+    g.confirmPlayerReady(p1);
+    g.confirmPlayerReady(p3);
+    g.confirmPlayerReady(p2);
     assertTrue(g.getPhase() == Phase.GAMEOVER);
   }
 
