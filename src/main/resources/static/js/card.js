@@ -63,11 +63,7 @@ Card.prototype.drawOutline = function(ctx) {
     ctx.strokeRect(this.x, this.y, this.width, this.height);
   }
   if (this.isStoryTeller) {
-    ctx.fillStyle = "#FFFFFF";
-    ctx.fillRect(this.x - 5, this.y - 12, 150, 25);
-    ctx.font = "20px Georgia";
-    ctx.fillStyle = "#000000";
-    ctx.fillText("Storyteller card!", this.x, this.y + 8);
+	  this.drawStoryToken(ctx, this.x + 20, this.y);
   }
 }
 Card.prototype.getCenter = function() {
@@ -78,6 +74,7 @@ Card.prototype.getCenter = function() {
     y : y
   }
 }
+
 Card.prototype.drawVotes = function(ctx) {
   var voteWidth = this.width / 8;
   for (var i = 0; i < this.votes.length; i++) {
@@ -121,4 +118,24 @@ Card.prototype.makeSmall = function(canvas) {
 Card.prototype.highlight = function(ctx) {
   ctx.fillStyle = "rgba(237, 243, 43, 0.5)";
   ctx.fillRect(this.x, this.y, this.width, this.height);
+}
+
+Card.prototype.drawStoryToken = function(ctx, x, y) {
+  	var voteWidth = ctx.canvas.width / 60;
+  	ctx.beginPath();
+  	ctx.arc(x, y,
+        voteWidth, 0, 2 * Math.PI);
+  	ctx.fillStyle = "gold";
+  	ctx.fill();
+  	ctx.beginPath();
+  	ctx.arc(x, y,
+        voteWidth/1.2, 0, 2 * Math.PI);
+  	ctx.fillStyle = "white";
+  	ctx.fill();
+  	ctx.beginPath();
+  	ctx.arc(x, y,
+        voteWidth/1.4, 0, 2 * Math.PI);
+  	ctx.fillStyle = "gold";
+  	ctx.fill();
+  	//golden S in center?
 }

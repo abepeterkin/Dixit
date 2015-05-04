@@ -15,12 +15,21 @@ public class Player implements Comparable<Player> {
   private final String COLOR;
   private boolean isStoryteller = false;
   private List<Card> hand = new ArrayList<>();
+  private boolean isReady = false;
 
   public Player(String id, String chatName, String color) {
     this.ID = id;
     this.score = 0;
     this.CHAT_NAME = chatName;
     this.COLOR = color;
+  }
+  
+  public void setReady(boolean isReady) {
+    this.isReady = isReady;
+  }
+  
+  public synchronized boolean getReady() {
+    return this.isReady;
   }
 
   /**

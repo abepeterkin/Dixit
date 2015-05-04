@@ -52,6 +52,8 @@ function Board(options) {
   this.clueInput = $('#clueInput');
   this.cardModal = $('#cardModal');
   this.clueModal = $('#sendClueModal');
+  this.finalScoresModal = $("#finalScoresModal");
+  this.finalScoresDiv = $("#finalScores");
   this.smallBoard = false;
   this.modalContent = $('.modal-content');
   this.advanceBtn = $('#advance-btn');
@@ -236,10 +238,14 @@ Board.prototype.displayPlayerNames = function() {
   tempHtml += "<br />";
   for (var id in board.game.players) {
       var player = board.game.players[id];
+      var nameToDisplay = "";
+      if(player.isReady) {
+    	  nameToDisplay = "(READY) ";
+      }
       if(player.isStoryTeller){
-        nameToDisplay = player.name + " - Story Teller";
+        nameToDisplay = nameToDisplay + player.name + " - Story Teller";
       } else {
-        nameToDisplay = player.name;
+        nameToDisplay = nameToDisplay + player.name;
       }
       tempHtml += "<span style=\"color: " + player.color + ";"
       tempHtml += " font-weight: bold;\">";
@@ -371,9 +377,41 @@ Board.prototype.adjustCardsPos = function() {
   }
 }
 
-Board.prototype.displayFinalScores = function() {
-  // TODO: display the final scores.
-  alert("SCORES GO HERE!");
+function displayFinalScores() {
+  board.finalScoresModal.modal("show");
+  var tempText = "";
+  var tempPlayerList = [];
+  for (id in board.game.players) {
+    tempPlayerList.push(board.game.players[id]);
+  }
+  tempPlayerList.sort(function(player1, player2) {
+    if (player1.score > player2.score) {
+      return -1;
+    }
+    if (player1.score < player2.score) {
+      return 1;
+    }
+    return 0;
+  });
+  var index = 0;
+  while (index < tempPlayerList.length) {
+    var tempPlayer = tempPlayerList[index]
+    tempText += "<p style=\"color: " + tempPlayer.color + ";\">";
+    tempText += "#" + (index + 1) + ": " + tempPlayer.name + " (" + tempPlayer.score + " points)";
+    tempText += "</p>";
+    index++;
+  }
+  
+  tempText += "<p style=\"color: white;\">";
+  tempText += "<br />";
+  tempText += "<br />";
+  tempText += "Good game, everyone! :)";
+  tempText += "</p>";
+  board.finalScoresDiv.css("padding", "20px");
+  board.finalScoresDiv.css("background", "black");
+  board.finalScoresDiv.css("font-weight", "bold");
+  board.finalScoresDiv.css("font-size", "18px;");
+  board.finalScoresDiv.html(tempText);
 }
 
 Board.prototype.addListeners = function() {
@@ -418,7 +456,7 @@ Board.prototype.updateAdvanceBtn = function() {
   this.advanceBtn.unbind("click");
   if (this.game.playerHasWon()) {
     board.advanceBtn.html("View Results!");
-    this.advanceBtn.click(this.displayFinalScores);
+    this.advanceBtn.click(displayFinalScores);
   } else {
     this.advanceBtn.html("Next Round!");
     this.advanceBtn.click(function() {

@@ -81,6 +81,7 @@ function processUpdates(responseObject) {
 
       game.updateScore(tempUpdateValue.id, tempUpdateValue.score);
       tempPlayer.hasVoted = tempUpdateValue.hasVoted;
+      tempPlayer.isReady = tempUpdateValue.isReady;
       board.displayPlayerNames();
       break;
     case "hand":
