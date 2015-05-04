@@ -245,15 +245,23 @@ Board.prototype.displayPlayerNames = function() {
       if(player.isReady) {
     	  nameToDisplay = "(READY) ";
       }
-      if(player.isStoryTeller){
-        nameToDisplay = nameToDisplay + player.name + " - Story Teller";
-      } else {
-        nameToDisplay = nameToDisplay + player.name;
-      }
-      tempHtml += "<span style=\"color: " + player.color + ";"
+      nameToDisplay = nameToDisplay + player.name;
+      tempHtml += "<span style=\"color: " + player.color + ";";
       tempHtml += " font-weight: bold;\">";
+      if (player == this.clientPlayer) {
+    	  tempHtml += "<u>";
+      }
       tempHtml += nameToDisplay;
+      if (player == this.clientPlayer) {
+    	  tempHtml += "</u>";
+      }
       tempHtml += "</span>";
+      if (player.isStoryTeller) {
+          tempHtml += "<span style=\"color: gold;\">";
+          tempHtml += " - Storyteller";
+          tempHtml += "</span>";
+      }
+      
       tempHtml += "<br />";
   }
   this.playerNamesDiv.html(tempHtml);
