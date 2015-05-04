@@ -41,6 +41,8 @@ function Board(options) {
 	  this.img.src = "/images/board6Player.jpg";
 	  break;
   }
+  this.helpImg = new Image();
+  this.helpImg.src = '/images/help.png';
   board = this;
   this.icons = [];
   this.iconsMap = {};
@@ -77,15 +79,17 @@ Board.prototype.draw = function() {
 
 Board.prototype.drawHelpIcon = function(){
   board.icons.push()
-  board.ctx.fillStyle = "red";
-  var x = board.canvas.width/100;
-  var y = board.canvas.height/10;
-  var width = board.canvas.width/40;
+  var x = 0;
+  var y = board.canvas.height/20;
   var height = board.canvas.height/40;
-  board.ctx.fillStyle ="black";
-  board.ctx.font = "20px Glyphicons Halflings";
-  var text = String.fromCharCode('0xe086');
-  board.ctx.fillText(text, x, y);
+  var width = board.canvas.width/30;
+  if(board.helpImg.complete){
+    board.ctx.drawImage(board.helpImg, x, y, width, height);
+  } else {
+    board.helpImg.onload = function(){
+      board.ctx.drawImage(board.helpImg, x, y, width, height);
+    }
+  }
   var ind = board.icons.push(new Icon({
     x : x,
     y : y,

@@ -179,7 +179,15 @@ window.onload = function() {
   
   var music = $('#music');
   var ctrl = $('#music-button');
-
+  
+  ctrl.mouseover(function() {
+    $(this).css("cursor", "pointer");
+  });
+  
+  ctrl.mouseleave(function() {
+    $(this).css("cursor", "auto");
+  });
+  
   ctrl.click(function() {
     if (music.prop('muted')) {
       ctrl.attr('src', '/images/volume-on.png');
