@@ -72,6 +72,8 @@ function processUpdates(responseObject) {
       board.tableCardsUpdate(tempUpdateValue);
       break;
     case "player":
+      console.log('player changed');
+      console.log(responseObject);
       var tempPlayer = game.players[tempUpdateValue.id];
       if (tempUpdateValue.isStoryTeller) {
         game.setStoryTeller(tempPlayer);
@@ -81,7 +83,7 @@ function processUpdates(responseObject) {
 
       game.updateScore(tempUpdateValue.id, tempUpdateValue.score);
       tempPlayer.hasVoted = tempUpdateValue.hasVoted;
-      tempPlayer.isReady = tempUpdateValue.isReady;
+      tempPlayer.isReady = tempUpdateValue.ready;
       board.displayPlayerNames();
       break;
     case "hand":

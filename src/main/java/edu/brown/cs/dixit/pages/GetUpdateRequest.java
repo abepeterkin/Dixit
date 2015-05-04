@@ -102,6 +102,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
       Game game,
       Player player) {
     addUpdate(game, new PlayerUpdate(player, game));
+    // System.out.println("MARK 1!!!!!!!!!!!!!!!!!!");
   }
 
   @Override
@@ -252,6 +253,7 @@ public class GetUpdateRequest implements Route, DixitGameSubscriber {
         Player inputPlayer) {
       JsonElement tempJson = DixitSerializationUtil.serializePlayer(player,
           game, inputPlayer);
+      // System.out.println("MARK 2!!!!!!!!!!!!!!!!!!");
       return DixitSerializationUtil.serializeUpdate("player", tempJson);
     }
 
