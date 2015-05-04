@@ -10,7 +10,8 @@
     </div>
     <div class="form-group">
       <label for="color">Color</label>
-      <select name="colorName" class="form-control">
+      <select name="colorName" class="form-control" required>
+            <option value="">Pick a color</option>
           <#if !usedColors?seq_contains("Blue")>
           	<option>Blue</option>
           </#if>
