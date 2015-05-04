@@ -71,6 +71,8 @@ function processUpdates(responseObject) {
       board.tableCardsUpdate(tempUpdateValue);
       break;
     case "player":
+      console.log('player changed');
+      console.log(responseObject);
       var tempPlayer = game.players[tempUpdateValue.id];
       if (tempUpdateValue.isStoryTeller) {
         game.setStoryTeller(tempPlayer);
@@ -80,7 +82,7 @@ function processUpdates(responseObject) {
 
       game.updateScore(tempUpdateValue.id, tempUpdateValue.score);
       tempPlayer.hasVoted = tempUpdateValue.hasVoted;
-      tempPlayer.isReady = tempUpdateValue.isReady;
+      tempPlayer.isReady = tempUpdateValue.ready;
       board.displayPlayerNames();
       break;
     case "hand":
@@ -174,4 +176,17 @@ window.onload = function() {
   if (window.location.pathname != "/board") {
     window.location = '/board';
   }
+  
+  var music = $('#music');
+  var ctrl = $('#music-button');
+
+  ctrl.click(function() {
+    if (music.prop('muted')) {
+      ctrl.attr('src', '/images/volume-on.png');
+      music.prop('muted', false);
+    } else {
+      ctrl.attr('src', '/images/volume-off.png');
+      music.prop('muted', true);
+    }
+  });
 }
