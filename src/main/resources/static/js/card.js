@@ -86,6 +86,16 @@ Card.prototype.drawVotes = function(ctx) {
         voteWidth, 0, 2 * Math.PI);
     ctx.fillStyle = this.votes[i];
     ctx.fill();
+  	board.ctx.beginPath();
+    ctx.arc(voteWidth + this.x + i * voteWidth, this.y + this.height,
+            voteWidth / 1.2, 0, 2 * Math.PI);
+  	board.ctx.fillStyle = "white";
+  	board.ctx.fill();
+  	board.ctx.beginPath();
+    ctx.arc(voteWidth + this.x + i * voteWidth, this.y + this.height,
+            voteWidth / 1.4, 0, 2 * Math.PI);
+  	board.ctx.fillStyle = this.votes[i];
+  	board.ctx.fill();
   }
 }
 // to see if this card was clicked
