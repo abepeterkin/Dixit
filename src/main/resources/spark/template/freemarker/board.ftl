@@ -70,11 +70,11 @@
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#init" aria-controls="init" role="tab" data-toggle="tab">Initialization</a></li>
-    <li role="presentation"><a href="#storyteller" aria-controls="storyteller" role="tab" data-toggle="tab">Storyteller</a></li>
-    <li role="presentation"><a href="#nonstoryteller" aria-controls="nonstoryteller" role="tab" data-toggle="tab">Card Selection</a></li>
-    <li role="presentation"><a href="#voting" aria-controls="voting" role="tab" data-toggle="tab">Voting</a></li>
-  	<li role="presentation"><a href="#scoring" aria-controls="scoring" role="tab" data-toggle="tab">Scoring</a></li>
+    <li id="initTab" role="presentation" class="active"><a href="#init" aria-controls="init" role="tab" data-toggle="tab">Initialization</a></li>
+    <li id="storyTellerTab" role="presentation"><a href="#storyteller" aria-controls="storyteller" role="tab" data-toggle="tab">Storyteller</a></li>
+    <li id="nonStoryTellerTab" role="presentation"><a href="#nonstoryteller" aria-controls="nonstoryteller" role="tab" data-toggle="tab">Card Selection</a></li>
+    <li id="votingTab" role="presentation"><a href="#voting" aria-controls="voting" role="tab" data-toggle="tab">Voting</a></li>
+  	<li id="scoringTab" role="presentation"><a href="#scoring" aria-controls="scoring" role="tab" data-toggle="tab">Scoring</a></li>
   	
   </ul>
 

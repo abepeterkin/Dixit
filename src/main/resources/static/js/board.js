@@ -56,7 +56,7 @@ function Board(options) {
   this.finalScoresModal = $("#finalScoresModal");
   this.finalScoresDiv = $("#finalScores");
   this.smallBoard = false;
-  this.modalContent = $('.modal-content');
+  this.modalContent = $('#cardModal .modal-content').add('#sendClueModal .modal-content');
   this.advanceBtn = $('#advance-btn');
   this.playerNamesDiv = $('#player-names');
   this.helpModal = $('#rulesModal');  
@@ -89,6 +89,23 @@ Board.prototype.drawHelpIcon = function(){
     width : width,
     height : height,
     callback : function() {
+      switch(board.game.currPhase){
+      case 'PREGAME':
+        $('#initTab a').tab('show');
+        break;
+      case 'STORYTELLER':
+        $('#storyTellerTab a').tab('show');
+        break;
+      case 'NONSTORYCARDS':
+        $('#nonStoryTellerTab a').tab('show');
+        break;
+      case 'VOTING':
+        $('#votingTab a').tab('show');
+        break;
+      case 'WAITING':
+        $('#scoringTab a').tab('show');
+        break;
+      }
       board.helpModal.modal('show');
     },
     name : "help"
@@ -434,7 +451,7 @@ Board.prototype.addListeners = function() {
   $('#carousel-example-generic').on('slid.bs.carousel', function(e) {
     board.clue.cardIndex = e.relatedTarget.children.item(0).value;
   })
-  
+
   this.updateAdvanceBtn();
 }
 
@@ -457,7 +474,6 @@ Board.prototype.updateAdvanceBtn = function() {
 Board.prototype.changePhase = function(phase) {
   //make sure the clue is up to date
 	board.clue.text = '"'+board.game.currClue+'"';
-	console.log(phase);
 	this.updateAdvanceBtn();
   switch (phase) {
   case 'STORYTELLER':
@@ -477,7 +493,6 @@ Board.prototype.changePhase = function(phase) {
     break;
   case 'NONSTORYCARDS':
 		board.advanceBtn.css('display', 'none');
-
     if (!this.clientPlayer.isStoryTeller) {
       this.sendBtn.prop("disabled", false);
     } else {
