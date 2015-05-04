@@ -464,6 +464,7 @@ function sendBtn(event) {
     selectedCard.visible = false;
     selectedCard.inHand = false;
     addNonStoryCardRequest(selectedCard.id, function(e) {
+      board.sendBtn.prop("disabled", true)
     });
     board.cardModal.modal('hide');
 }

@@ -621,6 +621,9 @@ public class Game {
     if (this.phase != Phase.STORYTELLER && this.phase != Phase.NONSTORYCARDS) {
       return false;
     }
+    if (tableCards.containsValue(p)) {
+      return false;
+    }
     this.tableCards.put(c, p);
     p.removeFromHand(c);
     p.draw(drawFromDeck());
