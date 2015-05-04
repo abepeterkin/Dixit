@@ -26,8 +26,10 @@ function Board(options) {
   this.ctx = this.canvas.getContext("2d");
   this.img = new Image();
   this.numPlayers = game.rules.maxPlayers;
-//  this.img.src = "/images/board.jpg";
   switch (this.numPlayers) {
+  case 2:
+    this.img.src = "/images/board3Player.jpg";
+    break;
   case 3:
 	  this.img.src = "/images/board3Player.jpg";
 	  break;
@@ -74,7 +76,7 @@ Board.prototype.draw = function() {
   } else {
     board.drawSmall();
   }
-  board.drawHelpIcon();
+  //board.drawHelpIcon();
 }
 
 Board.prototype.drawHelpIcon = function(){
