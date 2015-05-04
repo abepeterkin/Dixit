@@ -79,7 +79,6 @@ Card.prototype.getCenter = function() {
   }
 }
 Card.prototype.drawVotes = function(ctx) {
-  var center = this.getCenter();
   var voteWidth = this.width / 8;
   for (var i = 0; i < this.votes.length; i++) {
     ctx.beginPath();

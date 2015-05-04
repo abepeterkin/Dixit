@@ -24,7 +24,22 @@ function Board(options) {
       || document.documentElement.clientHeight || document.body.clientHeight);
   this.ctx = this.canvas.getContext("2d");
   this.img = new Image();
-  this.img.src = "/images/board.jpg";
+  var numPlayers = game.rules.maxPlayers;
+//  this.img.src = "/images/board.jpg";
+  switch (numPlayers) {
+  case 3:
+	  this.img.src = "/images/board3Player.jpg";
+	  break;
+  case 4:
+	  this.img.src = "/images/board4Player.jpg";
+	  break;
+  case 5:
+	  this.img.src = "/images/board5Player.jpg";
+	  break;
+  case 6:
+	  this.img.src = "/images/board6Player.jpg";
+	  break;
+  }
   board = this;
   this.icons = [];
   this.iconsMap = {};

@@ -109,3 +109,10 @@ textarea{
 #advance-btn{
  display:none;
 }
+
+#final-scores{
+    text-align: center; 
+    background-color:#000000; 
+    color:#6A69B5;
+    height:100vh;
+}
