@@ -11,6 +11,7 @@ var draggingCard;
 var board;
 var selectedCard = {};
 var sentCard = false;
+var numPlayers;
 // should hold to array of game.players to display their score and color
 function Board(options) {
   this.clientPlayer = game.players[sessionStorage.playerId]; // the player this
@@ -24,9 +25,9 @@ function Board(options) {
       || document.documentElement.clientHeight || document.body.clientHeight);
   this.ctx = this.canvas.getContext("2d");
   this.img = new Image();
-  var numPlayers = game.rules.maxPlayers;
+  this.numPlayers = game.rules.maxPlayers;
 //  this.img.src = "/images/board.jpg";
-  switch (numPlayers) {
+  switch (this.numPlayers) {
   case 3:
 	  this.img.src = "/images/board3Player.jpg";
 	  break;
@@ -214,9 +215,11 @@ var drawBigHelper = function() {
 }
 
 Board.prototype.displayPlayerNames = function() {
+	var fractionPlayers = "(" + Object.keys(board.game.players).length
+	+ "/" + this.numPlayers + "):";
   var tempHtml = "<span style=\"color: white;"
   tempHtml += " font-weight: bold;\">";
-  tempHtml += "Players:";
+  tempHtml += "Players" + fractionPlayers;
   tempHtml += "</span>";
   tempHtml += "<br />";
   for (var id in board.game.players) {
