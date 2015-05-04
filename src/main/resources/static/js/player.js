@@ -1,5 +1,6 @@
 function Player(options) {
   this.id = options.id;
+  this.isReady = options.ready;
   this.name = options.chatName;
   this.color = Player.getColor(options.color);
   this.isStoryTeller = options.isStoryTeller;
@@ -142,10 +143,10 @@ Player.prototype.drawSmall = function(board, index) {
 	  var tokenX = x + w / 4;
 	  var tokenY = y + h / 1.9;		
 	  if (player.hasVoted) {  
-		  this.drawVoteToken(board, tokenX, tokenY);
+		  this.drawVoteToken(board.ctx, tokenX, tokenY);
 	  }
 	  if (player.isStoryTeller) {	  
-		  this.drawStoryToken(board, tokenX, tokenY);
+		  this.drawStoryToken(board.ctx, tokenX, tokenY);
 	  }
   }
   if (img.complete) {
@@ -163,21 +164,41 @@ Player.prototype.drawSmall = function(board, index) {
   }
 }
 
-Player.prototype.drawStoryToken = function(board, x, y) {
+Player.prototype.drawStoryToken = function(ctx, x, y) {
   	var voteWidth = board.ctx.canvas.width / 80;
-  	board.ctx.beginPath();
-  	board.ctx.arc(x, y,
+  	ctx.beginPath();
+  	ctx.arc(x, y,
         voteWidth, 0, 2 * Math.PI);
-  	board.ctx.fillStyle = "white";
-  	board.ctx.fill();
+  	ctx.fillStyle = "gold";
+  	ctx.fill();
+  	ctx.beginPath();
+  	ctx.arc(x, y,
+        voteWidth/1.2, 0, 2 * Math.PI);
+  	ctx.fillStyle = "white";
+  	ctx.fill();
+  	ctx.beginPath();
+  	ctx.arc(x, y,
+        voteWidth/1.4, 0, 2 * Math.PI);
+  	ctx.fillStyle = "gold";
+  	ctx.fill();
   	//golden S in center?
 }
 
-Player.prototype.drawVoteToken = function(board, x, y) {
-	  	var voteWidth = board.ctx.canvas.width / 80;
-	  	board.ctx.beginPath();
-	  	board.ctx.arc(x, y,
+Player.prototype.drawVoteToken = function(ctx, x, y) {
+	  	var voteWidth = ctx.canvas.width / 80;
+	  	ctx.beginPath();
+	  	ctx.arc(x, y,
 	        voteWidth, 0, 2 * Math.PI);
-	  	board.ctx.fillStyle = this.color;
-	  	board.ctx.fill();
+	  	ctx.fillStyle = this.color;
+	  	ctx.fill();
+	  	ctx.beginPath();
+	  	ctx.arc(x, y,
+	        voteWidth/1.2, 0, 2 * Math.PI);
+	  	ctx.fillStyle = "white";
+	  	ctx.fill();
+	  	ctx.beginPath();
+	  	ctx.arc(x, y,
+	        voteWidth/1.4, 0, 2 * Math.PI);
+	  	ctx.fillStyle = this.color;
+	  	ctx.fill();
 	}

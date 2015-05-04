@@ -520,8 +520,15 @@ public class Game {
     }
     playerReadyMap.put(player, true);
     announcer.submitReady(player);
+    player.setReady(true);
+    subscriber.playerChanged(this, player);
+    System.out.println("PLAYERREADYSTANDS OUT ");
     if (allPlayersReady() && this.phase.equals(Phase.WAITING)) {
       playerReadyMap.clear();
+      for (Player p: players) {
+        subscriber.playerChanged(this, p);
+        p.setReady(false);
+      }
       boolean gameOver = false;
       for (Player p : players) {
         if (p.getScore() >= MAX_SCORE) {

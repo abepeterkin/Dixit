@@ -11,6 +11,7 @@ var draggingCard;
 var board;
 var selectedCard = {};
 var sentCard = false;
+var numPlayers;
 // should hold to array of game.players to display their score and color
 function Board(options) {
   this.clientPlayer = game.players[sessionStorage.playerId]; // the player this
@@ -24,9 +25,9 @@ function Board(options) {
       || document.documentElement.clientHeight || document.body.clientHeight);
   this.ctx = this.canvas.getContext("2d");
   this.img = new Image();
-  var numPlayers = game.rules.maxPlayers;
+  this.numPlayers = game.rules.maxPlayers;
 //  this.img.src = "/images/board.jpg";
-  switch (numPlayers) {
+  switch (this.numPlayers) {
   case 3:
 	  this.img.src = "/images/board3Player.jpg";
 	  break;
@@ -52,10 +53,13 @@ function Board(options) {
   this.clueInput = $('#clueInput');
   this.cardModal = $('#cardModal');
   this.clueModal = $('#sendClueModal');
+  this.finalScoresModal = $("#finalScoresModal");
+  this.finalScoresDiv = $("#finalScores");
   this.smallBoard = false;
-  this.modalContent = $('.modal-content');
+  this.modalContent = $('#cardModal .modal-content').add('#sendClueModal .modal-content');
   this.advanceBtn = $('#advance-btn');
   this.playerNamesDiv = $('#player-names');
+  this.helpModal = $('#rulesModal');  
   this.displayPlayerNames();
   this.refresh();
 }
@@ -63,16 +67,51 @@ function Board(options) {
 Board.prototype.draw = function() {
   board.ctx.clearRect(0, 0, board.canvas.width, board.canvas.height);
   window.requestAnimationFrame(Board.prototype.draw);
-
-  // TODO: draw clue
-  // TODO: draw game.players
   if (!board.smallBoard) {
     board.drawBig();
   } else {
     board.drawSmall();
   }
+  board.drawHelpIcon();
 }
 
+Board.prototype.drawHelpIcon = function(){
+  board.icons.push()
+  board.ctx.fillStyle = "red";
+  var x = board.canvas.width/80;
+  var y = board.canvas.height/20;
+  var width = board.canvas.width/40;
+  var height = board.canvas.height/40;
+  board.ctx.fillRect(x,y ,width , height);
+  var ind = board.icons.push(new Icon({
+    x : x,
+    y : y,
+    width : width,
+    height : height,
+    callback : function() {
+      switch(board.game.currPhase){
+      case 'PREGAME':
+        $('#initTab a').tab('show');
+        break;
+      case 'STORYTELLER':
+        $('#storyTellerTab a').tab('show');
+        break;
+      case 'NONSTORYCARDS':
+        $('#nonStoryTellerTab a').tab('show');
+        break;
+      case 'VOTING':
+        $('#votingTab a').tab('show');
+        break;
+      case 'WAITING':
+        $('#scoringTab a').tab('show');
+        break;
+      }
+      board.helpModal.modal('show');
+    },
+    name : "help"
+  }))
+  board.iconsMap['help'] = ind - 1;
+}
 // Draws important messages such as "Pick a story card"
 // or "Press advance to next round".
 Board.prototype.drawAlertMessage = function() {
@@ -193,17 +232,23 @@ var drawBigHelper = function() {
 }
 
 Board.prototype.displayPlayerNames = function() {
+	var fractionPlayers = "(" + Object.keys(board.game.players).length
+	+ "/" + this.numPlayers + "):";
   var tempHtml = "<span style=\"color: white;"
   tempHtml += " font-weight: bold;\">";
-  tempHtml += "Players:";
+  tempHtml += "Players" + fractionPlayers;
   tempHtml += "</span>";
   tempHtml += "<br />";
   for (var id in board.game.players) {
       var player = board.game.players[id];
+      var nameToDisplay = "";
+      if(player.isReady) {
+    	  nameToDisplay = "(READY) ";
+      }
       if(player.isStoryTeller){
-        nameToDisplay = player.name + " - Story Teller";
+        nameToDisplay = nameToDisplay + player.name + " - Story Teller";
       } else {
-        nameToDisplay = player.name;
+        nameToDisplay = nameToDisplay + player.name;
       }
       tempHtml += "<span style=\"color: " + player.color + ";"
       tempHtml += " font-weight: bold;\">";
@@ -335,9 +380,41 @@ Board.prototype.adjustCardsPos = function() {
   }
 }
 
-Board.prototype.displayFinalScores = function() {
-  // TODO: display the final scores.
-  alert("SCORES GO HERE!");
+function displayFinalScores() {
+  board.finalScoresModal.modal("show");
+  var tempText = "";
+  var tempPlayerList = [];
+  for (id in board.game.players) {
+    tempPlayerList.push(board.game.players[id]);
+  }
+  tempPlayerList.sort(function(player1, player2) {
+    if (player1.score > player2.score) {
+      return -1;
+    }
+    if (player1.score < player2.score) {
+      return 1;
+    }
+    return 0;
+  });
+  var index = 0;
+  while (index < tempPlayerList.length) {
+    var tempPlayer = tempPlayerList[index]
+    tempText += "<p style=\"color: " + tempPlayer.color + ";\">";
+    tempText += "#" + (index + 1) + ": " + tempPlayer.name + " (" + tempPlayer.score + " points)";
+    tempText += "</p>";
+    index++;
+  }
+  
+  tempText += "<p style=\"color: white;\">";
+  tempText += "<br />";
+  tempText += "<br />";
+  tempText += "Good game, everyone! :)";
+  tempText += "</p>";
+  board.finalScoresDiv.css("padding", "20px");
+  board.finalScoresDiv.css("background", "black");
+  board.finalScoresDiv.css("font-weight", "bold");
+  board.finalScoresDiv.css("font-size", "18px;");
+  board.finalScoresDiv.html(tempText);
 }
 
 Board.prototype.addListeners = function() {
@@ -374,7 +451,7 @@ Board.prototype.addListeners = function() {
   $('#carousel-example-generic').on('slid.bs.carousel', function(e) {
     board.clue.cardIndex = e.relatedTarget.children.item(0).value;
   })
-  
+
   this.updateAdvanceBtn();
 }
 
@@ -382,7 +459,7 @@ Board.prototype.updateAdvanceBtn = function() {
   this.advanceBtn.unbind("click");
   if (this.game.playerHasWon()) {
     board.advanceBtn.html("View Results!");
-    this.advanceBtn.click(this.displayFinalScores);
+    this.advanceBtn.click(displayFinalScores);
   } else {
     this.advanceBtn.html("Next Round!");
     this.advanceBtn.click(function() {
@@ -397,7 +474,6 @@ Board.prototype.updateAdvanceBtn = function() {
 Board.prototype.changePhase = function(phase) {
   //make sure the clue is up to date
 	board.clue.text = '"'+board.game.currClue+'"';
-	console.log(phase);
 	this.updateAdvanceBtn();
   switch (phase) {
   case 'STORYTELLER':
@@ -417,7 +493,6 @@ Board.prototype.changePhase = function(phase) {
     break;
   case 'NONSTORYCARDS':
 		board.advanceBtn.css('display', 'none');
-
     if (!this.clientPlayer.isStoryTeller) {
       this.sendBtn.prop("disabled", false);
     } else {
