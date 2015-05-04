@@ -1,5 +1,6 @@
 function Player(options) {
   this.id = options.id;
+  this.isReady = options.ready;
   this.name = options.chatName;
   this.color = Player.getColor(options.color);
   this.isStoryTeller = options.isStoryTeller;

@@ -219,10 +219,14 @@ Board.prototype.displayPlayerNames = function() {
   tempHtml += "<br />";
   for (var id in board.game.players) {
       var player = board.game.players[id];
+      var nameToDisplay = "";
+      if(player.isReady) {
+    	  nameToDisplay = "(READY) ";
+      }
       if(player.isStoryTeller){
-        nameToDisplay = player.name + " - Story Teller";
+        nameToDisplay = nameToDisplay + player.name + " - Story Teller";
       } else {
-        nameToDisplay = player.name;
+        nameToDisplay = nameToDisplay + player.name;
       }
       tempHtml += "<span style=\"color: " + player.color + ";"
       tempHtml += " font-weight: bold;\">";

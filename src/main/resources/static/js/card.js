@@ -63,7 +63,7 @@ Card.prototype.drawOutline = function(ctx) {
     ctx.strokeRect(this.x, this.y, this.width, this.height);
   }
   if (this.isStoryTeller) {
-	  this.drawStoryToken(ctx, this.x, this.y);
+	  this.drawStoryToken(ctx, this.x + 20, this.y);
   }
 }
 Card.prototype.getCenter = function() {
