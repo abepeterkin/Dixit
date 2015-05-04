@@ -14,7 +14,7 @@ function Chat() {
       console.log(message.charCodeAt(message.length-1)===10);
       if(message.charCodeAt(message.length-1) === 10){
         console.log('inside if');
-        message = message.substring(0, message.length-2);
+        message = message.substring(0, message.length-1);
       }
       console.log("message", message.length);
       addChatRequest(message, function(r){
