@@ -3,6 +3,7 @@ package edu.brown.cs.dixit.pages;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ public class DixitFinalScoresPage implements TemplateViewRoute {
     if (Main.gameExists(gameName)) {
       Game game = Main.getGame(gameName);
       List<Player> tempPlayerList = game.getPlayers();
+      tempPlayerList.sort(new PlayerComparator());
       List<Map<String, Object>> tempMapList = new ArrayList<Map<String, Object>>();
       int index = 0;
       while (index < tempPlayerList.size()) {
@@ -57,6 +59,23 @@ public class DixitFinalScoresPage implements TemplateViewRoute {
       Map<String, Object> variables = ImmutableMap.of("response", response);
       return new ModelAndView(variables, "response.ftl");
     }
+  }
+
+  private static class PlayerComparator implements Comparator<Player> {
+
+    @Override
+    public int compare(
+        Player player1,
+        Player player2) {
+      if (player1.getScore() > player2.getScore()) {
+        return -1;
+      }
+      if (player1.getScore() < player2.getScore()) {
+        return 1;
+      }
+      return 0;
+    }
+
   }
 
 }

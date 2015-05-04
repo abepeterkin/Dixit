@@ -698,7 +698,13 @@ public class Game {
    * @return list of all players
    */
   public synchronized List<Player> getPlayers() {
-    return players;
+    List<Player> output = new ArrayList<Player>();
+    int index = 0;
+    while (index < players.size()) {
+      output.add(players.get(index));
+      index++;
+    }
+    return output;
   }
 
   /**
