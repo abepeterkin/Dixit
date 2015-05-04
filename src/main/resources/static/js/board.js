@@ -78,11 +78,14 @@ Board.prototype.draw = function() {
 Board.prototype.drawHelpIcon = function(){
   board.icons.push()
   board.ctx.fillStyle = "red";
-  var x = board.canvas.width/80;
-  var y = board.canvas.height/20;
+  var x = board.canvas.width/100;
+  var y = board.canvas.height/10;
   var width = board.canvas.width/40;
   var height = board.canvas.height/40;
-  board.ctx.fillRect(x,y ,width , height);
+  board.ctx.fillStyle ="black";
+  board.ctx.font = "20px Glyphicons Halflings";
+  var text = String.fromCharCode('0xe086');
+  board.ctx.fillText(text, x, y);
   var ind = board.icons.push(new Icon({
     x : x,
     y : y,
