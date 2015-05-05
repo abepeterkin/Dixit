@@ -4,11 +4,12 @@
 <div id="container2">
 	<div id="container1">
 		<div id="col1">
-		  <audio id="music" autoplay loop>
+		<!--<audio id="music" autoplay loop>
             <source src="http://www.googledrive.com/host/0B0SSL1NefHURd3dJRXozZ3h6anc" type="audio/mpeg">
             Your browser does not support the audio element.
           </audio>
-          <img id="music-button" src="/images/volume-on.png" style="position: absolute">
+          <img id="music-button" src="/images/volume-on.png" style="position: absolute">-->
+		  
 		  <canvas id="board">No canvas support</canvas>
 		</div>
 		<div id="col2">
