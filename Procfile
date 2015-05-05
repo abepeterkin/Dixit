@@ -1,1 +1,1 @@
-web: ./run --port $PORT
+web: java -cp "target/dependency/*":target/classes Main
