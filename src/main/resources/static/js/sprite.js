@@ -30,13 +30,31 @@ Sprite.prototype.render = function(ctx, index, player) {
 
 Sprite.prototype.animate = function(ctx, index, player) {
   var newPos = this.getPosition(index, player.newScore);
-  if(player.currPos.x < newPos.x){
-    player.moving = false;
-    player.score = player.newScore;
-    return;
+  if(player.newScore < 14){
+    if(player.currPos.x < newPos.x){
+      player.moving = false;
+      player.score = player.newScore;
+      return;
+    }
+  } else if(player.newScore > 16){
+    if(player.currPos.x > newPos.x){
+      player.moving = false;
+      player.score = player.newScore;
+    }
+  } else {
+    if(player.currPos.y > newPos.y){
+      player.moving = false;
+      player.score = player.newScore;
+    }
   }
   if (this.frameIndex > 14 && this.frameIndex < 20){
-  player.currPos.x -= board.canvas.width/400;
+    if(player.newScore < 14){
+      player.currPos.x -= board.canvas.width/400;
+    } else if(player.newScore > 16){
+      player.currPos.x += board.canvas.width/400;
+    } else {
+      player.currPos.y += board.canvas.height/400;
+    }
   }
   var row = Math.floor(this.frameIndex / this.numberOfCols);
   var col = this.frameIndex - (row * this.numberOfCols);
