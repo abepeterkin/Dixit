@@ -34,7 +34,9 @@ Sprite.prototype.animate = function(ctx, index, player) {
     player.moving = false;
     player.score = player.newScore;
   }
-  player.currPos.x -= board.canvas.width/4000;
+  if (this.frameIndex > 14 && this.frameIndex < 20){
+  player.currPos.x -= board.canvas.width/400;
+  }
   var row = Math.floor(this.frameIndex / this.numberOfCols);
   var col = this.frameIndex - (row * this.numberOfCols);
   var sx = col * this.width / this.numberOfCols;
