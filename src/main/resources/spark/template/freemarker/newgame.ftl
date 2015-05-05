@@ -21,10 +21,11 @@
     	<option>Green</option>
     </select>
   </div>
-  <div class="radio">
+  <!-- <div class="radio">
     <label>
       <input type="radio" name="numberOfPlayers" id="twoPlayers" value=2> 2 Players
     </label>
+  </div> -->
   <div class="radio">
     <label>
       <input type="radio" name="numberOfPlayers" id="threePlayers" value=3 checked="checked"> 3 Players
