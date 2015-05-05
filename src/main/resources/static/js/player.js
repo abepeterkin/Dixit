@@ -151,7 +151,6 @@ Player.prototype.drawSmall = function(board, index) {
   		|| (board.game.currPhase == board.game.phases["NonStoryCards"])) {
 	  if (player.isStoryTeller) {	
 		  this.drawStoryToken(board.ctx, tokenX, tokenY);
-		  console.log("hello!");
 	  }
   }
   if (img.complete) {
