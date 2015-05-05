@@ -133,9 +133,9 @@ textarea{
 .btn-primary[disabled] {
   background-color: #6A69B5;
   background-image: none;
-  border-color:#6A69B5;
+  border-color:"#000000";
   }
 
 .btn-primary{
-	border-color:#6A69B5;
+	border-color:"#00000";
 }

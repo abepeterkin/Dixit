@@ -136,6 +136,11 @@ Board.prototype.drawAlertMessage = function() {
     this.ctx.fillText("Pick a story card!", this.canvas.width / 2.1,
         this.canvas.height / 1.5);
   }
+  if (this.game.currPhase == this.game.phases["StoryTeller"]
+  && !this.clientPlayer.isStoryTeller) {
+  this.ctx.fillText("Waiting on story.", this.canvas.width / 2.1,
+      this.canvas.height / 1.5);
+}
   if (this.game.currPhase == this.game.phases["NonStoryCards"]
   && !this.clientPlayer.isStoryTeller) {
   this.ctx.fillText("Pick a card!", this.canvas.width / 2.1,
