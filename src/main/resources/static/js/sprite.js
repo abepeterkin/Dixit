@@ -18,7 +18,7 @@ Sprite.prototype.render = function(ctx, index, player) {
   var sy = row * this.height; 
   var w = board.canvas.width/10;
   var h =  board.canvas.height/5;
-  var pos = this.getPosition(index, player);
+  var pos = this.getPosition(index, player.score);
   ctx.save();
   board.ctx.translate(pos.x,pos.y);
   board.ctx.translate(w/2,h/2);
@@ -27,11 +27,34 @@ Sprite.prototype.render = function(ctx, index, player) {
       this.height, -w/2,-h/2,w ,h);
   ctx.restore();
 }
-Sprite.prototype.getPosition = function(index, player){
+
+Sprite.prototype.animate = function(ctx, index, player) {
+  var newPos = this.getPosition(index, player.newScore);
+  if(player.currPos.x < newPos.x){
+    player.moving = false;
+    player.score = player.newScore;
+  }
+  player.currPos.x -= board.canvas.width/4000;
+  var row = Math.floor(this.frameIndex / this.numberOfCols);
+  var col = this.frameIndex - (row * this.numberOfCols);
+  var sx = col * this.width / this.numberOfCols;
+  var sy = row * this.height; 
+  var w = board.canvas.width/10;
+  var h =  board.canvas.height/5;
+  var pos = this.getPosition(index, player.score);
+  ctx.save();
+  board.ctx.translate(player.currPos.x,pos.y);
+  board.ctx.translate(w/2,h/2);
+  board.ctx.rotate(pos.angle);
+  ctx.drawImage(this.image, sx, sy, this.width / this.numberOfCols,
+      this.height, -w/2,-h/2,w ,h);
+  ctx.restore();
+}
+Sprite.prototype.getPosition = function(index, score){
   var yCenter;
   var xCenter;
   var angle;
-  switch (player.score) {
+  switch (score) {
     case 0:
       xCenter = board.canvas.width - (board.canvas.width / 7.3);
       yCenter = board.canvas.height-(board.canvas.height/1.3);

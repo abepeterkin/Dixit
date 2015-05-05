@@ -70,7 +70,7 @@ function Board(options) {
 // draws the entire game board, including client player's hand
 Board.prototype.draw = function() {
   board.ctx.clearRect(0, 0, board.canvas.width, board.canvas.height);
-  window.requestAnimationFrame(Board.prototype.draw);
+ window.requestAnimationFrame(Board.prototype.draw);
   if (!board.smallBoard) {
     board.drawBig();
   } else {
@@ -303,17 +303,13 @@ Board.prototype.drawPlayersBig = function() {
   for ( var id in board.game.players) {
     if (board.game.players.hasOwnProperty(id)) {
       player = board.game.players[id];
+      if(!player.moving){
       player.idle.update();
       player.idle.render(board.ctx, i, player);
-      //board.ctx.fillStyle = player.color;
-      //board.ctx.font = "20px Georgia" // TODO: make this responsive
-      //if(player.isStoryTeller){
-    	//  nameToDisplay = player.name + " - Story Teller";
-      //} else {
-    	//  nameToDisplay = player.name;
-      //}
-      //board.ctx.fillText(nameToDisplay, 20, i * 20 + 20);
-
+      } else {
+        player.advance.update();
+        player.advance.animate(board.ctx, i, player);
+      }
       i++;
     }
   }
@@ -546,7 +542,7 @@ Board.prototype.changePhase = function(phase) {
   	board.adjustCardsPos();
   	break;
   case 'WAITING':
-    board.smallBoard = true;
+    board.smallBoard = false;
     board.adjustCardsPos();
     board.cardVoted = null;
     board.advanceBtn.css('display', 'block');

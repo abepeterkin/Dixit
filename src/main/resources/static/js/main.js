@@ -79,10 +79,13 @@ function processUpdates(responseObject) {
       } else {
         tempPlayer.isStoryTeller = false;
       }
-
-      game.updateScore(tempUpdateValue.id, tempUpdateValue.score);
+      if(tempUpdateValue.score != tempPlayer.score){
+        var oldScore = game.players[tempUpdateValue.id].score;
+        tempPlayer.move(board.ctx, oldScore, tempUpdateValue.score)
+      }
       tempPlayer.hasVoted = tempUpdateValue.hasVoted;
       tempPlayer.isReady = tempUpdateValue.ready;
+      
       board.displayPlayerNames();
       break;
     case "hand":

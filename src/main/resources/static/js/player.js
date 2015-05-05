@@ -16,11 +16,22 @@ function Player(options) {
     height : 128,
     image : this.img.idle,
     numberOfFrames : 29,
-    ticksPerFrame : 3,
+    ticksPerFrame : 2,
+    numberOfCols : 8
+  })
+  this.img.advance = new Image();
+  this.img.advance.src = "/images/rabbits/" + options.color.toLowerCase()+"/advance.png";
+  this.advance = new Sprite({
+    width: 1024,
+    height: 128,
+    image: this.img.advance,
+    numberOfFrames : 29,
+    ticksPerFrame : 2,
     numberOfCols : 8
   })
   this.score = options.score;
   this.hasVoted = options.hasVoted;
+  this.moving = false;
   // TODO: add a vote so that a player is linked to its vote card
 }
 
@@ -90,29 +101,6 @@ Player.prototype.removeCard = function(id) {
 Player.prototype.drawHand = function(ctx) {
   for (var i = 0; i < this.hand.length; i++) {
     this.hand[i].draw(ctx);
-  }
-}
-// sends the clue to the board if it is the storyteller
-Player.prototype.sendClue = function(clue) {
-  // TODO:
-}
-// cast player’s vote
-Player.prototype.vote = function(cardId) {
-  // TODO:
-}
-
-// draw the player idle standing by
-Player.prototype.drawIdle = function(board, index) {
-  if (this.img.idle.complete) {
-    board.ctx.drawImage(this.img.idle, 0, 0, 128, 128, board.canvas.width
-        - (board.canvas.width / 8),
-        (index * 128 / 6) + board.canvas.height / 4, 128, 128);
-  } else {
-    this.img.idle.onload = function() {
-      board.ctx.drawImage(board.img.idle, 0, 0, 128, 128, board.canvas.width
-          - (board.canvas.width / 20), 0, 128, 128);
-
-    }
   }
 }
 
@@ -215,3 +203,23 @@ Player.prototype.drawVoteToken = function(ctx, x, y) {
 	  	ctx.fillStyle = this.color;
 	  	ctx.fill();
 	}
+
+Player.prototype.move = function(ctx, oldScore, newScore){
+  console.log("shoud animate from " + oldScore +" to " + newScore);
+  //TODO: do animation
+  //get index
+  var i =0;
+  var index;
+  for ( var id in board.game.players) {
+    if (board.game.players.hasOwnProperty(id)) {
+      if(board.game.players[id].id === this.id){
+        index = i;
+      }
+      i++;
+    }
+  }
+  this.currPos = this.advance.getPosition(index, oldScore);
+  this.newScore = newScore;
+  this.moving = true;  
+}
+  
