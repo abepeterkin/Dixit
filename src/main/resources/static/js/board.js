@@ -82,9 +82,14 @@ Board.prototype.draw = function() {
 Board.prototype.drawHelpIcon = function(){
   board.icons.push()
   var x = 0;
-  var y = board.canvas.height/13;
+  var y = 0;
   var height = board.canvas.height/30;
   var width = board.canvas.width/30;
+  if(height<width){
+    height = width;
+  } else {
+    width = height;
+  }
   if(board.helpImg.complete){
     board.ctx.drawImage(board.helpImg, x, y, width, height);
   } else {
