@@ -133,23 +133,23 @@ Board.prototype.drawAlertMessage = function() {
   this.ctx.fillStyle = "#000000";
   if (this.game.currPhase == this.game.phases["StoryTeller"]
     && this.clientPlayer.isStoryTeller) {
-    this.ctx.fillText("Pick a story card!", this.canvas.width / 2.1,
-        this.canvas.height / 1.5);
+    this.ctx.fillText("Pick a story card!", 10,
+        this.canvas.height - 50);
   }
   if (this.game.currPhase == this.game.phases["StoryTeller"]
   && !this.clientPlayer.isStoryTeller) {
-  this.ctx.fillText("Waiting on story.", this.canvas.width / 2.1,
-      this.canvas.height / 1.5);
+  this.ctx.fillText("Waiting on story.", 10,
+      this.canvas.height - 50);
 }
   if (this.game.currPhase == this.game.phases["NonStoryCards"]
   && !this.clientPlayer.isStoryTeller) {
-  this.ctx.fillText("Pick a card!", this.canvas.width / 2.1,
-      this.canvas.height / 1.5);
+  this.ctx.fillText("Pick a card!", 10,
+      this.canvas.height - 50);
 }
   if (this.game.currPhase == this.game.phases["Voting"]
   && !this.clientPlayer.isStoryTeller) {
-  this.ctx.fillText("Vote for a card!", this.canvas.width / 2.1,
-      this.canvas.height / 1.5);
+  this.ctx.fillText("Vote for a card!", 10,
+      this.canvas.height - 50);
 }
   if (this.game.currPhase == this.game.phases["Waiting"]
     && !this.advanceBtn.prop("disabled")) {
@@ -162,10 +162,10 @@ Board.prototype.drawAlertMessage = function() {
       tempText1 = "Click next";
       tempText2 = "round button!";
     }
-    this.ctx.fillText(tempText1, this.canvas.width / 1.4,
-        this.canvas.height / 1.5);
-    this.ctx.fillText(tempText2, this.canvas.width / 1.4,
-        this.canvas.height / 1.5 + 35);
+    this.ctx.fillText(tempText1, 10,
+        this.canvas.height - 50);
+    this.ctx.fillText(tempText2, 10,
+        this.canvas.height - 20);
   }
   
 }
@@ -248,7 +248,17 @@ var drawBigHelper = function() {
     callback : function() {
       board.smallBoard = true;
       board.adjustCardsPos();
+      for ( var id in board.game.players) {
+        if (board.game.players.hasOwnProperty(id)) {
+          player = board.game.players[id];
+          if(player.newScore){
+            player.score = player.newScore;
+            player.moving = false;
+          }
+        }
+      }
       board.clue.makeBig(board);
+      
     },
     name : "min"
   }))
