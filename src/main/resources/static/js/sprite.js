@@ -15,200 +15,201 @@ Sprite.prototype.render = function(ctx, index, player) {
   var row = Math.floor(this.frameIndex / this.numberOfCols);
   var col = this.frameIndex - (row * this.numberOfCols);
   var sx = col * this.width / this.numberOfCols;
-  var sy = row * this.height;
+  var sy = row * this.height; 
   var score = player.score;
-  // console.log(score);
   var yCenter;
   var xCenter;
-  var rotateParams;
+  var angle;
+  var w = board.canvas.width/10;
+  var h =  board.canvas.height/5;
   switch (score) {
   case 0:
-    yCenter = board.canvas.width - (board.canvas.width / 7.3);
-    xCenter = 51 - board.canvas.height / 2.8;
-    rotateParams = this.rotate("left");
+    xCenter = board.canvas.width - (board.canvas.width / 7.3);
+    yCenter = board.canvas.height-(board.canvas.height/1.3);
+    angle = 3*Math.PI/2;
     break;
   case 1:
-    yCenter = board.canvas.width - (board.canvas.width / 4.5);
-    xCenter = 51 - board.canvas.height / 2.8;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.35);
+    xCenter = board.canvas.width - (board.canvas.width / 4.5);
+    angle = 3*Math.PI/2;
     break;
   case 2:
-    yCenter = board.canvas.width - (board.canvas.width / 3.6);
-    xCenter = 51 - board.canvas.height / 2.8;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.35);
+    xCenter = board.canvas.width - (board.canvas.width / 3.5);
+    angle = 3*Math.PI/2;
     break;
   case 3:
-    yCenter = board.canvas.width - (board.canvas.width / 2.9);
-    xCenter = 51 - board.canvas.height / 2.6;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.35);
+    xCenter = board.canvas.width - (board.canvas.width / 2.9);
+    angle = 3*Math.PI/2;
     break;
   case 4:
-    yCenter = board.canvas.width - (board.canvas.width / 2.5);
-    xCenter = 51 - board.canvas.height / 2.4;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.4);
+    xCenter = board.canvas.width - (board.canvas.width / 2.45);
+    angle = 3*Math.PI/2;
     break;
   case 5:
-    yCenter = board.canvas.width - (board.canvas.width / 2.2);
-    xCenter = 51 - board.canvas.height / 3;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.28);
+    xCenter = board.canvas.width - (board.canvas.width / 2.2);
+    angle = 3*Math.PI/2;
     break;
   case 6:
-    yCenter = board.canvas.width - (board.canvas.width / 2);
-    xCenter = 51 - board.canvas.height / 2.4;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.45);
+    xCenter = board.canvas.width - (board.canvas.width / 2);
+    angle = 3*Math.PI/2;
     break;
   case 7:
-    yCenter = board.canvas.width - (board.canvas.width / 1.8);
-    xCenter = 51 - board.canvas.height / 2.8;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.30);
+    xCenter = board.canvas.width - (board.canvas.width / 1.8);
+    angle = 3*Math.PI/2;
     break;
   case 8:
-    yCenter = board.canvas.width - (board.canvas.width / 1.65);
-    xCenter = 51 - board.canvas.height / 2.4;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.45);
+    xCenter = board.canvas.width - (board.canvas.width / 1.65);
+    angle = 3*Math.PI/2;
     break;
   case 9:
-    yCenter = board.canvas.width - (board.canvas.width / 1.52);
-    xCenter = 51 - board.canvas.height / 2.65;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.33);
+    xCenter = board.canvas.width - (board.canvas.width / 1.5);
+    angle = 3*Math.PI/2;
     break;
   case 10:
-    yCenter = board.canvas.width - (board.canvas.width / 1.38);
-    xCenter = 51 - board.canvas.height / 2.65;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.38);
+    xCenter = board.canvas.width - (board.canvas.width / 1.35);
+    angle = 3*Math.PI/2;
     break;
   case 11:
-    yCenter = board.canvas.width - (board.canvas.width / 1.26);
-    xCenter = 51 - board.canvas.height / 2.65;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.33);
+    xCenter = board.canvas.width - (board.canvas.width / 1.24);
+    angle = 3*Math.PI/2;
     break;
   case 12:
-    yCenter = board.canvas.width - (board.canvas.width / 1.16);
-    xCenter = 51 - board.canvas.height / 2.60;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.38);
+    xCenter = board.canvas.width - (board.canvas.width / 1.16);
+    angle = 5*Math.PI/4;
     break;
   case 13:
-    yCenter = board.canvas.width - (board.canvas.width / 1.08);
-    xCenter = 51 - board.canvas.height / 2.35;
-    rotateParams = this.rotate("left");
+    yCenter = board.canvas.height-(board.canvas.height/1.45);
+    xCenter = board.canvas.width - (board.canvas.width / 1.06);
+    angle = 3*Math.PI/2;
     break;
   case 14:
-    yCenter = board.canvas.width - (board.canvas.width / 1.02);
-    xCenter = 51 - board.canvas.height / 2.80;
-    rotateParams = this.rotate("up");
+    yCenter = board.canvas.height-(board.canvas.height/1.3);
+    xCenter = board.canvas.width - (board.canvas.width / 1.01);
+    angle = 0;
     break;
   case 15:
-    yCenter = board.canvas.width - (board.canvas.width / 1.02);
-    xCenter = 51 - board.canvas.height / 4.5;
-    rotateParams = this.rotate("up");
+    yCenter = board.canvas.height-(board.canvas.height/1.1);
+    xCenter = board.canvas.width - (board.canvas.width / 1.01);
+    angle = Math.PI/4;
     break;
   case 16:
-    yCenter = board.canvas.width - (board.canvas.width / 1.1);
-    xCenter = 51 - board.canvas.height / 5.1;
-    rotateParams = this.rotate("right");
+    yCenter = board.canvas.height-(board.canvas.height/1.04);
+    xCenter = board.canvas.width - (board.canvas.width / 1.08);
+    angle = Math.PI/4;
     break;
   case 17:
-    yCenter = board.canvas.width - (board.canvas.width / 1.18);
-    xCenter = 51 - board.canvas.height / 8.4;
-    rotateParams = this.rotate("right");
+    yCenter = 0;
+    xCenter = board.canvas.width - (board.canvas.width / 1.17);
+    angle = Math.PI/2;
     break;
   case 18:
-    yCenter = board.canvas.width - (board.canvas.width / 1.3);
-    xCenter = 51 - board.canvas.height / 7;
-    rotateParams = this.rotate("right");
+    yCenter = 0;
+    xCenter = board.canvas.width - (board.canvas.width / 1.3);
+    angle = Math.PI/2;
     break;
   case 19:
-    yCenter = board.canvas.width - (board.canvas.width / 1.38);
-    xCenter = 51 - board.canvas.height / 4.5;
-    rotateParams = this.rotate("right");
+    yCenter = board.canvas.height-(board.canvas.height/1.12);
+    xCenter = board.canvas.width - (board.canvas.width / 1.37);
+    angle = Math.PI/2;
     break;
   case 20:
-    yCenter = board.canvas.width - (board.canvas.width / 1.5);
-    xCenter = 51 - board.canvas.height / 4.5;
-    rotateParams = this.rotate("right");
+    yCenter = board.canvas.height-(board.canvas.height/1.12);
+    xCenter = board.canvas.width - (board.canvas.width / 1.47);
+    angle = Math.PI/4;
     break;
   case 21:
-    yCenter = board.canvas.width - (board.canvas.width / 1.56);
-    xCenter = 51 - board.canvas.height / 7.5;
-    rotateParams = this.rotate("right");
+    yCenter = 0;
+    xCenter = board.canvas.width - (board.canvas.width / 1.55 );
+    angle = Math.PI/2; 
     break;
   case 22:
-    yCenter = board.canvas.width - (board.canvas.width / 1.74);
-    xCenter = 51 - board.canvas.height / 7;
-    rotateParams = this.rotate("right");
+    yCenter = board.canvas.height-(board.canvas.height/1.05);
+    xCenter = board.canvas.width - (board.canvas.width / 1.72  );
+    angle = Math.PI/2;   
     break;
   case 23:
-    yCenter = board.canvas.width - (board.canvas.width / 1.95);
-    xCenter = 51 - board.canvas.height / 7;
-    rotateParams = this.rotate("right");
+    yCenter = 0;
+    xCenter = board.canvas.width - (board.canvas.width / 1.92 );
+    angle = Math.PI/2;   
     break;
   case 24:
-    yCenter = board.canvas.width - (board.canvas.width / 2.2);
-    xCenter = 51 - board.canvas.height / 7;
-    rotateParams = this.rotate("right");
+    yCenter = 0;
+    xCenter = board.canvas.width - (board.canvas.width / 2.21 );
+    angle = Math.PI/2; 
     break;
   case 25:
-    yCenter = board.canvas.width - (board.canvas.width / 2.5);
-    xCenter = 51 - board.canvas.height / 7.2;
-    rotateParams = this.rotate("right");
+    yCenter = 0;
+    xCenter = board.canvas.width - (board.canvas.width / 2.55 );
+    angle = Math.PI/2;   
     break;
   case 26:
-    yCenter = board.canvas.width - (board.canvas.width / 2.8);
-    xCenter = 51 - board.canvas.height / 5.6;
-    rotateParams = this.rotate("right");
+    yCenter = board.canvas.height-(board.canvas.height/1.08);
+    xCenter = board.canvas.width - (board.canvas.width / 2.8 );
+    angle = Math.PI/2  
     break;
   case 27:
-    yCenter = board.canvas.width - (board.canvas.width / 3.3);
-    xCenter = 51 - board.canvas.height / 5.6;
-    rotateParams = this.rotate("right");
+    yCenter = board.canvas.height-(board.canvas.height/1.08);
+    xCenter = board.canvas.width - (board.canvas.width / 3.2 );
+    angle = Math.PI/2      
     break;
   case 28:
-    yCenter = board.canvas.width - (board.canvas.width / 4);
-    xCenter = 51 - board.canvas.height / 5.8;
-    rotateParams = this.rotate("right");
+    yCenter = board.canvas.height-(board.canvas.height/1.05);
+    xCenter = board.canvas.width - (board.canvas.width / 3.9 );
+    angle = Math.PI/2      
     break;
   case 29:
-    yCenter = board.canvas.width - (board.canvas.width / 5.3);
-    xCenter = 51 - board.canvas.height / 6;
-    rotateParams = this.rotate("right");
+    yCenter = board.canvas.height-(board.canvas.height/1.05);
+    xCenter = board.canvas.width - (board.canvas.width / 5.2 );
+    angle = Math.PI/2 
     break;
   case 30:
-    yCenter = board.canvas.width - (board.canvas.width / 7.5);
-    xCenter = 51 - board.canvas.height / 7;
-    rotateParams = this.rotate("right");
+    yCenter = board.canvas.height-(board.canvas.height/1.01);
+    xCenter = board.canvas.width - (board.canvas.width / 7 );
+    angle = Math.PI/2 
     break;
   default:
     yCenter = board.canvas.width - (board.canvas.width / 8);
     xCenter = 51 - board.canvas.height / 2.8;
+    angle = 3*Math.PI/2;
   }
   var x;
   var y;
   if (index === 0) {
-    x = xCenter + board.canvas.height / 40;
+    x = xCenter;
     y = yCenter;
   } else if (index === 1) {
     x = xCenter;
-    y = yCenter + board.canvas.width / 40;
+    y = yCenter+1.5*board.canvas.height/40;
   } else if (index === 2) {
-    x = xCenter;
-    y = yCenter;
+    x = xCenter
+    y = y = yCenter+3*board.canvas.height/40;
   } else if (index === 3) {
-    x = xCenter - board.canvas.height / 40;
-    y = yCenter + board.canvas.width / 40;
+    x = xCenter+board.canvas.width/40;
+    y = y = yCenter;
   } else if (index === 4) {
-    x = xCenter + board.canvas.height / 40;
-    y = yCenter + board.canvas.width / 40;
+    x = xCenter+board.canvas.width/40;
+    y = y = yCenter+1.5*board.canvas.height/40;
   } else {
-    x = xCenter - board.canvas.height / 40;
-    y = yCenter;
+    x = xCenter+board.canvas.width/40;
+    y = y = yCenter+3*board.canvas.height/40;
   }
-
-  // Draw the animation
   ctx.save();
-  ctx.translate(rotateParams.tx, rotateParams.ty);
-  ctx.rotate(rotateParams.angle * Math.PI / 180);
+  board.ctx.translate(x,y);
+  board.ctx.translate(w/2,h/2);
+  board.ctx.rotate(angle);
   ctx.drawImage(this.image, sx, sy, this.width / this.numberOfCols,
-      this.height, x, y, this.width / this.numberOfCols, this.height);
+      this.height, -w/2,-h/2,w ,h);
   ctx.restore();
 }
 
@@ -225,28 +226,4 @@ Sprite.prototype.update = function() {
       this.frameIndex = 0;
     }
   }
-}
-
-Sprite.prototype.rotate = function(dir) {
-  var tx, ty, angle;
-  switch (dir) {
-    case "left":
-      tx = 0;
-      ty = this.height;
-      angle = 270;
-      break;
-    case "up": // currently just left again
-	  tx = 0;
-	  ty = this.height;
-	  angle = 270;
-    case "right": // same
-	  tx = 0;
-	  ty = this.height;
-	  angle = 270;
-  }
-  return {
-    tx : tx,
-    ty : ty,
-    angle : angle
-  };
 }
