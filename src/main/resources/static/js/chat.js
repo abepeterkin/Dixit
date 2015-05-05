@@ -24,6 +24,13 @@ function Chat() {
       });
     }
   })
+  messageText.on('input', function(){
+      if (messageText.val().length == 0) {
+      sendButton.prop('disabled', true);
+    } else {
+      sendButton.prop('disabled', false);
+    }
+  })
 }
 Chat.prototype.addMsg = function(msg, player) {
   var html;

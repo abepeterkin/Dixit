@@ -12,6 +12,9 @@ body {
 	background:#fff689;
 }
 
+.modal-content{
+	overflow:scroll;
+}
 .btn {
       background-image: linear-gradient(to bottom,#6A69B5 0,#3B3A64 100%);
       -webkit-touch-callout: none;
@@ -125,4 +128,14 @@ textarea{
     background-color:#000000; 
     color:#6A69B5;
     height:100vh;
+}
+
+.btn-primary[disabled] {
+  background-color: #6A69B5;
+  background-image: none;
+  border-color:#6A69B5;
+  }
+
+.btn-primary{
+	border-color:#6A69B5;
 }

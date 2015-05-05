@@ -19,7 +19,7 @@
 				<div class="row" id="chat-input">
 					<div class="col-md-12">
 						<textarea id="msg-txt" class="form-control" rows="3"></textarea>
-						<button id="send-msg-btn" class="form-control btn btn-primary">Send</button>
+						<button id="send-msg-btn" class="form-control btn btn-primary" disabled>Send</button>
 					</div>
 					<br>
 					<button id="advance-btn" class="form-control btn btn-primary">Next Round!</button>
@@ -34,7 +34,6 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">Hand Card </h4>
       </div>
       <div class="modal-body">
         <img id="cardImg" src="">
@@ -87,9 +86,11 @@
     </div>
     <div role="tabpanel" class="tab-pane" id="storyteller">
     	<p>Players wait for the storyteller to pick a card and submit an according clue. The purpose of the clue is to draw votes during the voting phase. If a clue is too difficult and no players vote for the storyteller's card, all players will receive 2 points and the storyteller will receive none. The same will occur if a clue is too simple and all players vote for the storyteller's card. Pick a challenging clue that will still draw votes!</p>
-		<img src="https://boardgamegeek.com/camo/c8c35517fe4cdc5c44c94f18e237a5638082d6e2/687474703a2f2f7777772e6f682d63617264732d696e737469747574652e6f72672f77702d636f6e74656e742f75706c6f6164732f323031322f30382f32303132303830382d636f70652d37382d393435392d726e642e6a7067" alt="man going inside egg">
-		    	<p>Example of an overly simple clue: “Man stepping into egg.”</p>
-		<p>Example of an overly difficult clue: “Strife.”</p>
+    	<div>
+    		<p style="float:left">
+    		<img alight="left" src="https://boardgamegeek.com/camo/c8c35517fe4cdc5c44c94f18e237a5638082d6e2/687474703a2f2f7777772e6f682d63617264732d696e737469747574652e6f72672f77702d636f6e74656e742f75706c6f6164732f323031322f30382f32303132303830382d636f70652d37382d393435392d726e642e6a7067" alt="man going inside egg"></p>
+		  <p>Example of an overly simple clue: “Man stepping into egg.”</p>
+		<p>Example of an overly difficult clue: “Strife.”</p></div>	
     	
     </div>
     <div role="tabpanel" class="tab-pane" id="nonstoryteller">
