@@ -33,6 +33,7 @@ Sprite.prototype.animate = function(ctx, index, player) {
   if(player.currPos.x < newPos.x){
     player.moving = false;
     player.score = player.newScore;
+    return;
   }
   if (this.frameIndex > 14 && this.frameIndex < 20){
   player.currPos.x -= board.canvas.width/400;

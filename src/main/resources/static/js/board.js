@@ -248,7 +248,17 @@ var drawBigHelper = function() {
     callback : function() {
       board.smallBoard = true;
       board.adjustCardsPos();
+      for ( var id in board.game.players) {
+        if (board.game.players.hasOwnProperty(id)) {
+          player = board.game.players[id];
+          if(player.newScore){
+            player.score = player.newScore;
+            player.moving = false;
+          }
+        }
+      }
       board.clue.makeBig(board);
+      
     },
     name : "min"
   }))
