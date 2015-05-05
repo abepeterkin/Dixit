@@ -34,7 +34,7 @@ Chat.prototype.addMsg = function(msg, player) {
       + player.name + ": " + msg + "</span></p>";
 	}
 	this.messageBody.append(html);
-	$("#chat-text").scrollTop($("#chat-text")[0].scrollHeight);
+	this.messageBody.scrollTop(this.messageBody[0].scrollHeight);
 }
 
 Chat.prototype.addSysMsg = function(msg, color) {

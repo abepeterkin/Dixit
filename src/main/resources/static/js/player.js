@@ -181,7 +181,16 @@ Player.prototype.drawStoryToken = function(ctx, x, y) {
         voteWidth/1.4, 0, 2 * Math.PI);
   	ctx.fillStyle = "gold";
   	ctx.fill();
-  	//golden S in center?
+  	//draws the s in the center
+  	ctx.beginPath();
+    ctx.arc(x, y-voteWidth/4, voteWidth/5, Math.PI/2, 11*Math.PI/6);
+  	ctx.strokeStyle = 'white';
+  	ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(x, y+voteWidth/5.5, voteWidth/5, 3*Math.PI/2, 5*Math.PI/6);
+    ctx.strokeStyle = 'white';
+    ctx.stroke();
+    //end of s in center
 }
 
 Player.prototype.drawVoteToken = function(ctx, x, y) {
