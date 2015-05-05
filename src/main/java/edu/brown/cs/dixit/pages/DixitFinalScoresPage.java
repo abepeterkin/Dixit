@@ -34,8 +34,8 @@ public class DixitFinalScoresPage implements TemplateViewRoute {
     } catch (UnsupportedEncodingException e) {
       System.err.println("url decoding error");
     }
-    List<String> colors = new ArrayList<>();
-    List<String> playerNames = new ArrayList<>();
+    //List<String> colors = new ArrayList<>();
+    //List<String> playerNames = new ArrayList<>();
     if (Main.gameExists(gameName)) {
       Game game = Main.getGame(gameName);
       List<Player> tempPlayerList = game.getPlayers();

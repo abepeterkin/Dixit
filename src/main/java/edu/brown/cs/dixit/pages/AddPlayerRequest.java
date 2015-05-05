@@ -30,7 +30,7 @@ public class AddPlayerRequest implements TemplateViewRoute {
     String colorName = qm.value("colorName");
 
     if (!Main.gameExists(gameName)) {
-      return failure("game does not exist");
+      return failure("That game does not exist.");
     } else {
       Game game = Main.getGame(gameName);
       if (game.getColorsInUse().contains(colorName)) {
@@ -45,7 +45,7 @@ public class AddPlayerRequest implements TemplateViewRoute {
             newId);
         return new ModelAndView(variables, "board.ftl");
       } else {
-        return failure("player could not be added");
+        return failure("Sorry, you could not join this game.");
       }
     }
 
