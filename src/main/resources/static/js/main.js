@@ -80,6 +80,8 @@ function processUpdates(responseObject) {
         tempPlayer.isStoryTeller = false;
       }
       if(tempUpdateValue.score != tempPlayer.score){
+        board.smallBoard = false;
+        board.adjustCardsPos();
         var oldScore = game.players[tempUpdateValue.id].score;
         tempPlayer.move(board.ctx, oldScore, tempUpdateValue.score)
       }

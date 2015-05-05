@@ -142,7 +142,7 @@ Board.prototype.drawAlertMessage = function() {
       this.canvas.height - 50);
 }
   if (this.game.currPhase == this.game.phases["NonStoryCards"]
-  && !this.clientPlayer.isStoryTeller) {
+  && !this.clientPlayer.isStoryTeller && !board.clientPlayer.submittedCard) {
   this.ctx.fillText("Pick a card!", 10,
       this.canvas.height - 50);
 }
@@ -616,6 +616,7 @@ function sendBtn(event) {
     addNonStoryCardRequest(selectedCard.id, function(e) {
       board.sendBtn.prop("disabled", true)
     });
+    board.clientPlayer.submittedCard = true;
     board.cardModal.modal('hide');
 }
 
