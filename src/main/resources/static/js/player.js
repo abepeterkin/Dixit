@@ -30,6 +30,7 @@ function Player(options) {
     numberOfCols : 8
   })
   this.score = options.score;
+  this.newScore = options.score;
   this.hasVoted = options.hasVoted;
   this.moving = false;
   // TODO: add a vote so that a player is linked to its vote card
@@ -210,8 +211,10 @@ Player.prototype.move = function(ctx, oldScore, newScore){
   //get index
   if(board.smallBoard){
     this.moving = false;
+    this.newScore = newScore;
     this.score = newScore;
   } else {
+    this.newScore = newScore;
   var i =0;
   var index;
   for ( var id in board.game.players) {
@@ -223,7 +226,6 @@ Player.prototype.move = function(ctx, oldScore, newScore){
     }
   }
   this.currPos = this.advance.getPosition(index, oldScore);
-  this.newScore = newScore;
   this.moving = true;  
   }
 }
