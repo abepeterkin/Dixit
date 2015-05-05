@@ -68,10 +68,9 @@ public class Announcer {
   }
 
   public void advanceToVotingPhase() {
-    announce("The game has advanced to voting phase!");
-    int votesLeft = g.getNumberOfPlayers() - g.getNumberOfVotes() - 1;
-    announce("Waiting on " + votesLeft + " votes...");
-
+//    announce("The game has advanced to voting phase!");
+//    int votesLeft = g.getNumberOfPlayers() - g.getNumberOfVotes() - 1;
+//    announce("Waiting on " + votesLeft + " votes...");s
   }
 
   public void submitVote(Player p) {
@@ -99,7 +98,7 @@ public class Announcer {
     if (inc > 0) {
       announce(name + " gained " + inc + " points this round!");
     } else {
-      announce(name + " didnt gain any points this round :/");
+      announce(name + " didn't gain any points this round.");
     }
   }
 
@@ -108,12 +107,12 @@ public class Announcer {
   }
 
   public void submitReady(Player p) {
-    String name = p.getChatName();
-    int left = g.getMaxPlayers() - g.numberOfPlayersReady();
-    announce(name + " is ready for next round.");
-    if (left > 0) {
-      announce("Waiting for " + left + " more players...");
-    }
+//    String name = p.getChatName();
+//    int left = g.getMaxPlayers() - g.numberOfPlayersReady();
+//    announce(name + " is ready for next round.");
+//    if (left > 0) {
+//      announce("Waiting for " + left + " more players...");
+//    }
   }
 
   public void newRound() {

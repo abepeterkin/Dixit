@@ -266,7 +266,7 @@ Board.prototype.displayPlayerNames = function() {
       }
       tempHtml += "</span>";
       if (player.isStoryTeller) {
-          tempHtml += "<span style=\"color: gold;\">";
+          tempHtml += "<span style=\"color: saddlebrown;\">";
           tempHtml += " - Storyteller";
           tempHtml += "</span>";
       }
