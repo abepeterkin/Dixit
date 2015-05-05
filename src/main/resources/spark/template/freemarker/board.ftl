@@ -89,8 +89,8 @@
     	<div>
     		<p style="float:left">
     		<img alight="left" src="https://boardgamegeek.com/camo/c8c35517fe4cdc5c44c94f18e237a5638082d6e2/687474703a2f2f7777772e6f682d63617264732d696e737469747574652e6f72672f77702d636f6e74656e742f75706c6f6164732f323031322f30382f32303132303830382d636f70652d37382d393435392d726e642e6a7067" alt="man going inside egg"></p>
-		  <p>Example of an overly simple clue: “Man stepping into egg.”</p>
-		<p>Example of an overly difficult clue: “Strife.”</p></div>	
+		  <p>Example of an overly simple clue: "Man stepping into egg."</p>
+		<p>Example of an overly difficult clue: "Strife."</p></div>	
     	
     </div>
     <div role="tabpanel" class="tab-pane" id="nonstoryteller">
@@ -100,7 +100,7 @@
     	<p>All non-storyteller players vote for which card they believe belongs to the storyteller. Players cannot vote for their own card. Votes will remain anonymous during the voting phase, though other players will be able to see who has casted their vote. Once all players have casted votes, the game will advance to scoring phase.</p>
     </div>
   	<div role="tabpanel" class="tab-pane" id="scoring">
-  	<p>Players will increment score based on points earned during voting round. If no player crosses 30 points during scoring phase, the game will wait until all players have clicked the “next round” button, and then will advance to the next round. If any player ends scoring phase with at least 30 points, the game will end and a scoreboard will display.</p>
+  	<p>Players will increment score based on points earned during voting round. If no player crosses 30 points during scoring phase, the game will wait until all players have clicked the "next round" button, and then will advance to the next round. If any player ends scoring phase with at least 30 points, the game will end and a scoreboard will display.</p>
 	<p>Each round is scored according to the following scoring cases:
 		<ul>
 			<li>If all players vote for the storyteller card: each player will receive 2 points and the storyteller will receive 0 points.</li>
