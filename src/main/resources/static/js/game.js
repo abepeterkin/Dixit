@@ -76,7 +76,7 @@ Game.prototype.getPlayer = function(id) {
 Game.prototype.playerHasWon = function() {
   for (id in this.players) {
     var tempPlayer = this.players[id];
-    if (tempPlayer.score >= 30) {
+    if (tempPlayer.newScore >= 30) {
       return true;
     }
   }
