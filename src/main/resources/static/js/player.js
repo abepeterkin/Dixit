@@ -145,7 +145,11 @@ Player.prototype.drawSmall = function(board, index) {
 	  if (player.hasVoted) {  
 		  this.drawVoteToken(board.ctx, tokenX, tokenY);
 	  }
-	  if (player.isStoryTeller) {	  
+  }
+  if ((board.game.currPhase == board.game.phases["Voting"])
+  		|| (board.game.currPhase == board.game.phases["StoryTeller"])
+  		|| (board.game.currPhase == board.game.phases["NonStoryCards"])) {
+	  if (player.isStoryTeller) {	
 		  this.drawStoryToken(board.ctx, tokenX, tokenY);
 	  }
   }
@@ -169,7 +173,7 @@ Player.prototype.drawStoryToken = function(ctx, x, y) {
   	ctx.beginPath();
   	ctx.arc(x, y,
         voteWidth, 0, 2 * Math.PI);
-  	ctx.fillStyle = "gold";
+  	ctx.fillStyle = "saddlebrown";
   	ctx.fill();
   	ctx.beginPath();
   	ctx.arc(x, y,
@@ -179,16 +183,16 @@ Player.prototype.drawStoryToken = function(ctx, x, y) {
   	ctx.beginPath();
   	ctx.arc(x, y,
         voteWidth/1.4, 0, 2 * Math.PI);
-  	ctx.fillStyle = "gold";
+  	ctx.fillStyle = "saddlebrown";
   	ctx.fill();
   	//draws the s in the center
   	ctx.beginPath();
     ctx.arc(x, y-voteWidth/4, voteWidth/5, Math.PI/2, 11*Math.PI/6);
-  	ctx.strokeStyle = 'white';
+  	ctx.strokeStyle = "white";
   	ctx.stroke();
     ctx.beginPath();
     ctx.arc(x, y+voteWidth/5.5, voteWidth/5, 3*Math.PI/2, 5*Math.PI/6);
-    ctx.strokeStyle = 'white';
+    ctx.strokeStyle = "white";
     ctx.stroke();
     //end of s in center
 }
