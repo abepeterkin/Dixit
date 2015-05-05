@@ -499,6 +499,11 @@ Board.prototype.addListeners = function() {
 }
 
 Board.prototype.updateAdvanceBtn = function() {
+  //console.log("UPDATING ADVANCE BUTTON");
+  //for (id in this.game.players) {
+  //  var tempPlayer = this.game.players[id];
+  //  console.log(tempPlayer.name + ": " + tempPlayer.score);
+  //}
   this.advanceBtn.unbind("click");
   if (this.game.playerHasWon()) {
     board.advanceBtn.html("View Results!");

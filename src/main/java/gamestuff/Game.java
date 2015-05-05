@@ -158,7 +158,7 @@ public class Game {
       }
     }
     votes.remove(toRemove);
-//    announcer.removeVote(playerIdMap.get(playerId));
+    // announcer.removeVote(playerIdMap.get(playerId));
     subscriber.votesChanged(this);
     subscriber.playerChanged(this, playerIdMap.get(playerId));
     return true;
@@ -398,7 +398,7 @@ public class Game {
     votes.add(vote);
     subscriber.votesChanged(this);
     subscriber.playerChanged(this, p);
-//    announcer.submitVote(p);
+    // announcer.submitVote(p);
     if (this.votes.size() == this.players.size() - 1) {
       calculateScores();
     }
@@ -488,17 +488,19 @@ public class Game {
         }
       }
     }
-    boolean isGameOver = false;
+    // We want to set the phase to GAMEOVER after all players
+    // have confirmed for next round.
+    // boolean isGameOver = false;
     for (Player p : players) {
       int totalIncrement = p.getScore() - prevScores.get(p);
-      if (p.getScore() >= MAX_SCORE) {
-        isGameOver = true;
-      }
+      // if (p.getScore() >= MAX_SCORE) {
+      // isGameOver = true;
+      // }
       announcer.incrementScore(p, totalIncrement);
     }
-    if (isGameOver) {
-      gameOver();
-    }
+    // if (isGameOver) {
+    // gameOver();
+    // }
     if (this.phase != Phase.GAMEOVER) {
       prepareForNextRound();
     }
@@ -531,7 +533,7 @@ public class Game {
     System.out.println("PLAYERREADYSTANDS OUT ");
     if (allPlayersReady() && this.phase.equals(Phase.WAITING)) {
       playerReadyMap.clear();
-      for (Player p: players) {
+      for (Player p : players) {
         subscriber.playerChanged(this, p);
         p.setReady(false);
       }
