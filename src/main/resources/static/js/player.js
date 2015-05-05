@@ -208,6 +208,10 @@ Player.prototype.move = function(ctx, oldScore, newScore){
   console.log("shoud animate from " + oldScore +" to " + newScore);
   //TODO: do animation
   //get index
+  if(board.smallBoard){
+    this.moving = false;
+    this.score = newScore;
+  } else {
   var i =0;
   var index;
   for ( var id in board.game.players) {
@@ -221,5 +225,6 @@ Player.prototype.move = function(ctx, oldScore, newScore){
   this.currPos = this.advance.getPosition(index, oldScore);
   this.newScore = newScore;
   this.moving = true;  
+  }
 }
   
